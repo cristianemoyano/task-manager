@@ -15,8 +15,9 @@ const customJestConfig = {
     '^@/(.*)$': '<rootDir>/$1',
   },
   testEnvironment: 'jest-environment-jsdom',
-  watchPathIgnorePatterns: ['<rootDir>/__tests__/__mocks__/db/.*\\.json'],
+  watchPathIgnorePatterns: ['globalConfig.json'],
   // maxWorkers: 1,
+  preset: '@shelf/jest-mongodb',
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
