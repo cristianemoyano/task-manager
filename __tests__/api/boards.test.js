@@ -35,7 +35,7 @@ test('GET /api/boards get correct value', async () => {
       expect(res.status).toBe(200);
 
       const json = await res.json();
-      console.log(json);
+      expect(json).toHaveLength(1);
     },
   });
 });
