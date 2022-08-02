@@ -16,16 +16,10 @@ export default async function handler(
   }
 
   if (method === 'POST') {
-    const { board } = body;
+    const board = body;
 
     const newBoard = await db.collection('boards').insertOne(board);
 
-    res.status(200).json(newBoard);
-  }
-
-  if (method === 'DELETE') {
-    await db.collection('boards').remove({});
-
-    res.status(200).json({ msg: 'all boards deleted' });
+    res.status(201).json(newBoard);
   }
 }
