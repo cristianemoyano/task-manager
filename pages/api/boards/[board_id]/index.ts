@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { connectToDatabase } from '@/services/mongodb';
+import connectMongo from '@/services/connectMongo';
+import Board from '@/models/boardModel';
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,13 +10,13 @@ export default async function handler(
   const {
     method,
     body,
-    query: { boardId },
+    query: { board_id },
   } = req;
-  const { db } = await connectToDatabase();
+  await connectMongo();
 
   if (method === 'GET') {
     try {
-      const board = await db.collection('boards').findOne({ _id: boardId });
+      const board = await Board.findOne({ _id: board_id });
 
       res.status(200).json({ board });
     } catch (error) {

@@ -1,21 +1,31 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
+
 import connectMongo from '@/services/connectMongo';
 import Board from '@/models/boardModel';
 
-export default async function handler(req, res) {
+interface Column {
+  _id: string;
+  tasks: [];
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const {
     method,
     body,
-    query: { boardId },
+    query: { board_id },
   } = req;
   await connectMongo();
 
   if (method === 'PATCH') {
     const { column_id, task } = body;
 
-    const board = await Board.findOne({ _id: boardId });
+    const board = await Board.findOne({ _id: board_id });
 
     const column = board.columns.find(
-      (col) => col._id.toString() === column_id
+      (col: Column) => col._id.toString() === column_id
     );
 
     column.tasks.push(task);
