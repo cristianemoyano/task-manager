@@ -25,7 +25,7 @@ export default async function handler(
     const board = await Board.findOne({ _id: board_id });
 
     const column = board.columns.find(
-      (col: Column) => col._id.toString() === column_id
+      (col: Column) => col._id.toString() == column_id
     );
 
     column.tasks.push(task);
