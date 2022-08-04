@@ -1,12 +1,12 @@
-export const newTask = {
+export const taskToEditWithNoStatus = {
   _id: 1,
-  title: 'Launch version one',
-  description: '',
-  status: 'Doing',
+  title: 'Launch version two',
+  description: 'Test description added',
+  status: 'Now',
   subtasks: [
     {
       _id: 1,
-      title: 'Launch privately to our waitlist',
+      title: 'Test launch',
       isCompleted: false,
     },
     {

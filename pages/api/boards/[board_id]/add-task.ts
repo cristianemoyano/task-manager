@@ -2,11 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import connectMongo from '@/services/connectMongo';
 import Board from '@/models/boardModel';
-
-interface Column {
-  _id: string;
-  tasks: [];
-}
+import { IColumn } from '@/typing';
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,11 +20,11 @@ export default async function handler(
 
     const board = await Board.findOne({ _id: board_id });
 
-    const column = board.columns.find(
-      (col: Column) => col._id.toString() == column_id
+    const columnToUpdate = board.columns.find(
+      (c: IColumn) => c._id.toString() == column_id
     );
 
-    column.tasks.push(task);
+    columnToUpdate.tasks.push(task);
 
     const boardUpdated = await board.save();
 

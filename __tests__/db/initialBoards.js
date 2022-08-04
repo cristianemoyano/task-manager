@@ -122,7 +122,7 @@ export const initialBoards = [
             _id: 1,
             title: 'Launch version one',
             description: '',
-            status: '',
+            status: 'Now',
             subtasks: [
               {
                 _id: 1,
@@ -141,7 +141,7 @@ export const initialBoards = [
             title: 'Review early feedback and plan next steps for roadmap',
             description:
               "Beyond the initial launch, we're keeping the initial roadmap completely empty. This meeting will help us plan out our next steps based on actual customer feedback.",
-            status: '',
+            status: 'Now',
             subtasks: [
               {
                 _id: 1,
