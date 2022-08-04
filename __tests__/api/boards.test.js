@@ -4,7 +4,8 @@ import mongoose from 'mongoose';
 import boardsHandler from '@/pages/api/boards/index';
 import singleBoardHandler from '@/pages/api/boards/[board_id]/index';
 import addTaskHandler from '@/pages/api/boards/[board_id]/add-task';
-import editTaskWithNoStatusHandler from '@/pages/api/boards/[board_id]/edit-task';
+import editTaskHandler from '@/pages/api/boards/[board_id]/edit-task';
+import deleteTaskHandler from '@/pages/api/boards/[board_id]/delete-task';
 
 import Board from '@/models/boardModel';
 
@@ -12,6 +13,7 @@ import { initialBoards } from '../db/initialBoards';
 import { newBoard } from '../db/newBoard';
 import { taskToAdd } from '../db/taskToAdd';
 import { taskToEditWithNoStatus } from '../db/taskToEditWithNoStatus';
+import { taskToEditWithStatus } from '../db/taskToEditWithStatus';
 
 beforeAll(async () => {
   mongoose.connect(process.env.MONGODB_URI);
@@ -100,7 +102,7 @@ test('PATCH /api/boards/[board_id]/add-task create a new task', async () => {
 
 test('PATCH /api/boards/[board_id]/edit-task edit a task', async () => {
   await testApiHandler({
-    handler: editTaskWithNoStatusHandler,
+    handler: editTaskHandler,
     paramsPatcher: (params) => {
       params.board_id = 2;
     },
@@ -123,6 +125,31 @@ test('PATCH /api/boards/[board_id]/edit-task edit a task', async () => {
       expect(task.title).toEqual('Launch version two');
       expect(task.description).toEqual('Test description added');
       expect(task.subtasks[0].title).toEqual('Test launch');
+    },
+  });
+});
+
+test('DELETE /api/boards/[board_id]/delete-task delete a task', async () => {
+  await testApiHandler({
+    handler: deleteTaskHandler,
+    paramsPatcher: (params) => {
+      params.board_id = 2;
+    },
+    test: async ({ fetch }) => {
+      const res = await fetch({
+        method: 'DELETE',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          column_id: 1,
+          task_id: 1,
+        }),
+      });
+      expect(res.status).toBe(200);
+
+      const json = await res.json();
+      expect(json.columns[0].tasks).toHaveLength(1);
     },
   });
 });

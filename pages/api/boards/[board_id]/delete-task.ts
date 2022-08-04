@@ -15,18 +15,18 @@ export default async function handler(
   } = req;
   await connectMongo();
 
-  if (method === 'PATCH') {
-    const { column_id, task_id, task } = body;
+  if (method === 'DELETE') {
+    const { column_id, task_id } = body;
 
     const board = await Board.findOne({ _id: board_id });
 
-    const taskToUpdate = board.columns
-      .find((c: IColumn) => c._id.toString() == column_id)
-      .tasks.find((t: ITask) => t._id.toString() == task_id);
-
-    taskToUpdate.title = task.title;
-    taskToUpdate.description = task.description;
-    taskToUpdate.subtasks = task.subtasks;
+    const columnToUpdate: IColumn = board.columns.find(
+      (c: IColumn) => c._id.toString() == column_id
+    );
+    const taskIndex = columnToUpdate.tasks.findIndex(
+      (t: ITask) => t._id.toString() == task_id
+    );
+    columnToUpdate.tasks.splice(taskIndex, 1);
 
     const boardUpdated = await board.save();
 
