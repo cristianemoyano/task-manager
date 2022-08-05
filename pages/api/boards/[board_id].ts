@@ -25,5 +25,12 @@ export default async function handler(
   }
 
   if (method === 'DELETE') {
+    try {
+      const board = await Board.findOneAndDelete({ _id: board_id });
+
+      res.status(200).json({ board });
+    } catch (error) {
+      res.status(500).json(error);
+    }
   }
 }

@@ -1,30 +1,17 @@
 import { testApiHandler } from 'next-test-api-route-handler';
-import mongoose from 'mongoose';
 
 import boardsHandler from '@/pages/api/boards/index';
-import singleBoardHandler from '@/pages/api/boards/[board_id]/index';
-import addTaskHandler from '@/pages/api/boards/[board_id]/add-task';
-import editTaskHandler from '@/pages/api/boards/[board_id]/edit-task';
-import deleteTaskHandler from '@/pages/api/boards/[board_id]/delete-task';
-
-import Board from '@/models/boardModel';
-
-import { initialBoards } from '../db/initialBoards';
+import singleBoardHandler from '@/pages/api/boards/[board_id]';
 import { newBoard } from '../db/newBoard';
-import { taskToAdd } from '../db/taskToAdd';
-import { taskToEditWithNoStatus } from '../db/taskToEditWithNoStatus';
-import { taskToEditWithStatus } from '../db/taskToEditWithStatus';
+
+import { connect, closeAndReset } from '../db/utils/reset-db';
 
 beforeAll(async () => {
-  mongoose.connect(process.env.MONGODB_URI);
-
-  await Board.insertMany(initialBoards);
+  await connect();
 });
 
 afterAll(async () => {
-  await Board.deleteMany({});
-
-  mongoose.connection.close();
+  closeAndReset();
 });
 
 test('GET /api/boards get correct number and data of all boards ', async () => {
@@ -75,63 +62,9 @@ test('GET /api/boards/[board_id] get a single board', async () => {
   });
 });
 
-test('PATCH /api/boards/[board_id]/add-task create a new task', async () => {
+test('DELETE /api/boards/[board_id] delete a single board', async () => {
   await testApiHandler({
-    handler: addTaskHandler,
-    paramsPatcher: (params) => {
-      params.board_id = 1;
-    },
-    test: async ({ fetch }) => {
-      const res = await fetch({
-        method: 'PATCH',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          column_id: 2,
-          task: taskToAdd,
-        }),
-      });
-      expect(res.status).toBe(200);
-
-      const json = await res.json();
-      expect(json.columns[1].tasks).toHaveLength(1);
-    },
-  });
-});
-
-test('PATCH /api/boards/[board_id]/edit-task edit a task', async () => {
-  await testApiHandler({
-    handler: editTaskHandler,
-    paramsPatcher: (params) => {
-      params.board_id = 2;
-    },
-    test: async ({ fetch }) => {
-      const res = await fetch({
-        method: 'PATCH',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          column_id: 1,
-          task_id: 1,
-          task: taskToEditWithNoStatus,
-        }),
-      });
-      expect(res.status).toBe(200);
-
-      const json = await res.json();
-      const task = json.columns[0].tasks[0];
-      expect(task.title).toEqual('Launch version two');
-      expect(task.description).toEqual('Test description added');
-      expect(task.subtasks[0].title).toEqual('Test launch');
-    },
-  });
-});
-
-test('DELETE /api/boards/[board_id]/delete-task delete a task', async () => {
-  await testApiHandler({
-    handler: deleteTaskHandler,
+    handler: singleBoardHandler,
     paramsPatcher: (params) => {
       params.board_id = 2;
     },
@@ -141,15 +74,8 @@ test('DELETE /api/boards/[board_id]/delete-task delete a task', async () => {
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify({
-          column_id: 1,
-          task_id: 1,
-        }),
       });
       expect(res.status).toBe(200);
-
-      const json = await res.json();
-      expect(json.columns[0].tasks).toHaveLength(1);
     },
   });
 });

@@ -8,15 +8,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const {
-    method,
-    body,
-    query: { board_id },
-  } = req;
+  const { method, body } = req;
   await connectMongo();
 
   if (method === 'PATCH') {
-    const { column_id, task } = body;
+    const { board_id, column_id, task } = body;
 
     const board = await Board.findOne({ _id: board_id });
 

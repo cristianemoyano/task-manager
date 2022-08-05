@@ -8,15 +8,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const {
-    method,
-    body,
-    query: { board_id },
-  } = req;
+  const { method, body } = req;
   await connectMongo();
 
   if (method === 'DELETE') {
-    const { column_id, task_id } = body;
+    const { board_id, column_id, task_id } = body;
 
     const board = await Board.findOne({ _id: board_id });
 
