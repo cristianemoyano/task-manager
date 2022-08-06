@@ -1,0 +1,23 @@
+.empty {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty__title {
+  @extend %heading-l;
+
+  color: $color-medium-gray;
+  text-align: center;
+}
+
+.empty__button {
+  @extend %heading-m;
+
+  background: $color-purple;
+  color: $color-white;
+  padding: 16px;
+}

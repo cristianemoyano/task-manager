@@ -1,0 +1,48 @@
+.navbar {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  z-index: 10;
+  background: $color-white;
+}
+
+.navbar__container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navbar__title {
+  @extend %heading-l;
+
+  display: none;
+}
+
+.navbar__title--show {
+  display: block;
+}
+
+.navbar__dropdown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.navbar__dropdown--hide {
+  display: none;
+}
+
+.navbar__dropdown__title {
+  @extend %heading-l;
+}
+
+.navbar__add__button {
+  background: $color-purple;
+  width: 48px;
+  height: 32px;
+}
+
+.navbar__add__text {
+  display: none;
+}

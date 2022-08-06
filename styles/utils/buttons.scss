@@ -1,0 +1,50 @@
+%button-primary-l {
+  @extend %heading-m;
+
+  padding: 15px 0;
+  background: $color-purple;
+  color: $color-white;
+
+  &:hover {
+    background: $color-light-purple;
+  }
+}
+
+%button-primary-s {
+  @extend %body-l;
+
+  font-weight: 700;
+  padding: 8px 0;
+  background: $color-purple;
+  color: $color-white;
+
+  &:hover {
+    background: $color-light-purple;
+  }
+}
+
+%button-secondary {
+  @extend %body-l;
+
+  font-weight: 700;
+  padding: 8px 0;
+  background: rgba(99, 95, 199, 0.1);
+  color: $color-purple;
+
+  &:hover {
+    background: rgba(99, 95, 199, 0.25);
+  }
+}
+
+%button-delete {
+  @extend %body-l;
+
+  font-weight: 700;
+  padding: 8px 0;
+  background: $color-red;
+  color: $color-white;
+
+  &:hover {
+    background: $color-light-red;
+  }
+}

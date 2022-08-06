@@ -1,0 +1,12 @@
+.home {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  align-items: center;
+  justify-content: center;
+}
+
+.home__title {
+  @extend %heading-xl;
+}

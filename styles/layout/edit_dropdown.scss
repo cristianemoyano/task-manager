@@ -1,0 +1,30 @@
+.edit__dropdown {
+  display: none;
+  position: absolute;
+  top: 90px;
+  right: 24px;
+  padding: 16px;
+  background: $color-white;
+  border-radius: 8px;
+}
+
+.edit__dropdown--open {
+  display: block;
+}
+
+.edit__button__edit,
+.edit__button__delete {
+  @extend %body-l;
+
+  width: 160px;
+  justify-content: flex-start;
+}
+
+.edit__button__edit {
+  margin-bottom: 16px;
+  color: $color-medium-gray;
+}
+
+.edit__button__delete {
+  color: $color-red;
+}

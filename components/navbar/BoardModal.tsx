@@ -37,7 +37,7 @@ export default function BoardModal({ boards, close, isVisible }: Props) {
 
   return (
     <div
-      className={isVisible ? 'board__modal--open' : 'board__modal'}
+      className={isVisible ? 'board__modal board__modal--open' : 'board__modal'}
       onClick={handleCloseModal}
     >
       <div className='board__container'>
@@ -49,7 +49,7 @@ export default function BoardModal({ boards, close, isVisible }: Props) {
                 <div
                   className={
                     pathname.includes(item._id.toString())
-                      ? 'board__item--active'
+                      ? 'board__item board__item--active'
                       : 'board__item'
                   }
                 >
@@ -66,7 +66,7 @@ export default function BoardModal({ boards, close, isVisible }: Props) {
             </Link>
           ))}
           <button
-            className='board__items_button'
+            className='board__item__button'
             onClick={handleCreateNewBoard}
           >
             <Image
