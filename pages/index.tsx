@@ -7,13 +7,14 @@ import { IBoard } from '@/typing';
 import HeadOfPage from '@/components/shared/HeadOfPage';
 import EmptyState from '@/components/shared/EmptyState';
 import Navbar from '@/components/navbar/Navbar';
+import AddNewBoard from '@/components/modals/AddNewBoard';
 
 const Home: NextPage<{ boards: [IBoard] }> = ({ boards }) => {
-  console.log(boards);
   return (
     <HeadOfPage title='Home' content='Welcome Home'>
       <>
         <Navbar boards={boards} />
+        <AddNewBoard />
         {boards.length ? (
           <main className='home'>
             <h1 className='home__title'>

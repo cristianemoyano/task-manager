@@ -22,7 +22,7 @@ export default function Modal({ isVisible, close, children }: Props) {
 
   return (
     <div
-      className={isVisible ? 'modal--open top ' : 'modal top'}
+      className={isVisible ? 'modal modal--open top ' : 'modal top'}
       onClick={handleClick}
     >
       <div className='modal__container'>{children}</div>

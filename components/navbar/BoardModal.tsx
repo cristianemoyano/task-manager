@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
-// import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
 
-// import { toggleNewBoard } from '../../features/modal/modalSlice';
 import { IBoard } from '@/typing';
 
 interface Props {
@@ -14,7 +12,6 @@ interface Props {
 }
 
 export default function BoardModal({ boards, close, isVisible }: Props) {
-  // const dispatch = useDispatch();
   const { pathname } = useRouter();
 
   useEffect(() => {

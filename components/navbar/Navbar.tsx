@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-// import { useDispatch } from 'react-redux';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-// import { toggleNewTask } from '../../features/modal/modalSlice';
 import BoardModal from './BoardModal';
 import EditDropdown from './EditDropdown';
 import { IBoard } from '@/typing';
@@ -13,13 +11,11 @@ export default function Navbar({ boards }: { boards: [IBoard] }) {
   const [isBoardModalOpen, setIsBoardModalOpen] = useState(false);
   const [isEditDropdownOpen, setIsEditDropdownOpen] = useState(false);
   const { pathname } = useRouter();
-  // const dispatch = useDispatch();
 
   return (
     <>
       <nav className='navbar'>
         <div className='navbar__container'>
-          {/* logo */}
           <Link href='/' passHref>
             <a>
               <Image
@@ -31,9 +27,7 @@ export default function Navbar({ boards }: { boards: [IBoard] }) {
               />
             </a>
           </Link>
-          {/* board name */}
           <h2 className='navbar__title'>home</h2>
-          {/* board name input */}
           <div
             className='navbar__dropdown'
             onClick={() => setIsBoardModalOpen(!isBoardModalOpen)}
@@ -62,7 +56,6 @@ export default function Navbar({ boards }: { boards: [IBoard] }) {
         </div>
         {pathname !== '/' && (
           <div className='navbar__container'>
-            {/* add new task button */}
             <button
               className='navbar__add__button'
               // onClick={() => dispatch(toggleNewTask())}
@@ -77,7 +70,6 @@ export default function Navbar({ boards }: { boards: [IBoard] }) {
               />
               <h3 className='navbar__add__text'>+ Add New Task</h3>
             </button>
-            {/* board button */}
             <button
               className='navbar__edit__buton'
               onClick={() => setIsEditDropdownOpen(!isEditDropdownOpen)}
