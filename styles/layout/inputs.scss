@@ -1,0 +1,57 @@
+.input__text__control {
+  margin-bottom: 24px;
+}
+
+.input__array__container {
+  margin-bottom: 24px;
+}
+
+.input__array__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.input__array__control {
+  display: flex;
+  gap: 16px;
+}
+
+.input__label {
+  @extend %body-m;
+
+  display: block;
+  color: $color-medium-gray;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.input__text {
+  @extend %body-l;
+
+  padding: 8px 16px;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid rgba(130, 143, 163, 0.25);
+  border-radius: 4px;
+  color: $color-black;
+
+  &::placeholder {
+    @extend %body-l;
+
+    color: rgba(0, 1, 18, 0.25);
+  }
+
+  &.error {
+    border: 1px solid $color-red;
+  }
+}
+
+.input__textarea {
+}
+
+.input__array__delete {
+  border-radius: 0;
+  padding: 8px;
+}

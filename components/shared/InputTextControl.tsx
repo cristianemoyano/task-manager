@@ -18,18 +18,18 @@ export default function InputTextControl({
   placeholder,
 }: Props) {
   return (
-    <>
-      <label htmlFor={name} className='modal__label'>
+    <div className='input__text__control'>
+      <label htmlFor={name} className='input__label'>
         {label}
       </label>
       <input
         type='text'
         id={name}
         placeholder={placeholder}
-        className='modal__input__text'
+        className='input__text'
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
-    </>
+    </div>
   );
 }

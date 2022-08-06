@@ -5,9 +5,9 @@ export interface IBoard {
 }
 
 export interface IColumn {
-  _id: number | string;
+  _id?: number | string;
   name: string;
-  tasks: ITask[];
+  tasks?: ITask[];
 }
 
 export interface ITask {

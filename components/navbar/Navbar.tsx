@@ -3,11 +3,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import BoardModal from './BoardModal';
+import AllBoardsModal from './AllBoardsModal';
 import EditDropdown from './EditDropdown';
 import { IBoard } from '@/typing';
 
-export default function Navbar({ boards }: { boards: [IBoard] }) {
+interface Props {
+  boards: IBoard[];
+  board?: IBoard;
+}
+
+export default function Navbar({ boards, board }: Props) {
   const [isBoardModalOpen, setIsBoardModalOpen] = useState(false);
   const [isEditDropdownOpen, setIsEditDropdownOpen] = useState(false);
   const { pathname } = useRouter();
@@ -27,13 +32,12 @@ export default function Navbar({ boards }: { boards: [IBoard] }) {
               />
             </a>
           </Link>
-          <h2 className='navbar__title'>home</h2>
           <div
             className='navbar__dropdown'
             onClick={() => setIsBoardModalOpen(!isBoardModalOpen)}
           >
             <h2 className='navbar__dropdown__title'>
-              {pathname === '/' ? 'Choose your board' : 'Board'}
+              {pathname === '/' ? 'Choose your board' : board!.name}
             </h2>
             {isBoardModalOpen ? (
               <Image
@@ -58,6 +62,7 @@ export default function Navbar({ boards }: { boards: [IBoard] }) {
           <div className='navbar__container'>
             <button
               className='navbar__add__button'
+              // TODO: add new task
               // onClick={() => dispatch(toggleNewTask())}
             >
               <Image
@@ -86,7 +91,7 @@ export default function Navbar({ boards }: { boards: [IBoard] }) {
           </div>
         )}
       </nav>
-      <BoardModal
+      <AllBoardsModal
         isVisible={isBoardModalOpen}
         close={() => setIsBoardModalOpen(false)}
         boards={boards}

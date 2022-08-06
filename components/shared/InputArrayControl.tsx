@@ -16,14 +16,14 @@ export default function InputArrayControl({
   remove,
 }: Props) {
   return (
-    <>
+    <div className='input__array__control'>
       <input
         type='text'
-        className='modal__input__text'
+        className='input__text'
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
-      <button onClick={remove} className='modal__delete__column' type='button'>
+      <button onClick={remove} className='input__array__delete' type='button'>
         <Image
           src='/assets/icon-cross.svg'
           width={15}
@@ -32,6 +32,6 @@ export default function InputArrayControl({
           alt='cross'
         />
       </button>
-    </>
+    </div>
   );
 }

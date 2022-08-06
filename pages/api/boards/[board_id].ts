@@ -33,4 +33,15 @@ export default async function handler(
       res.status(500).json(error);
     }
   }
+
+  if (method === 'PATCH') {
+    const { name, columns } = body;
+
+    const board = await Board.findOneAndUpdate(
+      { _id: board_id },
+      { name, columns }
+    );
+
+    res.status(200).json({ board });
+  }
 }

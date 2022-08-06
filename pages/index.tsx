@@ -7,14 +7,14 @@ import { IBoard } from '@/typing';
 import HeadOfPage from '@/components/shared/HeadOfPage';
 import EmptyState from '@/components/shared/EmptyState';
 import Navbar from '@/components/navbar/Navbar';
-import AddNewBoard from '@/components/modals/AddNewBoard';
+import BoardModal from '@/components/modals/BoardModal';
 
-const Home: NextPage<{ boards: [IBoard] }> = ({ boards }) => {
+const Home: NextPage<{ boards: IBoard[] }> = ({ boards }) => {
   return (
     <HeadOfPage title='Home' content='Welcome Home'>
       <>
         <Navbar boards={boards} />
-        <AddNewBoard />
+        <BoardModal isNewBoard={true} />
         {boards.length ? (
           <main className='home'>
             <h1 className='home__title'>
@@ -36,12 +36,12 @@ const Home: NextPage<{ boards: [IBoard] }> = ({ boards }) => {
 export async function getStaticProps() {
   await connectMongo();
 
-  const boards = await Board.find();
-  const allBoards = JSON.parse(JSON.stringify(boards));
+  let boards = await Board.find();
+  boards = JSON.parse(JSON.stringify(boards));
 
   return {
     props: {
-      boards: allBoards,
+      boards,
     },
     // revalidate: true,
   };

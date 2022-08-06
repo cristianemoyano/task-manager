@@ -26,14 +26,16 @@
   cursor: auto;
 }
 
-.modal__title {
-  @extend %heading-l;
-
+.modal__header {
   margin-bottom: 24px;
+}
 
-  &.delete {
-    color: $color-red;
-  }
+.modal__header__title {
+  @extend %heading-l;
+}
+
+.modal__header__title--delete {
+  color: $color-red;
 }
 
 .modal__text {
@@ -59,59 +61,12 @@
   @extend %button-delete;
 
   width: 100%;
-  margin-bottom: 16px;
-}
-
-.modal__group__container {
-  margin-bottom: 24px;
-}
-
-.modal__label {
-  @extend %body-m;
-
-  display: block;
-  margin-bottom: 8px;
-  color: $color-medium-gray;
-  font-weight: 700;
-}
-
-.modal__input__text {
-  @extend %body-l;
-
-  padding: 8px 16px;
-  width: 100%;
-  background: #ffffff;
-  border: 1px solid rgba(130, 143, 163, 0.25);
-  border-radius: 4px;
-  color: $color-black;
-
-  &::placeholder {
-    @extend %body-l;
-
-    color: rgba(0, 1, 18, 0.25);
-  }
-
-  &.error {
-    border: 1px solid $color-red;
-  }
 }
 
 .modal__input__textarea {
   min-height: 112px;
   max-height: 112px;
   resize: none;
-}
-
-.input__text__container {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.modal__delete__column {
-  border-radius: 0;
-  padding: 8px;
 }
 
 .modal__dropdown {

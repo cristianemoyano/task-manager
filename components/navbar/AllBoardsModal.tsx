@@ -4,15 +4,18 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { IBoard } from '@/typing';
+import useModal from '@/contexts/useModal';
 
 interface Props {
-  boards: [IBoard];
+  boards: IBoard[];
   close: () => void;
   isVisible: boolean;
 }
 
-export default function BoardModal({ boards, close, isVisible }: Props) {
-  const { pathname } = useRouter();
+export default function AllBoardsModal({ boards, close, isVisible }: Props) {
+  const { toggleBoardModal } = useModal();
+  const router = useRouter();
+  const { board_id } = router.query;
 
   useEffect(() => {
     if (!isVisible) {
@@ -29,7 +32,7 @@ export default function BoardModal({ boards, close, isVisible }: Props) {
 
   const handleCreateNewBoard = () => {
     close();
-    // dispatch(toggleNewBoard());
+    toggleBoardModal();
   };
 
   return (
@@ -45,7 +48,7 @@ export default function BoardModal({ boards, close, isVisible }: Props) {
               <a>
                 <div
                   className={
-                    pathname.includes(item._id.toString())
+                    board_id === item._id
                       ? 'board__item board__item--active'
                       : 'board__item'
                   }

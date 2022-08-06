@@ -1,4 +1,4 @@
-import React from 'react';
+import useModal from '@/contexts/useModal';
 
 interface Props {
   isVisible: boolean;
@@ -6,9 +6,20 @@ interface Props {
 }
 
 export default function EditDropdown({ isVisible, close }: Props) {
+  const { toggleBoardModal } = useModal();
   return (
-    <div className={isVisible ? 'edit__dropdown' : 'edit__dropdown'}>
-      <button className='edit__button__edit' onClick={close}>
+    <div
+      className={
+        isVisible ? 'edit__dropdown edit__dropdown--open' : 'edit__dropdown'
+      }
+    >
+      <button
+        className='edit__button__edit'
+        onClick={() => {
+          close();
+          toggleBoardModal();
+        }}
+      >
         Edit Board
       </button>
       <button className='edit__button__delete' onClick={close}>
