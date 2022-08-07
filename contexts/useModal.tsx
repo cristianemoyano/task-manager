@@ -7,33 +7,68 @@ import {
   useState,
 } from 'react';
 
+import { ISubtask } from '@/typing';
+
+interface ITaskModalContent {
+  _id?: string;
+  title?: string;
+  description?: string;
+  status?: string;
+  subtasks?: ISubtask[];
+}
+
 interface ModalProviderProps {
   children: React.ReactNode;
 }
+
 interface IModal {
   isBoardModalOpen: boolean;
   toggleBoardModal: () => void;
+  isDeleteModalOpen: boolean;
+  deleteModalContent: { isBoard: boolean; _id: string; name: string };
+  setDeleteModalContent: Dispatch<
+    SetStateAction<{ isBoard: boolean; _id: string; name: string }>
+  >;
+  toggleDeleteModal: () => void;
   isTaskModalOpen: boolean;
   toggleTaskModal: () => void;
-  isNewTask: boolean;
-  setIsNewTask: Dispatch<SetStateAction<boolean>>;
+  taskModalContent: { isNew: boolean; task: ITaskModalContent };
+  setTaskModalContent: Dispatch<SetStateAction<{ isNew: boolean; task: {} }>>;
 }
 
 const ModalContext = createContext<IModal>({
   isBoardModalOpen: false,
   toggleBoardModal: () => {},
+  isDeleteModalOpen: false,
+  deleteModalContent: { isBoard: true, _id: '', name: '' },
+  setDeleteModalContent: () => {},
+  toggleDeleteModal: () => {},
   isTaskModalOpen: false,
   toggleTaskModal: () => {},
-  isNewTask: false,
-  setIsNewTask: () => {},
+  taskModalContent: {
+    isNew: true,
+    task: {},
+  },
+  setTaskModalContent: () => {},
 });
 
 export const ModalProvider = ({ children }: ModalProviderProps) => {
   const [isBoardModalOpen, setIsBoardModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteModalContent, setDeleteModalContent] = useState({
+    isBoard: true,
+    _id: '',
+    name: '',
+  });
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
-  const [isNewTask, setIsNewTask] = useState(false);
+  const [taskModalContent, setTaskModalContent] = useState({
+    isNew: true,
+    task: {},
+  });
 
   const toggleBoardModal = () => setIsBoardModalOpen(!isBoardModalOpen);
+
+  const toggleDeleteModal = () => setIsDeleteModalOpen(!isDeleteModalOpen);
 
   const toggleTaskModal = () => setIsTaskModalOpen(!isTaskModalOpen);
 
@@ -41,13 +76,23 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
     () => ({
       isBoardModalOpen,
       toggleBoardModal,
+      isDeleteModalOpen,
+      toggleDeleteModal,
+      deleteModalContent,
+      setDeleteModalContent,
       isTaskModalOpen,
       toggleTaskModal,
-      isNewTask,
-      setIsNewTask,
+      taskModalContent,
+      setTaskModalContent,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isBoardModalOpen, isTaskModalOpen, isNewTask]
+    [
+      isBoardModalOpen,
+      isDeleteModalOpen,
+      deleteModalContent,
+      isTaskModalOpen,
+      taskModalContent,
+    ]
   );
 
   return (

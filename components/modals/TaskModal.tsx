@@ -18,16 +18,22 @@ interface Props {
 }
 
 export default function TaskModal({ board }: Props) {
-  const { isTaskModalOpen, isNewTask, toggleTaskModal } = useModal();
+  const {
+    isTaskModalOpen,
+    taskModalContent: { isNew, task },
+    toggleTaskModal,
+  } = useModal();
   const { control, handleSubmit, reset, register } = useForm<ITask>({
     defaultValues: {
-      title: '',
-      description: '',
-      status: board.columns[0]._id!.toString(),
-      subtasks: [
-        { title: '', isCompleted: false },
-        { title: '', isCompleted: false },
-      ],
+      title: isNew ? '' : task.title,
+      description: isNew ? '' : task.description,
+      status: isNew ? board.columns[0]._id!.toString() : task.status,
+      subtasks: isNew
+        ? [
+            { title: '', isCompleted: false },
+            { title: '', isCompleted: false },
+          ]
+        : task.subtasks,
     },
   });
 
@@ -44,13 +50,15 @@ export default function TaskModal({ board }: Props) {
     <Modal
       isVisible={isTaskModalOpen}
       close={() => {
-        // dispatch(toggleNewTask());
+        toggleTaskModal();
         // TODO reset if isNewTask
       }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <header className='modal__header'>
-          <h3 className='modal__header__title'>Add New Task</h3>
+          <h3 className='modal__header__title'>
+            {isNew ? 'Add New Task' : 'Edit Task'}
+          </h3>
         </header>
         <Controller
           control={control}
@@ -120,7 +128,7 @@ export default function TaskModal({ board }: Props) {
           )}
         />
         <button className='modal__button__primary__s' type='submit'>
-          Create Task
+          {isNew ? 'Create Task' : ' Save Changes'}
         </button>
       </form>
     </Modal>

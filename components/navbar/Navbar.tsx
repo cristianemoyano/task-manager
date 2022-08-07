@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import useModal from '@/contexts/useModal';
 import AllBoardsModal from './AllBoardsModal';
 import EditDropdown from './EditDropdown';
 import { IBoard } from '@/typing';
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export default function Navbar({ boards, board }: Props) {
+  const { toggleTaskModal, setTaskModalContent } = useModal();
   const [isBoardModalOpen, setIsBoardModalOpen] = useState(false);
   const [isEditDropdownOpen, setIsEditDropdownOpen] = useState(false);
   const { pathname } = useRouter();
@@ -62,8 +64,10 @@ export default function Navbar({ boards, board }: Props) {
           <div className='navbar__container'>
             <button
               className='navbar__add__button'
-              // TODO: add new task
-              // onClick={() => dispatch(toggleNewTask())}
+              onClick={() => {
+                toggleTaskModal();
+                setTaskModalContent({ isNew: true, task: {} });
+              }}
             >
               <Image
                 src='/assets/icon-add-task-mobile.svg'
@@ -96,10 +100,13 @@ export default function Navbar({ boards, board }: Props) {
         close={() => setIsBoardModalOpen(false)}
         boards={boards}
       />
-      <EditDropdown
-        isVisible={isEditDropdownOpen}
-        close={() => setIsEditDropdownOpen(false)}
-      />
+      {pathname !== '/' && (
+        <EditDropdown
+          isVisible={isEditDropdownOpen}
+          close={() => setIsEditDropdownOpen(false)}
+          board={board}
+        />
+      )}
     </>
   );
 }
