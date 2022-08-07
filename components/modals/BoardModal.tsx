@@ -24,7 +24,7 @@ interface IAddNewBoard {
 
 export default function BoardModal({ isNewBoard, board }: Props) {
   const { isBoardModalOpen, toggleBoardModal } = useModal();
-  const { control, handleSubmit, reset } = useForm<IAddNewBoard>({
+  const { control, handleSubmit, reset } = useForm<IBoard>({
     defaultValues: {
       name: isNewBoard ? '' : board!.name,
       columns: isNewBoard
@@ -38,7 +38,7 @@ export default function BoardModal({ isNewBoard, board }: Props) {
     name: 'columns',
   });
 
-  const onSubmit: SubmitHandler<IAddNewBoard> = async (data) => {
+  const onSubmit: SubmitHandler<IBoard> = async (data) => {
     if (isNewBoard) {
       await axios.post('/api/boards', { board: data });
       reset({

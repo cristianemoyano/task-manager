@@ -7,17 +7,18 @@ import { IBoard } from '@/typing';
 import HeadOfPage from '@/components/shared/HeadOfPage';
 import Navbar from '@/components/navbar/Navbar';
 import BoardModal from '@/components/modals/BoardModal';
+import TaskModal from '@/components/modals/TaskModal';
 
 const SingleBoard: NextPage<{ board: IBoard; boards: IBoard[] }> = ({
   board,
   boards,
 }) => {
-  console.log(board);
   return (
     <HeadOfPage title='Board' content='Your Board'>
       <>
         <Navbar boards={boards} board={board} />
         <BoardModal isNewBoard={false} board={board} />
+        <TaskModal board={board} />
       </>
     </HeadOfPage>
   );

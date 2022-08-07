@@ -1,5 +1,5 @@
 export interface IBoard {
-  _id: number | string;
+  _id?: number | string;
   name: string;
   columns: IColumn[];
 }
@@ -11,7 +11,7 @@ export interface IColumn {
 }
 
 export interface ITask {
-  _id: number | string;
+  _id?: number | string;
   title: string;
   description?: string;
   status: string;
@@ -19,7 +19,7 @@ export interface ITask {
 }
 
 export interface ISubtask {
-  _id: number | string;
+  _id?: number | string;
   title: string;
   isCompleted: boolean;
 }
