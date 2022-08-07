@@ -26,14 +26,18 @@ interface IModal {
   toggleBoardModal: () => void;
   isDeleteModalOpen: boolean;
   deleteModalContent: { isBoard: boolean; _id: string; name: string };
+  toggleDeleteModal: () => void;
   setDeleteModalContent: Dispatch<
     SetStateAction<{ isBoard: boolean; _id: string; name: string }>
   >;
-  toggleDeleteModal: () => void;
   isTaskModalOpen: boolean;
   toggleTaskModal: () => void;
   taskModalContent: { isNew: boolean; task: ITaskModalContent };
   setTaskModalContent: Dispatch<SetStateAction<{ isNew: boolean; task: {} }>>;
+  isTaskInfosModalOpen: boolean;
+  toggleTaskInfosModal: () => void;
+  taskInfosModalContent: ITaskModalContent;
+  setTaskInfosModalContent: Dispatch<SetStateAction<{}>>;
 }
 
 const ModalContext = createContext<IModal>({
@@ -44,12 +48,13 @@ const ModalContext = createContext<IModal>({
   setDeleteModalContent: () => {},
   toggleDeleteModal: () => {},
   isTaskModalOpen: false,
+  taskModalContent: { isNew: true, task: {} },
   toggleTaskModal: () => {},
-  taskModalContent: {
-    isNew: true,
-    task: {},
-  },
   setTaskModalContent: () => {},
+  isTaskInfosModalOpen: false,
+  taskInfosModalContent: {},
+  toggleTaskInfosModal: () => {},
+  setTaskInfosModalContent: () => {},
 });
 
 export const ModalProvider = ({ children }: ModalProviderProps) => {
@@ -65,12 +70,17 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
     isNew: true,
     task: {},
   });
+  const [isTaskInfosModalOpen, setIsTaskInfosModalOpen] = useState(false);
+  const [taskInfosModalContent, setTaskInfosModalContent] = useState({});
 
   const toggleBoardModal = () => setIsBoardModalOpen(!isBoardModalOpen);
 
   const toggleDeleteModal = () => setIsDeleteModalOpen(!isDeleteModalOpen);
 
   const toggleTaskModal = () => setIsTaskModalOpen(!isTaskModalOpen);
+
+  const toggleTaskInfosModal = () =>
+    setIsTaskInfosModalOpen(!isTaskInfosModalOpen);
 
   const memoedValue = useMemo(
     () => ({
@@ -84,6 +94,10 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
       toggleTaskModal,
       taskModalContent,
       setTaskModalContent,
+      isTaskInfosModalOpen,
+      toggleTaskInfosModal,
+      taskInfosModalContent,
+      setTaskInfosModalContent,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -92,6 +106,8 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
       deleteModalContent,
       isTaskModalOpen,
       taskModalContent,
+      isTaskInfosModalOpen,
+      taskInfosModalContent,
     ]
   );
 

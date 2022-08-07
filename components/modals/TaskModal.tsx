@@ -13,11 +13,7 @@ import InputTextControl from '../shared/InputTextControl';
 import InputArrayControl from '../shared/InputArrayControl';
 import InputDropdownControl from '../shared/InputDropdownControl';
 
-interface Props {
-  board: IBoard;
-}
-
-export default function TaskModal({ board }: Props) {
+export default function TaskModal({ board }: { board: IBoard }) {
   const {
     isTaskModalOpen,
     taskModalContent: { isNew, task },
@@ -43,7 +39,14 @@ export default function TaskModal({ board }: Props) {
   });
 
   const onSubmit: SubmitHandler<ITask> = async (data) => {
-    console.log(data);
+    if (isNew) {
+      console.log(data);
+      await axios.patch('/api/task/add-task', {
+        task: data,
+        board_id: board._id,
+        column_id: data.status,
+      });
+    }
   };
 
   return (

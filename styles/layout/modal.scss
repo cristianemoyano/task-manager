@@ -30,6 +30,12 @@
   margin-bottom: 24px;
 }
 
+.modal__header__flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .modal__header__title {
   @extend %heading-l;
 }
