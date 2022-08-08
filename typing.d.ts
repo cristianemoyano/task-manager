@@ -1,25 +1,25 @@
 export interface IBoard {
-  _id?: number | string;
+  _id: string;
   name: string;
   columns: IColumn[];
 }
 
 export interface IColumn {
-  _id?: number | string;
+  _id: string;
   name: string;
-  tasks?: ITask[];
+  tasks: ITask[];
 }
 
 export interface ITask {
-  _id?: number | string;
+  _id: string;
   title: string;
-  description?: string;
+  description: string;
   status: string;
   subtasks: ISubtask[];
 }
 
 export interface ISubtask {
-  _id?: number | string;
+  _id: string;
   title: string;
   isCompleted: boolean;
 }

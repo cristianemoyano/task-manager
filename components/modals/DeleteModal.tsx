@@ -1,18 +1,26 @@
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { IBoard } from '@/typing';
 import useModal from '@/contexts/useModal';
 import Modal from '../shared/Modal';
 
-export default function DeleteModal() {
+export default function DeleteModal({ board }: { board: IBoard }) {
   const {
     toggleDeleteModal,
     isDeleteModalOpen,
-    deleteModalContent: { _id, isBoard, name },
+    deleteModalContent: { _id, isBoard, name, column_id },
   } = useModal();
+  const router = useRouter();
 
-  const onDelete = () => {
+  const onDelete = async () => {
     if (isBoard) {
-      // delete board
+      await axios.delete(`/api/boards/${_id}`);
+      router.push('/');
     } else {
-      // delete task
+      await axios.delete(
+        `/api/task/delete-task?board_id=${board._id}&column_id=${column_id}&task_id=${_id}`
+      );
+      toggleDeleteModal();
     }
   };
 

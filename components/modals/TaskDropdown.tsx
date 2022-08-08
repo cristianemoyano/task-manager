@@ -40,8 +40,9 @@ export default function TaskDropdown({ isVisible, close, task }: Props) {
           toggleDeleteModal();
           setDeleteModalContent({
             isBoard: false,
-            name: task!.title,
+            name: task.title,
             _id: task!._id!.toString(),
+            column_id: task.status,
           });
         }}
       >

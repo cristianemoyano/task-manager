@@ -17,8 +17,10 @@ export default async function handler(
     const board = await Board.findOne({ _id: board_id });
 
     const taskToUpdate = board.columns
-      .find((c: IColumn) => c._id.toString() == column_id)
-      .tasks.find((t: ITask) => t._id.toString() == task_id);
+      .find((c: IColumn) => c._id.toString() === column_id)
+      .tasks.find((t: ITask) => t._id.toString() === task_id);
+
+    console.log(taskToUpdate);
 
     taskToUpdate.title = task.title;
     taskToUpdate.description = task.description;

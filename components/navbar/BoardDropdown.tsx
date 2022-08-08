@@ -8,8 +8,29 @@ interface Props {
 }
 
 export default function BoardDropdown({ isVisible, close, board }: Props) {
-  const { toggleBoardModal, toggleDeleteModal, setDeleteModalContent } =
-    useModal();
+  const {
+    toggleBoardModal,
+    toggleDeleteModal,
+    setDeleteModalContent,
+    setIsNewBoard,
+  } = useModal();
+
+  const handleEditClick = () => {
+    close();
+    setIsNewBoard(false);
+    toggleBoardModal();
+  };
+
+  const handleDeleteClick = () => {
+    close();
+    toggleDeleteModal();
+    setDeleteModalContent({
+      isBoard: true,
+      name: board!.name,
+      _id: board!._id!.toString(),
+      column_id: '',
+    });
+  };
   return (
     <div
       className={
@@ -18,27 +39,10 @@ export default function BoardDropdown({ isVisible, close, board }: Props) {
           : 'edit__dropdown board__dropdown'
       }
     >
-      <button
-        className='edit__button__edit'
-        onClick={() => {
-          close();
-          toggleBoardModal();
-        }}
-      >
+      <button className='edit__button__edit' onClick={handleEditClick}>
         Edit Board
       </button>
-      <button
-        className='edit__button__delete'
-        onClick={() => {
-          close();
-          toggleDeleteModal();
-          setDeleteModalContent({
-            isBoard: true,
-            name: board!.name,
-            _id: board!._id!.toString(),
-          });
-        }}
-      >
+      <button className='edit__button__delete' onClick={handleDeleteClick}>
         Delete Board
       </button>
     </div>

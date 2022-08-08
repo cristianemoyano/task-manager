@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   useForm,
   useFieldArray,
@@ -5,46 +6,62 @@ import {
   SubmitHandler,
 } from 'react-hook-form';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 import useModal from '@/contexts/useModal';
-import { IColumn, IBoard } from '@/typing';
+import { IBoard, ITask } from '@/typing';
 import Modal from '../shared/Modal';
 import InputTextControl from '../shared/InputTextControl';
 import InputArrayControl from '../shared/InputArrayControl';
 
-interface Props {
-  isNewBoard: boolean;
-  board?: IBoard;
-}
-
-interface IAddNewBoard {
+interface IControllerColumn {
+  _id?: string;
   name: string;
-  columns: IColumn[];
+  tasks: ITask[] | [];
 }
 
-export default function BoardModal({ isNewBoard, board }: Props) {
-  const { isBoardModalOpen, toggleBoardModal } = useModal();
-  const { control, handleSubmit, reset } = useForm<IBoard>({
+interface IControllerBoard {
+  name: string;
+  columns: IControllerColumn[];
+}
+
+export default function BoardModal({ board }: { board?: IBoard }) {
+  const { isBoardModalOpen, toggleBoardModal, isNewBoard } = useModal();
+
+  const { control, handleSubmit, reset, setValue } = useForm<IControllerBoard>({
     defaultValues: {
-      name: isNewBoard ? '' : board!.name,
-      columns: isNewBoard
-        ? [{ name: 'Todo' }, { name: 'Doing' }]
-        : board!.columns,
+      name: '',
+      columns: [
+        { name: 'Todo', tasks: [] },
+        { name: 'Doing', tasks: [] },
+      ],
     },
   });
+
+  useEffect(() => {
+    if (!isNewBoard && board) {
+      setValue('name', board!.name);
+      setValue('columns', board!.columns);
+    } else {
+      setValue('name', '');
+      setValue('columns', [
+        { name: 'Todo', tasks: [] },
+        { name: 'Doing', tasks: [] },
+      ]);
+    }
+  }, [isNewBoard]);
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'columns',
   });
 
-  const onSubmit: SubmitHandler<IBoard> = async (data) => {
+  const router = useRouter();
+
+  const onSubmit: SubmitHandler<IControllerBoard> = async (data) => {
     if (isNewBoard) {
-      await axios.post('/api/boards', { board: data });
-      reset({
-        name: '',
-        columns: [{ name: 'Todo' }, { name: 'Doing' }],
-      });
+      const newBoard: IBoard = await axios.post('/api/boards', { board: data });
+      router.push(newBoard._id);
     } else {
       await axios.patch(`/api/boards/${board!._id}`, { ...data });
       toggleBoardModal();
@@ -56,7 +73,15 @@ export default function BoardModal({ isNewBoard, board }: Props) {
       isVisible={isBoardModalOpen}
       close={() => {
         toggleBoardModal();
-        // TODO reset if isNewBoard
+        if (isNewBoard) {
+          reset({
+            name: '',
+            columns: [
+              { name: 'Todo', tasks: [] },
+              { name: 'Doing', tasks: [] },
+            ],
+          });
+        }
       }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>

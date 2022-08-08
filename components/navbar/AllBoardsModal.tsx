@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function AllBoardsModal({ boards, close, isVisible }: Props) {
-  const { toggleBoardModal } = useModal();
+  const { toggleBoardModal, setIsNewBoard } = useModal();
   const router = useRouter();
   const { board_id } = router.query;
 
@@ -32,6 +32,7 @@ export default function AllBoardsModal({ boards, close, isVisible }: Props) {
 
   const handleCreateNewBoard = () => {
     close();
+    setIsNewBoard(true);
     toggleBoardModal();
   };
 

@@ -7,37 +7,46 @@ import {
 } from 'react-hook-form';
 import axios from 'axios';
 
+import { IBoard } from '@/typing';
 import useModal from '@/contexts/useModal';
-import { ITask, IBoard, ISubtask } from '@/typing';
 import Modal from '../shared/Modal';
 import InputTextControl from '../shared/InputTextControl';
 import InputArrayControl from '../shared/InputArrayControl';
 import InputDropdownControl from '../shared/InputDropdownControl';
 
+interface IControllerSubtasks {
+  _id?: string;
+  title: string;
+  isCompleted: boolean;
+}
+
 interface IControllerTask {
   title: string;
   description: string;
   status: string;
-  subtasks: ISubtask[];
+  subtasks: IControllerSubtasks[];
 }
 
 export default function TaskModal({ board }: { board: IBoard }) {
+  const defaultValues = {
+    title: '',
+    description: '',
+    status: board.columns[0]._id!.toString(),
+    subtasks: [
+      { title: '', isCompleted: false },
+      { title: '', isCompleted: false },
+    ],
+  };
+
   const {
     isTaskModalOpen,
     taskModalContent: { isNew, task },
     toggleTaskModal,
   } = useModal();
+
   const { control, handleSubmit, reset, register, setValue } =
     useForm<IControllerTask>({
-      defaultValues: {
-        title: '',
-        description: '',
-        status: board.columns[0]._id!.toString(),
-        subtasks: [
-          { title: '', isCompleted: false },
-          { title: '', isCompleted: false },
-        ],
-      },
+      defaultValues,
     });
 
   const { fields, append, remove } = useFieldArray({
@@ -57,15 +66,31 @@ export default function TaskModal({ board }: { board: IBoard }) {
 
   const onSubmit: SubmitHandler<IControllerTask> = async (data) => {
     if (isNew) {
-      console.log(data);
-      // await axios.patch('/api/task/add-task', {
-      //   task: data,
-      //   board_id: board._id,
-      //   column_id: data.status,
-      // });
+      await axios.patch('/api/task/add-task', {
+        task: data,
+        board_id: board._id,
+        column_id: data.status,
+      });
     } else {
-      console.log(data);
+      if (task.status === data.status) {
+        await axios.patch('/api/task/edit-task', {
+          task: data,
+          board_id: board._id,
+          column_id: task.status,
+          task_id: task._id,
+        });
+      } else {
+        await axios.delete(
+          `/api/task/delete-task?board_id=${board._id}&column_id=${task.status}&task_id=${task._id}`
+        );
+        await axios.patch('/api/task/add-task', {
+          task: data,
+          board_id: board._id,
+          column_id: data.status,
+        });
+      }
     }
+    toggleTaskModal();
   };
 
   return (
@@ -73,7 +98,9 @@ export default function TaskModal({ board }: { board: IBoard }) {
       isVisible={isTaskModalOpen}
       close={() => {
         toggleTaskModal();
-        // TODO reset if isNewTask
+        if (isNew) {
+          reset(defaultValues);
+        }
       }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>

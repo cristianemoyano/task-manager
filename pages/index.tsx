@@ -14,7 +14,7 @@ const Home: NextPage<{ boards: IBoard[] }> = ({ boards }) => {
     <HeadOfPage title='Home' content='Welcome Home'>
       <>
         <Navbar boards={boards} />
-        <BoardModal isNewBoard={true} />
+        <BoardModal />
         {boards.length ? (
           <main className='home'>
             <h1 className='home__title'>

@@ -21,9 +21,9 @@ const SingleBoard: NextPage<{ board: IBoard; boards: IBoard[] }> = ({
     <HeadOfPage title='Board' content='Your Board'>
       <>
         <Navbar boards={boards} board={board} />
-        <BoardModal isNewBoard={false} board={board} />
+        <BoardModal board={board} />
         <TaskModal board={board} />
-        <DeleteModal />
+        <DeleteModal board={board} />
         <TaskInfosModal board={board} />
         <main>
           {board.columns.map((column) => (
