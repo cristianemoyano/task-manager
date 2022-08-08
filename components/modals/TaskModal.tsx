@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   useForm,
   useFieldArray,
@@ -7,11 +8,18 @@ import {
 import axios from 'axios';
 
 import useModal from '@/contexts/useModal';
-import { ITask, IBoard } from '@/typing';
+import { ITask, IBoard, ISubtask } from '@/typing';
 import Modal from '../shared/Modal';
 import InputTextControl from '../shared/InputTextControl';
 import InputArrayControl from '../shared/InputArrayControl';
 import InputDropdownControl from '../shared/InputDropdownControl';
+
+interface IControllerTask {
+  title: string;
+  description: string;
+  status: string;
+  subtasks: ISubtask[];
+}
 
 export default function TaskModal({ board }: { board: IBoard }) {
   const {
@@ -19,33 +27,44 @@ export default function TaskModal({ board }: { board: IBoard }) {
     taskModalContent: { isNew, task },
     toggleTaskModal,
   } = useModal();
-  const { control, handleSubmit, reset, register } = useForm<ITask>({
-    defaultValues: {
-      title: isNew ? '' : task.title,
-      description: isNew ? '' : task.description,
-      status: isNew ? board.columns[0]._id!.toString() : task.status,
-      subtasks: isNew
-        ? [
-            { title: '', isCompleted: false },
-            { title: '', isCompleted: false },
-          ]
-        : task.subtasks,
-    },
-  });
+  const { control, handleSubmit, reset, register, setValue } =
+    useForm<IControllerTask>({
+      defaultValues: {
+        title: '',
+        description: '',
+        status: board.columns[0]._id!.toString(),
+        subtasks: [
+          { title: '', isCompleted: false },
+          { title: '', isCompleted: false },
+        ],
+      },
+    });
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'subtasks',
   });
 
-  const onSubmit: SubmitHandler<ITask> = async (data) => {
+  useEffect(() => {
+    if (!isNew) {
+      setValue('title', task.title!);
+      setValue('description', task.description!);
+      setValue('status', task.status!);
+      setValue('subtasks', task.subtasks!);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isNew]);
+
+  const onSubmit: SubmitHandler<IControllerTask> = async (data) => {
     if (isNew) {
       console.log(data);
-      await axios.patch('/api/task/add-task', {
-        task: data,
-        board_id: board._id,
-        column_id: data.status,
-      });
+      // await axios.patch('/api/task/add-task', {
+      //   task: data,
+      //   board_id: board._id,
+      //   column_id: data.status,
+      // });
+    } else {
+      console.log(data);
     }
   };
 

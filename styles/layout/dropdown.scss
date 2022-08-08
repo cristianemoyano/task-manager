@@ -1,8 +1,6 @@
 .edit__dropdown {
   display: none;
   position: absolute;
-  top: 90px;
-  right: 24px;
   padding: 16px;
   background: $color-white;
   border-radius: 8px;
@@ -10,6 +8,15 @@
 
 .edit__dropdown--open {
   display: block;
+}
+
+.board__dropdown {
+  top: 90px;
+  right: 24px;
+}
+
+.task__dropdown {
+  right: 0;
 }
 
 .edit__button__edit,

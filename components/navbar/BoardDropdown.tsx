@@ -7,13 +7,15 @@ interface Props {
   board?: IBoard;
 }
 
-export default function EditDropdown({ isVisible, close, board }: Props) {
+export default function BoardDropdown({ isVisible, close, board }: Props) {
   const { toggleBoardModal, toggleDeleteModal, setDeleteModalContent } =
     useModal();
   return (
     <div
       className={
-        isVisible ? 'edit__dropdown edit__dropdown--open' : 'edit__dropdown'
+        isVisible
+          ? 'edit__dropdown edit__dropdown--open board__dropdown'
+          : 'edit__dropdown board__dropdown'
       }
     >
       <button

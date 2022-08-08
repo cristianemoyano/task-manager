@@ -12,6 +12,7 @@ import { IBoard, ISubtask } from '@/typing';
 import Modal from '../shared/Modal';
 import InputCheckboxControl from '../shared/InputCheckboxControl';
 import InputDropdownControl from '../shared/InputDropdownControl';
+import TaskDropdown from './TaskDropdown';
 
 interface IControllerTask {
   status: string;
@@ -19,11 +20,12 @@ interface IControllerTask {
 }
 
 export default function TaskInfosModal({ board }: { board: IBoard }) {
+  const [isTaskDropdownOpen, setIsTaskDropdownOpen] = useState(false);
   const [subtasksCompleted, setSubtasksCompleted] = useState(0);
   const {
     isTaskInfosModalOpen,
     toggleTaskInfosModal,
-    taskInfosModalContent: { title, description, subtasks, status },
+    taskInfosModalContent: { _id, title, description, subtasks, status },
   } = useModal();
   const { control, handleSubmit, reset, setValue } = useForm<IControllerTask>({
     defaultValues: {
@@ -46,6 +48,7 @@ export default function TaskInfosModal({ board }: { board: IBoard }) {
           return acc;
         }, 0)
       );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isTaskInfosModalOpen]);
 
   const onSubmit: SubmitHandler<IControllerTask> = async (data) => {
@@ -65,7 +68,7 @@ export default function TaskInfosModal({ board }: { board: IBoard }) {
           <button
             className='navbar__edit__buton'
             type='button'
-            // onClick={() => setIsEditDropdownOpen(!isEditDropdownOpen)}
+            onClick={() => setIsTaskDropdownOpen(!isTaskDropdownOpen)}
           >
             <Image
               src='/assets/icon-vertical-ellipsis.svg'
@@ -77,6 +80,20 @@ export default function TaskInfosModal({ board }: { board: IBoard }) {
             />
           </button>
         </header>
+        <TaskDropdown
+          close={() => {
+            setIsTaskDropdownOpen(false);
+            toggleTaskInfosModal();
+          }}
+          isVisible={isTaskDropdownOpen}
+          task={{
+            _id,
+            title: title!,
+            description,
+            subtasks: subtasks!,
+            status: status!,
+          }}
+        />
         <p className='modal__text'>{description}</p>
         <div className='input__checkbox__container'>
           <p className='input__label'>

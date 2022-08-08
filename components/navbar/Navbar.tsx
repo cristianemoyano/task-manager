@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 import useModal from '@/contexts/useModal';
 import AllBoardsModal from './AllBoardsModal';
-import EditDropdown from './EditDropdown';
+import BoardDropdown from './BoardDropdown';
 import { IBoard } from '@/typing';
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
 export default function Navbar({ boards, board }: Props) {
   const { toggleTaskModal, setTaskModalContent } = useModal();
   const [isBoardModalOpen, setIsBoardModalOpen] = useState(false);
-  const [isEditDropdownOpen, setIsEditDropdownOpen] = useState(false);
+  const [isBoardDropdownOpen, setIsBoardDropdownOpen] = useState(false);
   const { pathname } = useRouter();
 
   return (
@@ -80,8 +80,8 @@ export default function Navbar({ boards, board }: Props) {
               <h3 className='navbar__add__text'>+ Add New Task</h3>
             </button>
             <button
-              className='navbar__edit__buton'
-              onClick={() => setIsEditDropdownOpen(!isEditDropdownOpen)}
+              className='dropdown__buton'
+              onClick={() => setIsBoardDropdownOpen(!isBoardDropdownOpen)}
             >
               <Image
                 src='/assets/icon-vertical-ellipsis.svg'
@@ -89,7 +89,7 @@ export default function Navbar({ boards, board }: Props) {
                 height={20}
                 layout='fixed'
                 alt='vertical-ellipsis'
-                className='navbar__dropdown__icon'
+                className='dropdown__button__icon'
               />
             </button>
           </div>
@@ -101,9 +101,9 @@ export default function Navbar({ boards, board }: Props) {
         boards={boards}
       />
       {pathname !== '/' && (
-        <EditDropdown
-          isVisible={isEditDropdownOpen}
-          close={() => setIsEditDropdownOpen(false)}
+        <BoardDropdown
+          isVisible={isBoardDropdownOpen}
+          close={() => setIsBoardDropdownOpen(false)}
           board={board}
         />
       )}
