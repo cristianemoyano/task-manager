@@ -30,18 +30,22 @@ export default function BoardModal({ board }: { board?: IBoard }) {
 
   const { control, handleSubmit, reset, setValue } = useForm<IControllerBoard>({
     defaultValues: {
-      name: '',
-      columns: [
-        { name: 'Todo', tasks: [] },
-        { name: 'Doing', tasks: [] },
-      ],
+      name: !isNewBoard && board ? board!.name : '',
+      columns:
+        !isNewBoard && board
+          ? board!.columns
+          : [
+              { name: 'Todo', tasks: [] },
+              { name: 'Doing', tasks: [] },
+            ],
     },
   });
 
   useEffect(() => {
+    console.log('passed');
     if (!isNewBoard && board) {
-      setValue('name', board!.name);
-      setValue('columns', board!.columns);
+      setValue('name', board.name);
+      setValue('columns', board.columns);
     } else {
       setValue('name', '');
       setValue('columns', [
@@ -50,7 +54,7 @@ export default function BoardModal({ board }: { board?: IBoard }) {
       ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isNewBoard]);
+  }, [isNewBoard, board]);
 
   const { fields, append, remove } = useFieldArray({
     control,

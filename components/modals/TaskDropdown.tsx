@@ -25,6 +25,7 @@ export default function TaskDropdown({ isVisible, close, task }: Props) {
     >
       <button
         className='edit__button__edit'
+        type='button'
         onClick={() => {
           close();
           setTaskModalContent({ isNew: false, task });
@@ -35,6 +36,7 @@ export default function TaskDropdown({ isVisible, close, task }: Props) {
       </button>
       <button
         className='edit__button__delete'
+        type='button'
         onClick={() => {
           close();
           toggleDeleteModal();

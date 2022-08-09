@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import {
   Controller,
   useForm,
   SubmitHandler,
   useFieldArray,
 } from 'react-hook-form';
+import Image from 'next/image';
+import axios from 'axios';
 
 import useModal from '@/contexts/useModal';
 import { IBoard, ISubtask } from '@/typing';
@@ -27,7 +28,7 @@ export default function TaskInfosModal({ board }: { board: IBoard }) {
     toggleTaskInfosModal,
     taskInfosModalContent: { _id, title, description, subtasks, status },
   } = useModal();
-  const { control, handleSubmit, reset, setValue } = useForm<IControllerTask>({
+  const { control, handleSubmit, setValue } = useForm<IControllerTask>({
     defaultValues: {
       status: status,
       subtasks: subtasks,
@@ -52,7 +53,29 @@ export default function TaskInfosModal({ board }: { board: IBoard }) {
   }, [isTaskInfosModalOpen]);
 
   const onSubmit: SubmitHandler<IControllerTask> = async (data) => {
-    console.log(data);
+    if (status === data.status) {
+      await axios.patch('/api/task/edit-task', {
+        task: { title, description, subtasks: data.subtasks },
+        board_id: board._id,
+        column_id: status,
+        task_id: _id,
+      });
+    } else {
+      await axios.delete(
+        `/api/task/delete-task?board_id=${board._id}&column_id=${status}&task_id=${_id}`
+      );
+      await axios.patch('/api/task/add-task', {
+        task: {
+          title,
+          description,
+          subtasks: data.subtasks,
+          status: data.status,
+        },
+        board_id: board._id,
+        column_id: data.status,
+      });
+    }
+    toggleTaskInfosModal();
   };
 
   return (

@@ -20,8 +20,6 @@ export default async function handler(
       .find((c: IColumn) => c._id.toString() === column_id)
       .tasks.find((t: ITask) => t._id.toString() === task_id);
 
-    console.log(taskToUpdate);
-
     taskToUpdate.title = task.title;
     taskToUpdate.description = task.description;
     taskToUpdate.subtasks = task.subtasks;

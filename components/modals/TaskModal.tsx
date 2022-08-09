@@ -62,7 +62,7 @@ export default function TaskModal({ board }: { board: IBoard }) {
       setValue('subtasks', task.subtasks!);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isNew]);
+  }, [isNew, task]);
 
   const onSubmit: SubmitHandler<IControllerTask> = async (data) => {
     if (isNew) {
