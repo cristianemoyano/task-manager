@@ -1,9 +1,9 @@
 import type { NextPage } from 'next';
 
-import useModal from '@/contexts/useModal';
 import connectMongo from '@/services/connectMongo';
 import Board from '@/models/boardModel';
 import { IBoard } from '@/typing';
+import useModal from '@/contexts/useModal';
 
 import HeadOfPage from '@/components/shared/HeadOfPage';
 import Navbar from '@/components/navbar/Navbar';
@@ -11,12 +11,15 @@ import BoardModal from '@/components/modals/BoardModal';
 import TaskModal from '@/components/modals/TaskModal';
 import DeleteModal from '@/components/modals/DeleteModal';
 import TaskInfosModal from '@/components/modals/TaskInfosModal';
+import BoardColumn from '@/components/single_board/BoardColumn';
+import EmptyState from '@/components/shared/EmptyState';
 
 const SingleBoard: NextPage<{ board: IBoard; boards: IBoard[] }> = ({
   board,
   boards,
 }) => {
-  const { toggleTaskInfosModal, setTaskInfosModalContent } = useModal();
+  const { setIsNewBoard, toggleBoardModal } = useModal();
+
   return (
     <HeadOfPage title='Board' content='Your Board'>
       <>
@@ -25,24 +28,33 @@ const SingleBoard: NextPage<{ board: IBoard; boards: IBoard[] }> = ({
         <TaskModal board={board} />
         <DeleteModal board={board} />
         <TaskInfosModal board={board} />
-        <main>
-          {board.columns.map((column) => (
-            <div key={column._id}>
-              <h1>{column.name}</h1>
-              {column.tasks?.map((task) => (
-                <button
-                  key={task?._id}
-                  onClick={() => {
-                    setTaskInfosModalContent(task);
-                    toggleTaskInfosModal();
-                  }}
-                >
-                  {task.title}
-                </button>
+        {board.columns.length ? (
+          <main className='board__main'>
+            <div className='board__main__container'>
+              {board.columns.map((column) => (
+                <BoardColumn key={column._id} column={column} />
               ))}
+              <div
+                className='board__new__column'
+                onClick={() => {
+                  setIsNewBoard(false);
+                  toggleBoardModal();
+                }}
+              >
+                <h1 className='board__new__column__title'>+ New Column</h1>
+              </div>
             </div>
-          ))}
-        </main>
+          </main>
+        ) : (
+          <EmptyState
+            title='This board is empty. Create a new column to get started.'
+            button='+ Add New Column'
+            handleClick={() => {
+              setIsNewBoard(false);
+              toggleBoardModal();
+            }}
+          />
+        )}
       </>
     </HeadOfPage>
   );

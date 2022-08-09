@@ -1,0 +1,89 @@
+.board__main {
+  height: calc(100vh - 64px);
+  overflow: scroll;
+}
+
+.board__main__container {
+  padding: 24px 16px;
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.board__column {
+}
+
+.board__column__title {
+  @extend %heading-s;
+
+  color: $color-medium-gray;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2.4px;
+  margin-bottom: 24px;
+}
+
+.board__column__container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.board__task {
+  width: 280px;
+  height: 88px;
+  padding: 24px 16px;
+  background: $color-white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(54, 78, 126, 0.101545);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+
+  &:hover {
+    .board__task__title {
+      color: $color-purple;
+    }
+  }
+}
+
+.board__task__title {
+  @extend %heading-m;
+
+  margin-bottom: 8px;
+}
+
+.board__task__text {
+  @extend %body-m;
+
+  color: $color-medium-gray;
+  font-weight: 700;
+}
+
+.board__new__column {
+  min-width: 280px;
+  margin-top: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    180deg,
+    #e9effa 0%,
+    rgba(233, 239, 250, 0.5) 100%
+  );
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:hover {
+    .board__new__column__title {
+      color: $color-purple;
+    }
+  }
+}
+
+.board__new__column__title {
+  @extend %heading-xl;
+
+  color: $color-medium-gray;
+}

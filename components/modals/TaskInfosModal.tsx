@@ -87,9 +87,9 @@ export default function TaskInfosModal({ board }: { board: IBoard }) {
           }}
           isVisible={isTaskDropdownOpen}
           task={{
-            _id,
+            _id: _id!,
             title: title!,
-            description,
+            description: description!,
             subtasks: subtasks!,
             status: status!,
           }}

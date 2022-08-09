@@ -36,6 +36,11 @@
   padding: 0;
   width: 48px;
   height: 32px;
+
+  &:disabled {
+    background: $color-light-purple;
+    cursor: not-allowed;
+  }
 }
 
 .navbar__add__text {

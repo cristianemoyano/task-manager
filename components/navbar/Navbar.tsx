@@ -60,7 +60,7 @@ export default function Navbar({ boards, board }: Props) {
             )}
           </div>
         </div>
-        {pathname !== '/' && (
+        {board && (
           <div className='navbar__container'>
             <button
               className='navbar__add__button'
@@ -68,6 +68,7 @@ export default function Navbar({ boards, board }: Props) {
                 toggleTaskModal();
                 setTaskModalContent({ isNew: true, task: {} });
               }}
+              disabled={!board.columns.length}
             >
               <Image
                 src='/assets/icon-add-task-mobile.svg'
@@ -100,7 +101,7 @@ export default function Navbar({ boards, board }: Props) {
         close={() => setIsBoardModalOpen(false)}
         boards={boards}
       />
-      {pathname !== '/' && (
+      {board && (
         <BoardDropdown
           isVisible={isBoardDropdownOpen}
           close={() => setIsBoardDropdownOpen(false)}
