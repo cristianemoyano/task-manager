@@ -71,6 +71,7 @@ export default function TaskModal({ board }: { board: IBoard }) {
         board_id: board._id,
         column_id: data.status,
       });
+      reset(defaultValues);
     } else {
       if (task.status === data.status) {
         await axios.patch('/api/task/edit-task', {

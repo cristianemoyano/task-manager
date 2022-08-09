@@ -24,6 +24,7 @@
   padding: 16px 0;
   border-radius: 8px;
   cursor: auto;
+  width: 264px;
 }
 
 .board__numbers {
@@ -77,14 +78,25 @@
   margin-left: 24px;
   padding: 16px 0;
   gap: 12px;
+
+  &:hover {
+    .board__item__button__text {
+      color: $color-light-purple;
+    }
+
+    .board__item__button__logo {
+      filter: invert(73%) sepia(34%) saturate(4684%) hue-rotate(196deg)
+        brightness(101%) contrast(101%);
+    }
+  }
 }
 
-.board__button__logo {
+.board__item__button__logo {
   filter: invert(45%) sepia(12%) saturate(3980%) hue-rotate(208deg)
     brightness(83%) contrast(86%);
 }
 
-.board__button__text {
+.board__item__button__text {
   @extend %heading-m;
 
   color: $color-purple;

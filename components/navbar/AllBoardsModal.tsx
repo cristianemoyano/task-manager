@@ -75,9 +75,9 @@ export default function AllBoardsModal({ boards, close, isVisible }: Props) {
               width={16}
               height={16}
               alt='board'
-              className='board__button__logo'
+              className='board__item__button__logo'
             />
-            <h3 className='board__button__text'>+ Create New Board</h3>
+            <h3 className='board__item__button__text'>+ Create New Board</h3>
           </button>
         </div>
         <div className='board__theme'>

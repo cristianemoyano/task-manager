@@ -49,6 +49,7 @@ export default function BoardModal({ board }: { board?: IBoard }) {
         { name: 'Doing', tasks: [] },
       ]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isNewBoard]);
 
   const { fields, append, remove } = useFieldArray({
@@ -60,8 +61,8 @@ export default function BoardModal({ board }: { board?: IBoard }) {
 
   const onSubmit: SubmitHandler<IControllerBoard> = async (data) => {
     if (isNewBoard) {
-      const newBoard: IBoard = await axios.post('/api/boards', { board: data });
-      router.push(newBoard._id);
+      const newBoard = await axios.post('/api/boards', { board: data });
+      router.push(`/board/${newBoard.data._id}`);
     } else {
       await axios.patch(`/api/boards/${board!._id}`, { ...data });
       toggleBoardModal();

@@ -15,9 +15,7 @@
 }
 
 .empty__button {
-  @extend %heading-m;
+  @extend %button-primary-l;
 
-  background: $color-purple;
-  color: $color-white;
   padding: 16px;
 }

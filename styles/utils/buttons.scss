@@ -1,9 +1,10 @@
 %button-primary-l {
   @extend %heading-m;
 
-  padding: 15px 0;
+  padding: 16px 0;
   background: $color-purple;
   color: $color-white;
+  border-radius: 24px;
 
   &:hover {
     background: $color-light-purple;
@@ -17,6 +18,7 @@
   padding: 8px 0;
   background: $color-purple;
   color: $color-white;
+  border-radius: 20px;
 
   &:hover {
     background: $color-light-purple;
@@ -30,6 +32,7 @@
   padding: 8px 0;
   background: rgba(99, 95, 199, 0.1);
   color: $color-purple;
+  border-radius: 20px;
 
   &:hover {
     background: rgba(99, 95, 199, 0.25);
@@ -43,6 +46,7 @@
   padding: 8px 0;
   background: $color-red;
   color: $color-white;
+  border-radius: 20px;
 
   &:hover {
     background: $color-light-red;

@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
 
+import useModal from '@/contexts/useModal';
 import connectMongo from '@/services/connectMongo';
 import Board from '@/models/boardModel';
 import { IBoard } from '@/typing';
@@ -10,6 +11,8 @@ import Navbar from '@/components/navbar/Navbar';
 import BoardModal from '@/components/modals/BoardModal';
 
 const Home: NextPage<{ boards: IBoard[] }> = ({ boards }) => {
+  const { toggleBoardModal, setIsNewBoard } = useModal();
+
   return (
     <HeadOfPage title='Home' content='Welcome Home'>
       <>
@@ -25,7 +28,10 @@ const Home: NextPage<{ boards: IBoard[] }> = ({ boards }) => {
           <EmptyState
             title='You have no board yet. Create a new board to get started.'
             button='+ Add New Board'
-            handleClick={() => console.log('click')}
+            handleClick={() => {
+              toggleBoardModal();
+              setIsNewBoard(true);
+            }}
           />
         )}
       </>
