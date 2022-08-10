@@ -60,6 +60,14 @@ export default function TaskModal({ board }: { board: IBoard }) {
       setValue('description', task.description!);
       setValue('status', task.status!);
       setValue('subtasks', task.subtasks!);
+    } else {
+      setValue('title', '');
+      setValue('description', '');
+      setValue('status', board.columns[0]._id!.toString());
+      setValue('subtasks', [
+        { title: '', isCompleted: false },
+        { title: '', isCompleted: false },
+      ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isNew, task]);
@@ -72,6 +80,7 @@ export default function TaskModal({ board }: { board: IBoard }) {
         column_id: data.status,
       });
       reset(defaultValues);
+      await axios(`/api/revalidate?board_id=${board._id}`);
     } else {
       if (task.status === data.status) {
         await axios.patch('/api/task/edit-task', {
@@ -80,6 +89,7 @@ export default function TaskModal({ board }: { board: IBoard }) {
           column_id: task.status,
           task_id: task._id,
         });
+        await axios(`/api/revalidate?board_id=${board._id}`);
       } else {
         await axios.delete(
           `/api/task/delete-task?board_id=${board._id}&column_id=${task.status}&task_id=${task._id}`
@@ -89,6 +99,7 @@ export default function TaskModal({ board }: { board: IBoard }) {
           board_id: board._id,
           column_id: data.status,
         });
+        await axios(`/api/revalidate?board_id=${board._id}`);
       }
     }
     toggleTaskModal();

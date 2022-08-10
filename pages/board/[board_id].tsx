@@ -28,7 +28,7 @@ const SingleBoard: NextPage<{ board: IBoard; boards: IBoard[] }> = ({
         <TaskModal board={board} />
         <DeleteModal board={board} />
         <TaskInfosModal board={board} />
-        {board.columns.length ? (
+        {board && board.columns.length ? (
           <main className='board__main'>
             <div className='board__main__container'>
               {board.columns.map((column) => (
@@ -66,6 +66,7 @@ export async function getStaticProps({
   params: { board_id: string };
 }) {
   const { board_id } = params;
+  await connectMongo();
 
   let board = await Board.findOne({ _id: board_id });
   board = JSON.parse(JSON.stringify(board));
@@ -74,11 +75,11 @@ export async function getStaticProps({
   boards = JSON.parse(JSON.stringify(boards));
 
   return {
+    revalidate: 1,
     props: {
-      board,
-      boards,
+      board: board,
+      boards: boards,
     },
-    // revalidate: true,
   };
 }
 
@@ -91,7 +92,7 @@ export async function getStaticPaths() {
     params: { board_id: board._id.toString() },
   }));
 
-  return { paths, fallback: 'blocking' };
+  return { paths, fallback: true };
 }
 
 export default SingleBoard;

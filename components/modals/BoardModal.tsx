@@ -42,7 +42,6 @@ export default function BoardModal({ board }: { board?: IBoard }) {
   });
 
   useEffect(() => {
-    console.log('passed');
     if (!isNewBoard && board) {
       setValue('name', board.name);
       setValue('columns', board.columns);

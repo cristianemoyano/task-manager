@@ -13,7 +13,6 @@ export default async function handler(
 
   if (method === 'DELETE') {
     const { board_id, column_id, task_id } = query;
-    console.log(board_id, column_id, task_id);
 
     const board = await Board.findOne({ _id: board_id });
 
