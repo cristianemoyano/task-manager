@@ -6,11 +6,13 @@ export default async function handler(
 ) {
   const { board_id } = req.query;
   let revalidated = false;
+
   try {
     await res.revalidate(`/board/${board_id}`);
     revalidated = true;
   } catch (error) {
     console.log(error);
   }
+
   res.json({ revalidated });
 }

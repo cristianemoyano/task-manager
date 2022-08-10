@@ -64,6 +64,18 @@ const SingleBoard: NextPage<{ board: IBoard; boards: IBoard[] }> = ({
   );
 };
 
+export async function getStaticPaths() {
+  await connectMongo();
+
+  const boards = await Board.find();
+
+  const paths = boards.map((board) => ({
+    params: { board_id: board._id.toString() },
+  }));
+
+  return { paths, fallback: 'blocking' };
+}
+
 export async function getStaticProps({
   params,
 }: {
@@ -77,27 +89,13 @@ export async function getStaticProps({
 
   let boards = await Board.find();
   boards = JSON.parse(JSON.stringify(boards));
-  console.log(board.columns[1].tasks);
 
   return {
-    revalidate: 1,
     props: {
       board: board,
       boards: boards,
     },
   };
-}
-
-export async function getStaticPaths() {
-  await connectMongo();
-
-  const boards = await Board.find();
-
-  const paths = boards.map((board) => ({
-    params: { board_id: board._id.toString() },
-  }));
-
-  return { paths, fallback: true };
 }
 
 export default SingleBoard;

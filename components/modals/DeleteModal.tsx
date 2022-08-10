@@ -20,7 +20,7 @@ export default function DeleteModal({ board }: { board: IBoard }) {
       await axios.delete(
         `/api/task/delete-task?board_id=${board._id}&column_id=${column_id}&task_id=${_id}`
       );
-      await axios(`/api/revalidate?board_id=${board._id}`);
+      fetch(`/api/revalidate?board_id=${board._id}`);
       toggleDeleteModal();
     }
   };
