@@ -28,7 +28,6 @@
 
 .board__task {
   width: 280px;
-  height: 88px;
   padding: 24px 16px;
   background: $color-white;
   border-radius: 8px;
@@ -58,9 +57,8 @@
   font-weight: 700;
 }
 
-.board__new__column {
+.board__new {
   min-width: 280px;
-  margin-top: 39px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -73,13 +71,21 @@
   cursor: pointer;
 
   &:hover {
-    .board__new__column__title {
+    .board__new__title {
       color: $color-purple;
     }
   }
 }
 
-.board__new__column__title {
+.board__new__column {
+  margin-top: 39px;
+}
+
+.board__new__task {
+  height: 88px;
+}
+
+.board__new__title {
   @extend %heading-xl;
 
   color: $color-medium-gray;

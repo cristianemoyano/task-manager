@@ -1,5 +1,8 @@
 import { useRouter } from 'next/router';
 import useSWR, { mutate, Fetcher } from 'swr';
+import axios from 'axios';
+
+import { IBoard } from '@/typing';
 import connectMongo from '@/services/connectMongo';
 import Board from '@/models/boardModel';
 import useModal from '@/contexts/useModal';
@@ -12,9 +15,7 @@ import DeleteModal from '@/components/modals/DeleteModal';
 import TaskInfosModal from '@/components/modals/TaskInfosModal';
 import BoardColumn from '@/components/single_board/BoardColumn';
 import EmptyState from '@/components/shared/EmptyState';
-import { IBoard } from '@/typing';
-import axios from 'axios';
-import { useState } from 'react';
+import NewItem from '@/components/shared/NewItem';
 
 const fetcher: Fetcher<any, string> = (url) =>
   axios.get(url).then((res) => res.data);
@@ -43,9 +44,6 @@ const SingleBoard = () => {
 
   if (boardsError || boardError) return <h1>Error</h1>;
 
-  console.log('boards', boards);
-  console.log('board', board);
-
   return (
     <HeadOfPage title='Board' content='Your Board'>
       <>
@@ -60,15 +58,13 @@ const SingleBoard = () => {
               {board.columns.map((column) => (
                 <BoardColumn key={column._id} column={column} />
               ))}
-              <div
-                className='board__new__column'
+              <NewItem
+                isColumn={true}
                 onClick={() => {
                   setIsNewBoard(false);
                   toggleBoardModal();
                 }}
-              >
-                <h1 className='board__new__column__title'>+ New Column</h1>
-              </div>
+              />
             </div>
           </main>
         ) : (

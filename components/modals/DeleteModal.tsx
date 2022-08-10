@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { IBoard } from '@/typing';
 import useModal from '@/contexts/useModal';
 import Modal from '../shared/Modal';
+import { mutate } from 'swr';
 
 export default function DeleteModal({ board }: { board: IBoard }) {
   const {
@@ -15,12 +16,13 @@ export default function DeleteModal({ board }: { board: IBoard }) {
   const onDelete = async () => {
     if (isBoard) {
       await axios.delete(`/api/boards/${_id}`);
+
       router.push('/');
     } else {
       await axios.delete(
         `/api/task/delete-task?board_id=${board._id}&column_id=${column_id}&task_id=${_id}`
       );
-      fetch(`/api/revalidate?board_id=${board._id}`);
+      setTimeout(() => mutate(`/api/boards/${board._id}`), 1000);
       toggleDeleteModal();
     }
   };
