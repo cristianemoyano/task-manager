@@ -28,6 +28,6 @@ const boardSchema = new Schema<IBoard>({
   columns: [columnsSchema],
 });
 
-const Board = models.Board || model<IBoard>('Board', boardSchema);
+const Board = models?.Board || model<IBoard>('Board', boardSchema);
 
 export default Board;

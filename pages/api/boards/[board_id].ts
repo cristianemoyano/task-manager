@@ -18,7 +18,7 @@ export default async function handler(
     try {
       const board = await Board.findOne({ _id: board_id });
 
-      res.status(200).json({ board });
+      res.status(200).json(board);
     } catch (error) {
       res.status(500).json(error);
     }
@@ -28,7 +28,7 @@ export default async function handler(
     try {
       const board = await Board.findOneAndDelete({ _id: board_id });
 
-      res.status(200).json({ board });
+      res.status(200).json(board);
     } catch (error) {
       res.status(500).json(error);
     }
@@ -42,6 +42,6 @@ export default async function handler(
       { name, columns }
     );
 
-    res.status(200).json({ board });
+    res.status(200).json(board);
   }
 }

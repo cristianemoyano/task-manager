@@ -6,6 +6,7 @@ import {
   SubmitHandler,
 } from 'react-hook-form';
 import axios from 'axios';
+import { mutate } from 'swr';
 
 import { IBoard } from '@/typing';
 import useModal from '@/contexts/useModal';
@@ -26,6 +27,19 @@ interface IControllerTask {
   status: string;
   subtasks: IControllerSubtasks[];
 }
+
+interface Args {
+  url: string;
+  data: any;
+}
+
+async function fetcher(url: string, data: any) {
+  axios.patch(url, data).then((res) => res.data);
+}
+
+// async function newfetcher(...args: [string, object]) {
+//   fetch(...args).then((res) => res.json());
+// }
 
 export default function TaskModal({ board }: { board: IBoard }) {
   const defaultValues = {
@@ -74,13 +88,13 @@ export default function TaskModal({ board }: { board: IBoard }) {
 
   const onSubmit: SubmitHandler<IControllerTask> = async (data) => {
     if (isNew) {
-      await axios.patch('/api/task/add-task', {
+      await fetcher('/api/task/add-task', {
         task: data,
         board_id: board._id,
         column_id: data.status,
       });
+      setTimeout(() => mutate(`/api/boards/${board._id}`), 1000);
       reset(defaultValues);
-      await axios(`/api/revalidate?board_id=${board._id}`);
     } else {
       if (task.status === data.status) {
         await axios.patch('/api/task/edit-task', {
@@ -89,7 +103,6 @@ export default function TaskModal({ board }: { board: IBoard }) {
           column_id: task.status,
           task_id: task._id,
         });
-        await axios(`/api/revalidate?board_id=${board._id}`);
       } else {
         await axios.delete(
           `/api/task/delete-task?board_id=${board._id}&column_id=${task.status}&task_id=${task._id}`
@@ -99,7 +112,6 @@ export default function TaskModal({ board }: { board: IBoard }) {
           board_id: board._id,
           column_id: data.status,
         });
-        await axios(`/api/revalidate?board_id=${board._id}`);
       }
     }
     toggleTaskModal();
