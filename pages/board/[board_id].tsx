@@ -22,40 +22,44 @@ const SingleBoard: NextPage<{ board: IBoard; boards: IBoard[] }> = ({
 
   return (
     <HeadOfPage title='Board' content='Your Board'>
-      <>
-        <Navbar boards={boards} board={board} />
-        <BoardModal board={board} />
-        <TaskModal board={board} />
-        <DeleteModal board={board} />
-        <TaskInfosModal board={board} />
-        {board && board.columns.length ? (
-          <main className='board__main'>
-            <div className='board__main__container'>
-              {board.columns.map((column) => (
-                <BoardColumn key={column._id} column={column} />
-              ))}
-              <div
-                className='board__new__column'
-                onClick={() => {
-                  setIsNewBoard(false);
-                  toggleBoardModal();
-                }}
-              >
-                <h1 className='board__new__column__title'>+ New Column</h1>
+      {board ? (
+        <>
+          <Navbar boards={boards} board={board} />
+          <BoardModal board={board} />
+          <TaskModal board={board} />
+          <DeleteModal board={board} />
+          <TaskInfosModal board={board} />
+          {board.columns.length ? (
+            <main className='board__main'>
+              <div className='board__main__container'>
+                {board.columns.map((column) => (
+                  <BoardColumn key={column._id} column={column} />
+                ))}
+                <div
+                  className='board__new__column'
+                  onClick={() => {
+                    setIsNewBoard(false);
+                    toggleBoardModal();
+                  }}
+                >
+                  <h1 className='board__new__column__title'>+ New Column</h1>
+                </div>
               </div>
-            </div>
-          </main>
-        ) : (
-          <EmptyState
-            title='This board is empty. Create a new column to get started.'
-            button='+ Add New Column'
-            handleClick={() => {
-              setIsNewBoard(false);
-              toggleBoardModal();
-            }}
-          />
-        )}
-      </>
+            </main>
+          ) : (
+            <EmptyState
+              title='This board is empty. Create a new column to get started.'
+              button='+ Add New Column'
+              handleClick={() => {
+                setIsNewBoard(false);
+                toggleBoardModal();
+              }}
+            />
+          )}
+        </>
+      ) : (
+        <h1>something went wring</h1>
+      )}
     </HeadOfPage>
   );
 };
@@ -73,6 +77,7 @@ export async function getStaticProps({
 
   let boards = await Board.find();
   boards = JSON.parse(JSON.stringify(boards));
+  console.log(board.columns[1].tasks);
 
   return {
     revalidate: 1,
