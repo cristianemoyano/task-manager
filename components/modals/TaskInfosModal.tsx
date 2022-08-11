@@ -7,6 +7,7 @@ import {
 } from 'react-hook-form';
 import Image from 'next/image';
 import axios from 'axios';
+import { mutate } from 'swr';
 
 import useModal from '@/contexts/useModal';
 import { IBoard, ISubtask } from '@/typing';
@@ -30,8 +31,8 @@ export default function TaskInfosModal({ board }: { board: IBoard }) {
   } = useModal();
   const { control, handleSubmit, setValue } = useForm<IControllerTask>({
     defaultValues: {
-      status: status,
-      subtasks: subtasks,
+      status,
+      subtasks,
     },
   });
   const { fields } = useFieldArray({
@@ -42,6 +43,7 @@ export default function TaskInfosModal({ board }: { board: IBoard }) {
   useEffect(() => {
     setValue('status', status!);
     setValue('subtasks', subtasks!);
+
     subtasks &&
       setSubtasksCompleted(
         subtasks.reduce((acc, curr) => {
@@ -75,6 +77,8 @@ export default function TaskInfosModal({ board }: { board: IBoard }) {
         column_id: data.status,
       });
     }
+
+    mutate(`/api/boards/${board._id}`);
     toggleTaskInfosModal();
   };
 

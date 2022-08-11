@@ -28,19 +28,6 @@ interface IControllerTask {
   subtasks: IControllerSubtasks[];
 }
 
-interface Args {
-  url: string;
-  data: any;
-}
-
-async function fetcher(url: string, data: any) {
-  axios.patch(url, data).then((res) => res.data);
-}
-
-// async function newfetcher(...args: [string, object]) {
-//   fetch(...args).then((res) => res.json());
-// }
-
 export default function TaskModal({ board }: { board: IBoard }) {
   const defaultValues = {
     title: '',
@@ -52,21 +39,19 @@ export default function TaskModal({ board }: { board: IBoard }) {
     ],
   };
 
+  const { control, handleSubmit, reset, register, setValue } =
+    useForm<IControllerTask>({
+      defaultValues,
+    });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'subtasks',
+  });
   const {
     isTaskModalOpen,
     taskModalContent: { isNew, task },
     toggleTaskModal,
   } = useModal();
-
-  const { control, handleSubmit, reset, register, setValue } =
-    useForm<IControllerTask>({
-      defaultValues,
-    });
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'subtasks',
-  });
 
   useEffect(() => {
     if (!isNew) {
@@ -88,32 +73,30 @@ export default function TaskModal({ board }: { board: IBoard }) {
 
   const onSubmit: SubmitHandler<IControllerTask> = async (data) => {
     if (isNew) {
-      await fetcher('/api/task/add-task', {
+      await axios.patch('/api/task/add-task', {
         task: data,
         board_id: board._id,
         column_id: data.status,
       });
-      setTimeout(() => mutate(`/api/boards/${board._id}`), 1000);
       reset(defaultValues);
+    } else if (task.status === data.status) {
+      await axios.patch('/api/task/edit-task', {
+        task: data,
+        board_id: board._id,
+        column_id: task.status,
+        task_id: task._id,
+      });
     } else {
-      if (task.status === data.status) {
-        await axios.patch('/api/task/edit-task', {
-          task: data,
-          board_id: board._id,
-          column_id: task.status,
-          task_id: task._id,
-        });
-      } else {
-        await axios.delete(
-          `/api/task/delete-task?board_id=${board._id}&column_id=${task.status}&task_id=${task._id}`
-        );
-        await axios.patch('/api/task/add-task', {
-          task: data,
-          board_id: board._id,
-          column_id: data.status,
-        });
-      }
+      await axios.delete(
+        `/api/task/delete-task?board_id=${board._id}&column_id=${task.status}&task_id=${task._id}`
+      );
+      await axios.patch('/api/task/add-task', {
+        task: data,
+        board_id: board._id,
+        column_id: data.status,
+      });
     }
+    mutate(`/api/boards/${board._id}`);
     toggleTaskModal();
   };
 

@@ -11,7 +11,7 @@ export default async function handler(
   await connectMongo();
 
   if (method === 'GET') {
-    const boards = await Board.find();
+    const boards = await Board.find().select(['-columns']);
 
     res.status(200).json(boards);
   }

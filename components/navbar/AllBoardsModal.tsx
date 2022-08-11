@@ -53,6 +53,7 @@ export default function AllBoardsModal({ boards, close, isVisible }: Props) {
                       ? 'board__item board__item--active'
                       : 'board__item'
                   }
+                  onClick={close}
                 >
                   <Image
                     src='/assets/icon-board.svg'

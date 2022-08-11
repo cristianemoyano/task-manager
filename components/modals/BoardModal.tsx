@@ -25,21 +25,24 @@ interface IControllerBoard {
   columns: IControllerColumn[];
 }
 
-export default function BoardModal({ board }: { board?: IBoard }) {
-  const { isBoardModalOpen, toggleBoardModal, isNewBoard } = useModal();
+const defaultValues = {
+  name: '',
+  columns: [
+    { name: 'Todo', tasks: [] },
+    { name: 'Doing', tasks: [] },
+  ],
+};
 
+export default function BoardModal({ board }: { board?: IBoard }) {
   const { control, handleSubmit, reset, setValue } = useForm<IControllerBoard>({
-    defaultValues: {
-      name: !isNewBoard && board ? board!.name : '',
-      columns:
-        !isNewBoard && board
-          ? board!.columns
-          : [
-              { name: 'Todo', tasks: [] },
-              { name: 'Doing', tasks: [] },
-            ],
-    },
+    defaultValues,
   });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'columns',
+  });
+  const { isBoardModalOpen, toggleBoardModal, isNewBoard } = useModal();
+  const router = useRouter();
 
   useEffect(() => {
     if (!isNewBoard && board) {
@@ -55,19 +58,14 @@ export default function BoardModal({ board }: { board?: IBoard }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isNewBoard, board]);
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'columns',
-  });
-
-  const router = useRouter();
-
   const onSubmit: SubmitHandler<IControllerBoard> = async (data) => {
     if (isNewBoard) {
       const newBoard = await axios.post('/api/boards', { board: data });
       router.push(`/board/${newBoard.data._id}`);
     } else {
       await axios.patch(`/api/boards/${board!._id}`, { ...data });
+
+      // TODO: mutate board and boards if the name changed
       toggleBoardModal();
     }
   };
@@ -78,13 +76,7 @@ export default function BoardModal({ board }: { board?: IBoard }) {
       close={() => {
         toggleBoardModal();
         if (isNewBoard) {
-          reset({
-            name: '',
-            columns: [
-              { name: 'Todo', tasks: [] },
-              { name: 'Doing', tasks: [] },
-            ],
-          });
+          reset(defaultValues);
         }
       }}
     >

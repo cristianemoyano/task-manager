@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router';
-import useSWR, { mutate, Fetcher } from 'swr';
+import type { NextPage } from 'next';
+import useSWR from 'swr';
 import axios from 'axios';
 
 import { IBoard } from '@/typing';
@@ -17,17 +17,54 @@ import BoardColumn from '@/components/single_board/BoardColumn';
 import EmptyState from '@/components/shared/EmptyState';
 import NewItem from '@/components/shared/NewItem';
 
-const fetcher: Fetcher<any, string> = (url) =>
-  axios.get(url).then((res) => res.data);
+export async function getStaticPaths() {
+  await connectMongo();
 
-const SingleBoard = () => {
-  const router = useRouter();
-  const { board_id } = router.query;
+  // TODO: get only _id and name
+  const boards = await Board.find().select(['-columns']);
 
+  const paths = boards.map((board) => ({
+    params: { board_id: board._id.toString() },
+  }));
+
+  return { paths, fallback: 'blocking' };
+}
+
+export async function getStaticProps({
+  params,
+}: {
+  params: { board_id: string };
+}) {
+  const { board_id } = params;
+  await connectMongo();
+
+  let board = await Board.findOne({ _id: board_id });
+  board = JSON.parse(JSON.stringify(board));
+
+  let boards = await Board.find().select(['-columns']);
+  boards = JSON.parse(JSON.stringify(boards));
+
+  return {
+    props: {
+      isrBoards: boards,
+      isrBoard: board,
+      board_id,
+    },
+  };
+}
+
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+
+const SingleBoard: NextPage<{
+  isrBoards: IBoard[];
+  isrBoard: IBoard;
+  board_id: string;
+}> = ({ isrBoards, isrBoard, board_id }) => {
   const { data: boards, error: boardsError } = useSWR<IBoard[], any>(
     '/api/boards',
     fetcher,
     {
+      fallbackData: isrBoards,
       revalidateOnFocus: false,
     }
   );
@@ -35,14 +72,15 @@ const SingleBoard = () => {
   const { data: board, error: boardError } = useSWR<IBoard, any>(
     `/api/boards/${board_id}`,
     fetcher,
-    { revalidateOnFocus: false }
+    {
+      fallbackData: isrBoard,
+      revalidateOnFocus: false,
+    }
   );
 
   const { setIsNewBoard, toggleBoardModal } = useModal();
 
-  if (!boards || !board) return <h1>Loading</h1>;
-
-  if (boardsError || boardError) return <h1>Error</h1>;
+  if (boardsError || boardError || !boards || !board) return <h1>Error</h1>;
 
   return (
     <HeadOfPage title='Board' content='Your Board'>
@@ -81,39 +119,5 @@ const SingleBoard = () => {
     </HeadOfPage>
   );
 };
-
-// export async function getStaticPaths() {
-//   await connectMongo();
-
-//   const boards = await Board.find();
-
-//   const paths = boards.map((board) => ({
-//     params: { board_id: board._id.toString() },
-//   }));
-
-//   return { paths, fallback: 'blocking' };
-// }
-
-// export async function getStaticProps({
-//   params,
-// }: {
-//   params: { board_id: string };
-// }) {
-//   const { board_id } = params;
-//   await connectMongo();
-
-//   let board = await Board.findOne({ _id: board_id });
-//   board = JSON.parse(JSON.stringify(board));
-
-//   let boards = await Board.find();
-//   boards = JSON.parse(JSON.stringify(boards));
-
-//   return {
-//     props: {
-//       board: board,
-//       boards: boards,
-//     },
-//   };
-// }
 
 export default SingleBoard;
