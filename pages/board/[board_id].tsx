@@ -16,6 +16,7 @@ import TaskInfosModal from '@/components/modals/TaskInfosModal';
 import BoardColumn from '@/components/single_board/BoardColumn';
 import EmptyState from '@/components/shared/EmptyState';
 import NewItem from '@/components/shared/NewItem';
+import Sidebar from '@/components/sidebar/Sidebar';
 
 export async function getStaticPaths() {
   await connectMongo();
@@ -79,41 +80,46 @@ const SingleBoard: NextPage<{
 
   const { setIsNewBoard, toggleBoardModal } = useModal();
 
-  if (boardsError || boardError || !boards || !board) return <h1>Error</h1>;
+  if (boardsError || boardError || !boards || !board) return <div>Error</div>;
 
   return (
     <HeadOfPage title='Board' content='Your Board'>
       <>
-        <Navbar boards={boards} board={board} />
         <BoardModal board={board} />
         <TaskModal board={board} />
         <DeleteModal board={board} />
         <TaskInfosModal board={board} />
-        {board.columns.length ? (
-          <main className='board__main'>
-            <div className='board__main__container'>
-              {board.columns.map((column) => (
-                <BoardColumn key={column._id} column={column} />
-              ))}
-              <NewItem
-                isColumn={true}
-                onClick={() => {
+        <main>
+          <Sidebar boards={boards} />
+          <div>
+            <Navbar boards={boards} board={board} />
+            {board.columns.length ? (
+              <div className='board__main'>
+                <div className='board__main__container'>
+                  {board.columns.map((column) => (
+                    <BoardColumn key={column._id} column={column} />
+                  ))}
+                  <NewItem
+                    isColumn={true}
+                    onClick={() => {
+                      setIsNewBoard(false);
+                      toggleBoardModal();
+                    }}
+                  />
+                </div>
+              </div>
+            ) : (
+              <EmptyState
+                title='This board is empty. Create a new column to get started.'
+                button='+ Add New Column'
+                handleClick={() => {
                   setIsNewBoard(false);
                   toggleBoardModal();
                 }}
               />
-            </div>
-          </main>
-        ) : (
-          <EmptyState
-            title='This board is empty. Create a new column to get started.'
-            button='+ Add New Column'
-            handleClick={() => {
-              setIsNewBoard(false);
-              toggleBoardModal();
-            }}
-          />
-        )}
+            )}
+          </div>
+        </main>
       </>
     </HeadOfPage>
   );

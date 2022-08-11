@@ -4,16 +4,47 @@
   justify-content: space-between;
   z-index: 10;
   background: $color-white;
+  position: relative;
+  width: 100vw;
+
+  @include tabletScreen {
+    border-bottom: 1px solid $color-light-lines;
+    width: calc(100vw - 260px);
+  }
 }
 
 .navbar__container {
   display: flex;
   align-items: center;
   gap: 16px;
+
+  &::after {
+    content: '';
+    display: none;
+    position: absolute;
+    width: 1px;
+    background: $color-light-lines;
+    top: 0;
+    left: 171px;
+    height: 100%;
+  }
+
+  @include tabletScreen {
+    gap: 50px;
+
+    &::after {
+      display: block;
+    }
+  }
 }
 
-.navbar__title--show {
-  display: block;
+.navbar__title {
+  @extend %heading-l;
+  display: none;
+
+  @include tabletScreen {
+    display: block;
+  }
 }
 
 .navbar__dropdown {
@@ -21,6 +52,10 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
+
+  @include tabletScreen {
+    display: none;
+  }
 }
 
 .navbar__dropdown--hide {
@@ -41,8 +76,43 @@
     background: $color-light-purple;
     cursor: not-allowed;
   }
+
+  @include tabletScreen {
+    width: 100%;
+    height: auto;
+    padding: 16px 24px;
+  }
+}
+
+.navbar__add__icon {
+  display: block;
+
+  @include tabletScreen {
+    display: none;
+  }
 }
 
 .navbar__add__text {
   display: none;
+
+  @include tabletScreen {
+    display: block;
+  }
+}
+
+.kanban__logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.kanban__logo__title {
+  @extend %heading-xl;
+  margin-bottom: 3px;
+
+  display: none;
+
+  @include tabletScreen {
+    display: block;
+  }
 }

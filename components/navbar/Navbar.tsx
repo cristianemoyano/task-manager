@@ -7,6 +7,7 @@ import useModal from '@/contexts/useModal';
 import AllBoardsModal from './AllBoardsModal';
 import BoardDropdown from './BoardDropdown';
 import { IBoard } from '@/typing';
+import KanbanLogo from '../shared/KanbanLogo';
 
 interface Props {
   boards: IBoard[];
@@ -23,17 +24,7 @@ export default function Navbar({ boards, board }: Props) {
     <>
       <nav className='navbar'>
         <div className='navbar__container'>
-          <Link href='/' passHref>
-            <a>
-              <Image
-                src='/assets/logo-mobile.svg'
-                width={24}
-                height={25}
-                layout='fixed'
-                alt='company-logo'
-              />
-            </a>
-          </Link>
+          <KanbanLogo />
           <div
             className='navbar__dropdown'
             onClick={() => setIsBoardModalOpen(!isBoardModalOpen)}
@@ -59,6 +50,9 @@ export default function Navbar({ boards, board }: Props) {
               />
             )}
           </div>
+          <h2 className='navbar__title'>
+            {pathname === '/' ? 'Choose your board' : board!.name}
+          </h2>
         </div>
         {board && (
           <div className='navbar__container'>
@@ -70,14 +64,15 @@ export default function Navbar({ boards, board }: Props) {
               }}
               disabled={!board.columns.length}
             >
-              <Image
-                src='/assets/icon-add-task-mobile.svg'
-                width={12}
-                height={12}
-                layout='fixed'
-                alt='chevron-down'
-                className='navbar__add__icon'
-              />
+              <div className='navbar__add__icon'>
+                <Image
+                  src='/assets/icon-add-task-mobile.svg'
+                  width={12}
+                  height={12}
+                  layout='fixed'
+                  alt='chevron-down'
+                />
+              </div>
               <h3 className='navbar__add__text'>+ Add New Task</h3>
             </button>
             <button
