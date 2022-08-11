@@ -14,6 +14,10 @@
 .board__dropdown {
   top: 60px;
   right: 24px;
+
+  @include tabletScreen {
+    top: 90px;
+  }
 }
 
 .task__dropdown {

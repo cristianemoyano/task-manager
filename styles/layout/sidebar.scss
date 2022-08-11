@@ -1,13 +1,28 @@
 .sidebar {
-  min-width: 260px;
-  height: 100vh;
   background-color: $color-white;
+  border-right: 1px solid $color-light-lines;
+  display: none;
+}
+
+.sidebar--open {
+  display: block;
+}
+
+.sidebar__wrapper {
+  min-width: 260px;
+  max-width: 260px;
+  height: 100vh;
   padding: 32px 0;
   display: none;
 
   @include tabletScreen {
     display: flex;
     flex-direction: column;
+  }
+
+  @include desktopScreen {
+    min-width: 300px;
+    max-width: 300px;
   }
 }
 
@@ -21,4 +36,62 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.sidebar__hide__button {
+  width: 240px;
+  padding: 16px 0px 16px 32px;
+  margin-right: 24px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  border-radius: 0 100px 100px 0;
+
+  &:hover {
+    background: rgba(98, 94, 199, 0.1);
+
+    .sidebar__hide__button__text {
+      color: $color-purple;
+    }
+
+    .sidebar__hide__button__logo {
+      filter: invert(49%) sepia(60%) saturate(5934%) hue-rotate(228deg)
+        brightness(86%) contrast(78%);
+    }
+  }
+}
+
+.sidebar__hide__button__logo {
+  filter: invert(61%) sepia(11%) saturate(593%) hue-rotate(177deg)
+    brightness(91%) contrast(89%);
+}
+
+.sidebar__hide__button__text {
+  @extend %heading-m;
+  color: $color-medium-gray;
+}
+
+.sidebar__show__button {
+  position: absolute;
+  bottom: 32px;
+  left: 0;
+  background: $color-purple;
+  width: 38px;
+  height: 48px;
+  border-radius: 0px 100px 100px 0px;
+  display: none;
+  justify-content: flex-start;
+  padding-left: 18px;
+
+  &:hover {
+    background-color: $color-light-purple;
+  }
+}
+
+.sidebar__show__button--show {
+  @include tabletScreen {
+    display: flex;
+  }
 }

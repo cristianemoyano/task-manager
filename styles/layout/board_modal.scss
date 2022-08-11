@@ -43,12 +43,25 @@
 
 .board__item {
   width: 240px;
-  padding: 16px 0px 16px 24px;
+  padding: 16px 4px 16px 24px;
   margin-right: 24px;
   display: flex;
   align-items: center;
   gap: 12px;
   border-radius: 0 100px 100px 0;
+
+  &:hover {
+    background: rgba(99, 95, 199, 0.1);
+
+    .board__item__name {
+      color: $color-purple;
+    }
+
+    .board__item__logo {
+      filter: invert(42%) sepia(10%) saturate(6813%) hue-rotate(217deg)
+        brightness(85%) contrast(80%);
+    }
+  }
 }
 
 .board__item--active {
@@ -61,6 +74,19 @@
 
   .board__item__name {
     color: $color-white;
+  }
+
+  &:hover {
+    background-color: $color-purple;
+
+    .board__item__name {
+      color: $color-white;
+    }
+
+    .board__item__logo {
+      filter: invert(100%) sepia(0%) saturate(2%) hue-rotate(213deg)
+        brightness(105%) contrast(101%);
+    }
   }
 }
 
@@ -112,4 +138,9 @@
   align-items: center;
   gap: 24px;
   border-radius: 6px;
+
+  @include tabletScreen {
+    width: calc(100% - 48px);
+    margin: 0 auto;
+  }
 }

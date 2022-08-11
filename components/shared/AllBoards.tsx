@@ -35,6 +35,7 @@ export default function AllBoards({ boards, className, close }: Props) {
                     src='/assets/icon-board.svg'
                     width={16}
                     height={16}
+                    layout='fixed'
                     alt='board'
                     className='board__item__logo'
                   />

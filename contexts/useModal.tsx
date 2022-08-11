@@ -33,11 +33,13 @@ interface IModal {
   isDeleteModalOpen: boolean;
   isTaskModalOpen: boolean;
   isTaskInfosModalOpen: boolean;
+  isSidebarOpen: boolean;
 
   toggleBoardModal: () => void;
   toggleTaskModal: () => void;
   toggleDeleteModal: () => void;
   toggleTaskInfosModal: () => void;
+  toggleSidebar: () => void;
 
   deleteModalContent: IDeleteModalContent;
   taskModalContent: { isNew: boolean; task: ITaskModalContent };
@@ -55,11 +57,13 @@ const ModalContext = createContext<IModal>({
   isDeleteModalOpen: false,
   isTaskModalOpen: false,
   isTaskInfosModalOpen: false,
+  isSidebarOpen: true,
 
   toggleBoardModal: () => {},
   toggleDeleteModal: () => {},
   toggleTaskModal: () => {},
   toggleTaskInfosModal: () => {},
+  toggleSidebar: () => {},
 
   deleteModalContent: { isBoard: true, _id: '', column_id: '', name: '' },
   taskModalContent: { isNew: true, task: {} },
@@ -77,6 +81,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [isTaskInfosModalOpen, setIsTaskInfosModalOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isNewBoard, setIsNewBoard] = useState(false);
 
   const [deleteModalContent, setDeleteModalContent] = useState({
@@ -100,16 +105,20 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
   const toggleTaskInfosModal = () =>
     setIsTaskInfosModalOpen(!isTaskInfosModalOpen);
 
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
   const memoedValue = useMemo(
     () => ({
       isBoardModalOpen,
       isDeleteModalOpen,
       isTaskModalOpen,
       isTaskInfosModalOpen,
+      isSidebarOpen,
       toggleBoardModal,
       toggleDeleteModal,
       toggleTaskModal,
       toggleTaskInfosModal,
+      toggleSidebar,
       deleteModalContent,
       taskModalContent,
       taskInfosModalContent,
@@ -125,6 +134,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
       isDeleteModalOpen,
       isTaskModalOpen,
       isTaskInfosModalOpen,
+      isSidebarOpen,
       deleteModalContent,
       taskModalContent,
       taskInfosModalContent,

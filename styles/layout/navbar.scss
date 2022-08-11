@@ -1,16 +1,30 @@
 .navbar {
+  background: $color-white;
+
+  @include tabletScreen {
+    border-bottom: 1px solid $color-light-lines;
+  }
+}
+
+.navbar__wrapper {
   padding: 16px 20px;
   display: flex;
   justify-content: space-between;
   z-index: 10;
-  background: $color-white;
-  position: relative;
   width: 100vw;
 
   @include tabletScreen {
-    border-bottom: 1px solid $color-light-lines;
     width: calc(100vw - 260px);
+    padding: 20px 24px;
   }
+
+  @include desktopScreen {
+    width: calc(100vw - 300px);
+  }
+}
+
+.navbar__wrapper--full {
+  width: 100vw;
 }
 
 .navbar__container {
@@ -18,28 +32,43 @@
   align-items: center;
   gap: 16px;
 
-  &::after {
-    content: '';
-    display: none;
-    position: absolute;
-    width: 1px;
-    background: $color-light-lines;
-    top: 0;
-    left: 171px;
-    height: 100%;
+  @include tabletScreen {
+    gap: 24px;
   }
+}
+
+.navbar__logo {
+  display: block;
 
   @include tabletScreen {
-    gap: 50px;
+    margin-right: 24px;
 
-    &::after {
-      display: block;
+    &--hide {
+      display: none;
     }
+  }
+}
+
+.kanban__logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.kanban__logo__title {
+  @extend %heading-xl;
+  margin-bottom: 3px;
+
+  display: none;
+
+  @include tabletScreen {
+    display: block;
   }
 }
 
 .navbar__title {
   @extend %heading-l;
+
   display: none;
 
   @include tabletScreen {
@@ -68,9 +97,11 @@
 
 .navbar__add__button {
   @extend %button-primary-l;
+
   padding: 0;
   width: 48px;
   height: 32px;
+  z-index: 2;
 
   &:disabled {
     background: $color-light-purple;
@@ -93,23 +124,6 @@
 }
 
 .navbar__add__text {
-  display: none;
-
-  @include tabletScreen {
-    display: block;
-  }
-}
-
-.kanban__logo {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.kanban__logo__title {
-  @extend %heading-xl;
-  margin-bottom: 3px;
-
   display: none;
 
   @include tabletScreen {
