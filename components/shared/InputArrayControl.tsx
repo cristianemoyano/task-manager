@@ -19,10 +19,11 @@ export default function InputArrayControl({
     <div className='input__array__control'>
       <input
         type='text'
-        className='input__text'
+        className={error ? 'input__text error' : 'input__text'}
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
+      <p className='input__array__error'>{error?.message}</p>
       <button onClick={remove} className='input__array__delete' type='button'>
         <Image
           src='/assets/icon-cross.svg'

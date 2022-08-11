@@ -7,6 +7,7 @@ import {
 } from 'react-hook-form';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { mutate } from 'swr';
 
 import useModal from '@/contexts/useModal';
 import { IBoard, ITask } from '@/typing';
@@ -64,8 +65,11 @@ export default function BoardModal({ board }: { board?: IBoard }) {
       router.push(`/board/${newBoard.data._id}`);
     } else {
       await axios.patch(`/api/boards/${board!._id}`, { ...data });
+      mutate(`/api/boards/${board!._id}`);
 
-      // TODO: mutate board and boards if the name changed
+      if (board?.name !== data.name) {
+        mutate(`/api/boards`);
+      }
       toggleBoardModal();
     }
   };

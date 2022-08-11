@@ -20,7 +20,6 @@ import NewItem from '@/components/shared/NewItem';
 export async function getStaticPaths() {
   await connectMongo();
 
-  // TODO: get only _id and name
   const boards = await Board.find().select(['-columns']);
 
   const paths = boards.map((board) => ({

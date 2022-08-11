@@ -106,21 +106,21 @@ export default function TaskInfosModal({ board }: { board: IBoard }) {
               className='navbar__dropdown__icon'
             />
           </button>
+          <TaskDropdown
+            close={() => {
+              setIsTaskDropdownOpen(false);
+              toggleTaskInfosModal();
+            }}
+            isVisible={isTaskDropdownOpen}
+            task={{
+              _id: _id!,
+              title: title!,
+              description: description!,
+              subtasks: subtasks!,
+              status: status!,
+            }}
+          />
         </header>
-        <TaskDropdown
-          close={() => {
-            setIsTaskDropdownOpen(false);
-            toggleTaskInfosModal();
-          }}
-          isVisible={isTaskDropdownOpen}
-          task={{
-            _id: _id!,
-            title: title!,
-            description: description!,
-            subtasks: subtasks!,
-            status: status!,
-          }}
-        />
         <p className='modal__text'>{description}</p>
         <div className='input__checkbox__container'>
           <p className='input__label'>

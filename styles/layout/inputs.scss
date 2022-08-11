@@ -1,5 +1,6 @@
 .input__text__control {
   margin-bottom: 24px;
+  position: relative;
 }
 
 .input__array__container {
@@ -16,6 +17,7 @@
 .input__array__control {
   display: flex;
   gap: 16px;
+  position: relative;
 }
 
 .input__textarea__control {
@@ -97,6 +99,11 @@
   display: flex;
   align-items: center;
   gap: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background: #635fc740;
+  }
 }
 
 .input__label {
@@ -117,6 +124,8 @@
   border: 1px solid rgba(130, 143, 163, 0.25);
   border-radius: 4px;
   color: $color-black;
+  cursor: pointer;
+  font-family: inherit;
 
   &::placeholder {
     @extend %body-l;
@@ -127,6 +136,19 @@
   &.error {
     border: 1px solid $color-red;
   }
+
+  &:focus {
+    border-color: $color-purple;
+  }
+}
+
+.input__text__error {
+  @extend %body-l;
+
+  position: absolute;
+  right: 16px;
+  top: 32px;
+  color: $color-red;
 }
 
 .input__textarea {
@@ -138,11 +160,21 @@
 .input__array__delete {
   border-radius: 0;
   padding: 8px;
+
+  &:hover {
+    filter: invert(47%) sepia(20%) saturate(1566%) hue-rotate(313deg)
+      brightness(95%) contrast(107%);
+  }
 }
 
-.input__checkbox {
-}
+.input__array__error {
+  @extend %body-l;
 
+  position: absolute;
+  right: 63px;
+  top: 8px;
+  color: $color-red;
+}
 .input__checkbox__label {
   @extend %body-m;
 

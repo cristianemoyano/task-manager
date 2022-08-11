@@ -26,10 +26,11 @@ export default function InputTextControl({
         type='text'
         id={name}
         placeholder={placeholder}
-        className='input__text'
+        className={error ? 'input__text error' : 'input__text'}
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
+      <p className='input__text__error'>{error?.message}</p>
     </div>
   );
 }

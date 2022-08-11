@@ -39,7 +39,7 @@ const Home: NextPage<{ boards: IBoard[] }> = ({ boards }) => {
   );
 };
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   await connectMongo();
 
   let boards = await Board.find();
@@ -49,7 +49,6 @@ export async function getStaticProps() {
     props: {
       boards,
     },
-    // revalidate: true,
   };
 }
 

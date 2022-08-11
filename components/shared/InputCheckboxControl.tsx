@@ -6,16 +6,16 @@ interface Props {
 
 export default function InputCheckboxControl({ onChange, value, name }: Props) {
   return (
-    <div className='input__checkbox__control'>
+    <div className='input__checkbox__control' onClick={() => onChange(!value)}>
       <input
         checked={value}
         onChange={(e) => onChange(e.target.checked)}
         type='checkbox'
         id={name}
+        name='name'
         className='input__checkbox'
       />
-      <label
-        htmlFor={name}
+      <p
         className={
           value
             ? 'input__checkbox__label input__checkbox__label--disabled'
@@ -23,7 +23,7 @@ export default function InputCheckboxControl({ onChange, value, name }: Props) {
         }
       >
         {name}
-      </label>
+      </p>
     </div>
   );
 }
