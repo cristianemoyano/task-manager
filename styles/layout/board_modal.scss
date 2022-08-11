@@ -144,3 +144,25 @@
     margin: 0 auto;
   }
 }
+
+.board__theme__switch {
+  background: $color-purple;
+  padding: 0 3px;
+  width: 34px;
+  height: 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+html.dark-theme .board__theme__switch {
+  justify-content: flex-end;
+}
+
+.board__theme__switch__circle {
+  width: 14px;
+  height: 14px;
+  background: $color-white;
+  border-radius: 50%;
+}

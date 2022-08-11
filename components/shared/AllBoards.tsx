@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 
 import { IBoard } from '@/typing';
 import useModal from '@/contexts/useModal';
+import useTheme from '@/contexts/useTheme';
 
 interface Props {
   boards: IBoard[];
@@ -12,6 +13,7 @@ interface Props {
 }
 export default function AllBoards({ boards, className, close }: Props) {
   const { toggleBoardModal, setIsNewBoard } = useModal();
+  const { theme, toggleTheme } = useTheme();
   const router = useRouter();
   const { board_id } = router.query;
 
@@ -70,6 +72,9 @@ export default function AllBoards({ boards, className, close }: Props) {
           height={19}
           alt='board'
         />
+        <button className='board__theme__switch' onClick={toggleTheme}>
+          <div className='board__theme__switch__circle'></div>
+        </button>
         <Image
           src='/assets/icon-dark-theme.svg'
           width={16}

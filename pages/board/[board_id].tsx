@@ -18,41 +18,6 @@ import EmptyState from '@/components/shared/EmptyState';
 import NewItem from '@/components/shared/NewItem';
 import Sidebar from '@/components/sidebar/Sidebar';
 
-export async function getStaticPaths() {
-  await connectMongo();
-
-  const boards = await Board.find().select(['-columns']);
-
-  const paths = boards.map((board) => ({
-    params: { board_id: board._id.toString() },
-  }));
-
-  return { paths, fallback: 'blocking' };
-}
-
-export async function getStaticProps({
-  params,
-}: {
-  params: { board_id: string };
-}) {
-  const { board_id } = params;
-  await connectMongo();
-
-  let board = await Board.findOne({ _id: board_id });
-  board = JSON.parse(JSON.stringify(board));
-
-  let boards = await Board.find().select(['-columns']);
-  boards = JSON.parse(JSON.stringify(boards));
-
-  return {
-    props: {
-      isrBoards: boards,
-      isrBoard: board,
-      board_id,
-    },
-  };
-}
-
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 const SingleBoard: NextPage<{
@@ -124,5 +89,40 @@ const SingleBoard: NextPage<{
     </HeadOfPage>
   );
 };
+
+export async function getStaticPaths() {
+  await connectMongo();
+
+  const boards = await Board.find().select(['-columns']);
+
+  const paths = boards.map((board) => ({
+    params: { board_id: board._id.toString() },
+  }));
+
+  return { paths, fallback: 'blocking' };
+}
+
+export async function getStaticProps({
+  params,
+}: {
+  params: { board_id: string };
+}) {
+  const { board_id } = params;
+  await connectMongo();
+
+  let board = await Board.findOne({ _id: board_id });
+  board = JSON.parse(JSON.stringify(board));
+
+  let boards = await Board.find().select(['-columns']);
+  boards = JSON.parse(JSON.stringify(boards));
+
+  return {
+    props: {
+      isrBoards: boards,
+      isrBoard: board,
+      board_id,
+    },
+  };
+}
 
 export default SingleBoard;

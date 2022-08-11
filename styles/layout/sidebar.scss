@@ -39,7 +39,7 @@
 }
 
 .sidebar__hide__button {
-  width: 240px;
+  width: 208px;
   padding: 16px 0px 16px 32px;
   margin-right: 24px;
   margin-top: 8px;
@@ -70,6 +70,7 @@
 
 .sidebar__hide__button__text {
   @extend %heading-m;
+
   color: $color-medium-gray;
 }
 
