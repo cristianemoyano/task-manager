@@ -37,11 +37,15 @@ export default async function handler(
   if (method === 'PATCH') {
     const { name, columns } = body;
 
-    const board = await Board.findOneAndUpdate(
-      { _id: board_id },
-      { name, columns }
-    );
+    try {
+      const board = await Board.findOneAndUpdate(
+        { _id: board_id },
+        { name, columns }
+      );
 
-    res.status(200).json(board);
+      res.status(200).json(board);
+    } catch (error) {
+      res.status(500).json(error);
+    }
   }
 }

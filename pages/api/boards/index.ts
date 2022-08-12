@@ -7,11 +7,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { method, body } = req;
+  const { method, body, query } = req;
   await connectMongo();
 
   if (method === 'GET') {
-    const boards = await Board.find().select(['-columns']);
+    const boards = await Board.find({ user_id: query.user_id }).select([
+      '-columns',
+    ]);
 
     res.status(200).json(boards);
   }

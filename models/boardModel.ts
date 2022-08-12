@@ -1,4 +1,4 @@
-import { Schema, model, models } from 'mongoose';
+import mongoose, { Schema, model, models } from 'mongoose';
 
 import { ISubtask, ITask, IColumn, IBoard } from '@/typing';
 
@@ -26,6 +26,12 @@ const boardSchema = new Schema<IBoard>({
   // _id: { type: Number, required: false },
   name: String,
   columns: [columnsSchema],
+  user_id: {
+    // @ts-ignore
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true,
+  },
 });
 
 const Board = models?.Board || model<IBoard>('Board', boardSchema);

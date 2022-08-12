@@ -1,4 +1,6 @@
 import type { NextPage } from 'next';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
 import useSWR from 'swr';
 import axios from 'axios';
 
@@ -18,15 +20,23 @@ import EmptyState from '@/components/shared/EmptyState';
 import NewItem from '@/components/shared/NewItem';
 import Sidebar from '@/components/sidebar/Sidebar';
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
-const SingleBoard: NextPage<{
+interface Props {
   isrBoards: IBoard[];
   isrBoard: IBoard;
   board_id: string;
-}> = ({ isrBoards, isrBoard, board_id }) => {
+  user_id: string;
+}
+
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+
+const SingleBoard: NextPage<Props> = ({
+  isrBoards,
+  isrBoard,
+  board_id,
+  user_id,
+}) => {
   const { data: boards, error: boardsError } = useSWR<IBoard[], any>(
-    '/api/boards',
+    `/api/boards?user_id=${user_id}`,
     fetcher,
     {
       fallbackData: isrBoards,
@@ -90,30 +100,25 @@ const SingleBoard: NextPage<{
   );
 };
 
-export async function getStaticPaths() {
-  await connectMongo();
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/register',
+      },
+    };
+  }
 
-  const boards = await Board.find().select(['-columns']);
+  const board_id = context.query.board_id;
 
-  const paths = boards.map((board) => ({
-    params: { board_id: board._id.toString() },
-  }));
-
-  return { paths, fallback: 'blocking' };
-}
-
-export async function getStaticProps({
-  params,
-}: {
-  params: { board_id: string };
-}) {
-  const { board_id } = params;
   await connectMongo();
 
   let board = await Board.findOne({ _id: board_id });
   board = JSON.parse(JSON.stringify(board));
 
-  let boards = await Board.find().select(['-columns']);
+  let boards = await Board.find({ user_id: session.id }).select(['-columns']);
   boards = JSON.parse(JSON.stringify(boards));
 
   return {
@@ -121,8 +126,9 @@ export async function getStaticProps({
       isrBoards: boards,
       isrBoard: board,
       board_id,
+      user_id: session.id,
     },
   };
-}
+};
 
 export default SingleBoard;

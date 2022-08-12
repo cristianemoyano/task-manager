@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
-import { useSession } from 'next-auth/react';
+import { GetServerSideProps } from 'next';
+import { useSession, getSession } from 'next-auth/react';
 
 import useModal from '@/contexts/useModal';
 import connectMongo from '@/services/connectMongo';
@@ -13,7 +14,6 @@ import BoardModal from '@/components/modals/BoardModal';
 import Sidebar from '@/components/sidebar/Sidebar';
 
 const Home: NextPage<{ boards: IBoard[] }> = ({ boards }) => {
-  const { data: session } = useSession();
   const { toggleBoardModal, setIsNewBoard } = useModal();
 
   return (
@@ -50,10 +50,20 @@ const Home: NextPage<{ boards: IBoard[] }> = ({ boards }) => {
   );
 };
 
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/register',
+      },
+    };
+  }
+
   await connectMongo();
 
-  let boards = await Board.find().select(['-columns']);
+  let boards = await Board.find({ user_id: session.id }).select(['-columns']);
   boards = JSON.parse(JSON.stringify(boards));
 
   return {
@@ -61,6 +71,6 @@ export async function getServerSideProps() {
       boards,
     },
   };
-}
+};
 
 export default Home;
