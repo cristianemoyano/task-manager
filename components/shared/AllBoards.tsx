@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { signOut } from 'next-auth/react';
 
 import { IBoard } from '@/typing';
 import useModal from '@/contexts/useModal';
@@ -83,7 +84,12 @@ export default function AllBoards({ boards, className, close }: Props) {
             alt='board'
           />
         </div>
-        <button className='board__logout'>Logout</button>
+        <button
+          className='board__logout'
+          onClick={() => signOut({ callbackUrl: '/register' })}
+        >
+          Logout
+        </button>
       </div>
     </div>
   );

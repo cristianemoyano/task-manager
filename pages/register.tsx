@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { signIn, useSession } from 'next-auth/react';
 import type { NextPage } from 'next';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
 import HeadOfPage from '@/components/shared/HeadOfPage';
 import InputTextControl from '@/components/shared/InputTextControl';
+import axios from 'axios';
 
 interface IControllerRegister {
   name?: string;
@@ -13,9 +16,12 @@ interface IControllerRegister {
 }
 
 const Register: NextPage = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
+
   const [isMember, setIsMember] = useState(true);
 
-  const { control, handleSubmit } = useForm<IControllerRegister>({
+  const { control, handleSubmit, setError } = useForm<IControllerRegister>({
     defaultValues: {
       name: '',
       email: '',
@@ -23,7 +29,33 @@ const Register: NextPage = () => {
     },
   });
 
-  const onSubmit = () => {};
+  useEffect(() => {
+    if (session) router.push('/');
+  }, [session, router]);
+
+  const onSubmit: SubmitHandler<IControllerRegister> = async (data) => {
+    if (!isMember) {
+      try {
+        await axios.post('/api/auth/register', { ...data });
+      } catch (error) {
+        setError('email', { message: 'invalid credentials' });
+        setError('password', { message: 'invalid credentials' });
+        return;
+      }
+    }
+
+    signIn('credentials', {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    }).then(({ error }: any) => {
+      if (error) {
+        setError('email', { message: 'invalid credentials' });
+        setError('password', { message: 'invalid credentials' });
+        return;
+      }
+    });
+  };
 
   return (
     <HeadOfPage title='Login / Register' content='login or create an account'>

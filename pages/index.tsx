@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import { useSession } from 'next-auth/react';
 
 import useModal from '@/contexts/useModal';
 import connectMongo from '@/services/connectMongo';
@@ -12,6 +13,7 @@ import BoardModal from '@/components/modals/BoardModal';
 import Sidebar from '@/components/sidebar/Sidebar';
 
 const Home: NextPage<{ boards: IBoard[] }> = ({ boards }) => {
+  const { data: session } = useSession();
   const { toggleBoardModal, setIsNewBoard } = useModal();
 
   return (

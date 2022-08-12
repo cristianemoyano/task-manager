@@ -8,8 +8,8 @@ import User from '@/models/userModel';
 export default NextAuth({
   providers: [
     CredentialProvider({
-      id: 'Credentials',
-      name: 'Credentials',
+      id: 'credentials',
+      name: 'credentials',
       credentials: {
         email: { label: 'Email', type: 'text', placeholder: 'Your email' },
         password: {
@@ -22,13 +22,13 @@ export default NextAuth({
         await connectMongo();
 
         const user = await User.findOne({ email: credentials!.email });
-        if (!user) return null;
+        if (!user) throw new Error('error');
 
         const checkPassword = await compare(
           credentials!.password,
           user.password
         );
-        if (!checkPassword) return null;
+        if (!checkPassword) throw new Error('error');
 
         return {
           email: user.email,
@@ -42,24 +42,23 @@ export default NextAuth({
     jwt: ({ token, user }) => {
       if (user) {
         token.id = user.id;
-        token.name = user.name;
       }
       return token;
     },
     session: ({ session, token }) => {
       if (token) {
         session.id = token.id;
-        session.name = token.name;
       }
       return session;
     },
   },
   session: {
-    jwt: true,
+    strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60,
   },
-  secret: process.env.JWT_SECRET,
   pages: {
     signIn: '/register',
-    error: '/register',
+    // error: '/register',
   },
+  secret: process.env.JWT_SECRET,
 });
