@@ -1,7 +1,10 @@
 .navbar {
   background: $color-white;
+  max-height: 64px;
 
   @include tabletScreen {
+    max-height: 96px;
+
     border-bottom: 1px solid $color-light-lines;
   }
 }

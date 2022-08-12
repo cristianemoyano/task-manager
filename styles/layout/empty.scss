@@ -1,12 +1,16 @@
 .empty {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  height: calc(100vh - 64px);
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: 25px;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  gap: 32px;
+  padding: 0 24px;
+
+  @include tabletScreen {
+    height: calc(100vh - 96px);
+  }
 }
 
 .empty__title {

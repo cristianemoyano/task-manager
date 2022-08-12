@@ -9,6 +9,7 @@ import HeadOfPage from '@/components/shared/HeadOfPage';
 import EmptyState from '@/components/shared/EmptyState';
 import Navbar from '@/components/navbar/Navbar';
 import BoardModal from '@/components/modals/BoardModal';
+import Sidebar from '@/components/sidebar/Sidebar';
 
 const Home: NextPage<{ boards: IBoard[] }> = ({ boards }) => {
   const { toggleBoardModal, setIsNewBoard } = useModal();
@@ -16,24 +17,32 @@ const Home: NextPage<{ boards: IBoard[] }> = ({ boards }) => {
   return (
     <HeadOfPage title='Home' content='Welcome Home'>
       <>
-        <Navbar boards={boards} />
         <BoardModal />
-        {boards.length ? (
-          <main className='home'>
-            <h1 className='home__title'>
-              Choose the board that you want to see
-            </h1>
-          </main>
-        ) : (
-          <EmptyState
-            title='You have no board yet. Create a new board to get started.'
-            button='+ Add New Board'
-            handleClick={() => {
-              toggleBoardModal();
-              setIsNewBoard(true);
-            }}
-          />
-        )}
+        <main>
+          <Sidebar boards={boards} />
+          <div>
+            <Navbar boards={boards} />
+            {boards.length ? (
+              <EmptyState
+                title='Choose the board that you want to see or create a new one.'
+                button='+ Add New Board'
+                handleClick={() => {
+                  toggleBoardModal();
+                  setIsNewBoard(true);
+                }}
+              />
+            ) : (
+              <EmptyState
+                title='You have no board yet. Create a new board to get started.'
+                button='+ Add New Board'
+                handleClick={() => {
+                  toggleBoardModal();
+                  setIsNewBoard(true);
+                }}
+              />
+            )}
+          </div>
+        </main>
       </>
     </HeadOfPage>
   );
@@ -42,7 +51,7 @@ const Home: NextPage<{ boards: IBoard[] }> = ({ boards }) => {
 export async function getServerSideProps() {
   await connectMongo();
 
-  let boards = await Board.find();
+  let boards = await Board.find().select(['-columns']);
   boards = JSON.parse(JSON.stringify(boards));
 
   return {

@@ -166,3 +166,10 @@ html.dark-theme .board__theme__switch {
   background: $color-white;
   border-radius: 50%;
 }
+
+.board__logout {
+  @extend %button-primary-l;
+
+  margin: 16px auto 0 auto;
+  padding: 16px;
+}

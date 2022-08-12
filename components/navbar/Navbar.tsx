@@ -41,7 +41,7 @@ export default function Navbar({ boards, board }: Props) {
               onClick={() => setIsBoardModalOpen(!isBoardModalOpen)}
             >
               <h2 className='navbar__dropdown__title'>
-                {pathname === '/' ? 'Choose your board' : board!.name}
+                {pathname === '/' ? 'Home' : board!.name}
               </h2>
               {isBoardModalOpen ? (
                 <Image
@@ -62,45 +62,47 @@ export default function Navbar({ boards, board }: Props) {
               )}
             </div>
             <h2 className='navbar__title'>
-              {pathname === '/' ? 'Choose your board' : board!.name}
+              {pathname === '/' ? 'Home' : board!.name}
             </h2>
           </div>
-          {board && (
-            <div className='navbar__container'>
-              <button
-                className='navbar__add__button'
-                onClick={() => {
-                  toggleTaskModal();
-                  setTaskModalContent({ isNew: true, task: {} });
-                }}
-                disabled={!board.columns.length}
-              >
-                <div className='navbar__add__icon'>
+          <div className='navbar__container'>
+            {board && (
+              <>
+                <button
+                  className='navbar__add__button'
+                  onClick={() => {
+                    toggleTaskModal();
+                    setTaskModalContent({ isNew: true, task: {} });
+                  }}
+                  disabled={!board.columns.length}
+                >
+                  <div className='navbar__add__icon'>
+                    <Image
+                      src='/assets/icon-add-task-mobile.svg'
+                      width={12}
+                      height={12}
+                      layout='fixed'
+                      alt='chevron-down'
+                    />
+                  </div>
+                  <h3 className='navbar__add__text'>+ Add New Task</h3>
+                </button>
+                <button
+                  className='dropdown__buton'
+                  onClick={() => setIsBoardDropdownOpen(!isBoardDropdownOpen)}
+                >
                   <Image
-                    src='/assets/icon-add-task-mobile.svg'
-                    width={12}
-                    height={12}
+                    src='/assets/icon-vertical-ellipsis.svg'
+                    width={5}
+                    height={20}
                     layout='fixed'
-                    alt='chevron-down'
+                    alt='vertical-ellipsis'
+                    className='dropdown__button__icon'
                   />
-                </div>
-                <h3 className='navbar__add__text'>+ Add New Task</h3>
-              </button>
-              <button
-                className='dropdown__buton'
-                onClick={() => setIsBoardDropdownOpen(!isBoardDropdownOpen)}
-              >
-                <Image
-                  src='/assets/icon-vertical-ellipsis.svg'
-                  width={5}
-                  height={20}
-                  layout='fixed'
-                  alt='vertical-ellipsis'
-                  className='dropdown__button__icon'
-                />
-              </button>
-            </div>
-          )}
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </nav>
       <AllBoardsModal

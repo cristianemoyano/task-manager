@@ -65,22 +65,25 @@ export default function AllBoards({ boards, className, close }: Props) {
           </button>
         </div>
       </div>
-      <div className='board__theme'>
-        <Image
-          src='/assets/icon-light-theme.svg'
-          width={19}
-          height={19}
-          alt='board'
-        />
-        <button className='board__theme__switch' onClick={toggleTheme}>
-          <div className='board__theme__switch__circle'></div>
-        </button>
-        <Image
-          src='/assets/icon-dark-theme.svg'
-          width={16}
-          height={16}
-          alt='board'
-        />
+      <div>
+        <div className='board__theme'>
+          <Image
+            src='/assets/icon-light-theme.svg'
+            width={19}
+            height={19}
+            alt='board'
+          />
+          <button className='board__theme__switch' onClick={toggleTheme}>
+            <div className='board__theme__switch__circle'></div>
+          </button>
+          <Image
+            src='/assets/icon-dark-theme.svg'
+            width={16}
+            height={16}
+            alt='board'
+          />
+        </div>
+        <button className='board__logout'>Logout</button>
       </div>
     </div>
   );
