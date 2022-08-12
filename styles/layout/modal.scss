@@ -25,6 +25,10 @@
   margin: 0 16px;
   cursor: auto;
   max-width: 480px;
+
+  @include tabletScreen {
+    padding: 32px;
+  }
 }
 
 .modal__header {

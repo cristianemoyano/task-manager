@@ -1,9 +1,9 @@
 .board__main {
-  height: calc(100vh - 64px);
+  min-height: calc(100vh - 64px);
   overflow: scroll;
 
   @include tabletScreen {
-    height: calc(100vh - 96px);
+    min-height: calc(100vh - 96px);
   }
 }
 

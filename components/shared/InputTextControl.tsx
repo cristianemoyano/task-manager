@@ -7,6 +7,7 @@ interface Props {
   label: string;
   name: string;
   placeholder: string;
+  isPassword?: boolean;
 }
 
 export default function InputTextControl({
@@ -16,6 +17,7 @@ export default function InputTextControl({
   label,
   name,
   placeholder,
+  isPassword,
 }: Props) {
   return (
     <div className='input__text__control'>
@@ -23,7 +25,7 @@ export default function InputTextControl({
         {label}
       </label>
       <input
-        type='text'
+        type={isPassword ? 'password' : 'text'}
         id={name}
         placeholder={placeholder}
         className={error ? 'input__text error' : 'input__text'}
