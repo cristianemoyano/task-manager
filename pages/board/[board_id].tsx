@@ -4,6 +4,7 @@ import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import axios from 'axios';
+import ScrollContainer from 'react-indiana-drag-scroll';
 
 import { IBoard } from '@/typing';
 import connectMongo from '@/services/connectMongo';
@@ -77,23 +78,24 @@ const SingleBoard: NextPage<Props> = ({
         <TaskInfosModal board={board} />
         <main>
           <Sidebar boards={boards} />
-          <div>
+          <div className='board__main'>
             <Navbar boards={boards} board={board} />
             {board.columns.length ? (
-              <div className='board__main'>
-                <div className='board__main__container'>
-                  {board.columns.map((column) => (
-                    <BoardColumn key={column._id} column={column} />
-                  ))}
-                  <NewItem
-                    isColumn={true}
-                    onClick={() => {
-                      setIsNewBoard(false);
-                      toggleBoardModal();
-                    }}
-                  />
-                </div>
-              </div>
+              <ScrollContainer
+                vertical={true}
+                className='board__main__container'
+              >
+                {board.columns.map((column) => (
+                  <BoardColumn key={column._id} column={column} />
+                ))}
+                <NewItem
+                  isColumn={true}
+                  onClick={() => {
+                    setIsNewBoard(false);
+                    toggleBoardModal();
+                  }}
+                />
+              </ScrollContainer>
             ) : (
               <EmptyState
                 title='This board is empty. Create a new column to get started.'

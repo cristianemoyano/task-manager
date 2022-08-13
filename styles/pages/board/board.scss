@@ -1,5 +1,6 @@
 .board__main {
   min-height: calc(100vh - 64px);
+  height: 100%;
   overflow: scroll;
 
   @include tabletScreen {
@@ -12,6 +13,7 @@
   display: flex;
   gap: 24px;
   align-items: stretch;
+  overflow: scroll !important;
 
   @include tabletScreen {
     padding: 24px 24px;

@@ -8,6 +8,7 @@ body {
   font-family: $font-jakarta;
   background: $color-light-gray;
   min-height: 100vh;
+  min-width: 100vw;
 
   &.fixed {
     overflow: hidden;
