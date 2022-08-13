@@ -6,6 +6,7 @@ import {
   SubmitHandler,
 } from 'react-hook-form';
 import axios from 'axios';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 
@@ -35,6 +36,9 @@ const defaultValues = {
 };
 
 export default function BoardModal({ board }: { board?: IBoard }) {
+  const { data: session } = useSession();
+  const { isBoardModalOpen, toggleBoardModal, isNewBoard } = useModal();
+  const router = useRouter();
   const { control, handleSubmit, reset, setValue } = useForm<IControllerBoard>({
     defaultValues,
   });
@@ -42,8 +46,6 @@ export default function BoardModal({ board }: { board?: IBoard }) {
     control,
     name: 'columns',
   });
-  const { isBoardModalOpen, toggleBoardModal, isNewBoard } = useModal();
-  const router = useRouter();
 
   useEffect(() => {
     if (!isNewBoard && board) {
@@ -61,17 +63,22 @@ export default function BoardModal({ board }: { board?: IBoard }) {
 
   const onSubmit: SubmitHandler<IControllerBoard> = async (data) => {
     if (isNewBoard) {
-      const newBoard = await axios.post('/api/boards', { board: data });
+      const newBoard = await axios.post(`/api/boards?user_id=${session?.id}`, {
+        board: data,
+      });
+
       router.push(`/board/${newBoard.data._id}`);
     } else {
-      await axios.patch(`/api/boards/${board!._id}`, { ...data });
-      mutate(`/api/boards/${board!._id}`);
+      await axios.patch(`/api/boards/${board!._id}?user_id=${session?.id}`, {
+        ...data,
+      });
+      mutate(`/api/boards/${board!._id}?user_id=${session?.id}`);
 
       if (board?.name !== data.name) {
-        mutate(`/api/boards`);
+        mutate(`/api/boards?user_id=${session?.id}`);
       }
-      toggleBoardModal();
     }
+    toggleBoardModal();
   };
 
   return (

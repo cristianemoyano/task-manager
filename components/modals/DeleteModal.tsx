@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 import { mutate } from 'swr';
 
 import { IBoard } from '@/typing';
@@ -7,6 +8,7 @@ import useModal from '@/contexts/useModal';
 import Modal from '../shared/Modal';
 
 export default function DeleteModal({ board }: { board: IBoard }) {
+  const { data: session } = useSession();
   const {
     toggleDeleteModal,
     isDeleteModalOpen,
@@ -16,15 +18,15 @@ export default function DeleteModal({ board }: { board: IBoard }) {
 
   const onDelete = async () => {
     if (isBoard) {
-      await axios.delete(`/api/boards/${_id}`);
+      await axios.delete(`/api/boards/${_id}?user_id=${session?.id}`);
       router.push('/');
     } else {
       await axios.delete(
-        `/api/task/delete-task?board_id=${board._id}&column_id=${column_id}&task_id=${_id}`
+        `/api/task/delete-task?board_id=${board._id}&user_id=${session?.id}&column_id=${column_id}&task_id=${_id}`
       );
-      mutate(`/api/boards/${board._id}`);
-      toggleDeleteModal();
+      mutate(`/api/boards/${board._id}?user_id=${session?.id}`);
     }
+    toggleDeleteModal();
   };
 
   return (

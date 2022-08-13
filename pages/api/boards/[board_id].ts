@@ -10,13 +10,13 @@ export default async function handler(
   const {
     method,
     body,
-    query: { board_id },
+    query: { board_id, user_id },
   } = req;
   await connectMongo();
 
   if (method === 'GET') {
     try {
-      const board = await Board.findOne({ _id: board_id });
+      const board = await Board.findOne({ _id: board_id, user_id });
 
       res.status(200).json(board);
     } catch (error) {
@@ -26,7 +26,7 @@ export default async function handler(
 
   if (method === 'DELETE') {
     try {
-      const board = await Board.findOneAndDelete({ _id: board_id });
+      const board = await Board.findOneAndDelete({ _id: board_id, user_id });
 
       res.status(200).json(board);
     } catch (error) {
@@ -39,7 +39,7 @@ export default async function handler(
 
     try {
       const board = await Board.findOneAndUpdate(
-        { _id: board_id },
+        { _id: board_id, user_id },
         { name, columns }
       );
 

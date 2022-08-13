@@ -7,22 +7,32 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { method, body, query } = req;
+  const {
+    method,
+    body,
+    query: { user_id },
+  } = req;
   await connectMongo();
 
   if (method === 'GET') {
-    const boards = await Board.find({ user_id: query.user_id }).select([
-      '-columns',
-    ]);
+    try {
+      const boards = await Board.find({ user_id }).select(['-columns']);
 
-    res.status(200).json(boards);
+      res.status(200).json(boards);
+    } catch (error) {
+      res.status(500).json(error);
+    }
   }
 
   if (method === 'POST') {
-    const { board } = body;
+    try {
+      const { board } = body;
 
-    const newBoard = await Board.create(board);
+      const newBoard = await Board.create({ ...board, user_id });
 
-    res.status(201).json(newBoard);
+      res.status(201).json(newBoard);
+    } catch (error) {
+      res.status(500).json(error);
+    }
   }
 }

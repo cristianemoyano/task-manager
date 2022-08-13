@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import axios from 'axios';
 
@@ -45,7 +46,7 @@ const SingleBoard: NextPage<Props> = ({
   );
 
   const { data: board, error: boardError } = useSWR<IBoard, any>(
-    `/api/boards/${board_id}`,
+    `/api/boards/${board_id}?user_id=${user_id}`,
     fetcher,
     {
       fallbackData: isrBoard,
@@ -54,8 +55,18 @@ const SingleBoard: NextPage<Props> = ({
   );
 
   const { setIsNewBoard, toggleBoardModal } = useModal();
+  const router = useRouter();
 
-  if (boardsError || boardError || !boards || !board) return <div>Error</div>;
+  if (boardsError || boardError || !boards || !board)
+    return (
+      <HeadOfPage title='Board Error' content='No Board'>
+        <EmptyState
+          title='We did not foun any board, maybe you are trying to access someone else board or one that does not exist.'
+          button='Go back home'
+          handleClick={() => router.push('/')}
+        />
+      </HeadOfPage>
+    );
 
   return (
     <HeadOfPage title='Board' content='Your Board'>
@@ -115,7 +126,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   await connectMongo();
 
-  let board = await Board.findOne({ _id: board_id });
+  if (board_id?.length !== 24) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/',
+      },
+    };
+  }
+
+  let board = await Board.findOne({ _id: board_id, user_id: session.id });
   board = JSON.parse(JSON.stringify(board));
 
   let boards = await Board.find({ user_id: session.id }).select(['-columns']);

@@ -8,22 +8,29 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { method, body } = req;
+  const { method, body, query } = req;
   await connectMongo();
 
   if (method === 'PATCH') {
-    const { board_id, column_id, task } = body;
+    try {
+      const { board_id, column_id, task } = body;
 
-    const board = await Board.findOne({ _id: board_id });
+      const board = await Board.findOne({
+        _id: board_id,
+        user_id: query.user_id,
+      });
 
-    const columnToUpdate = board.columns.find(
-      (c: IColumn) => c._id!.toString() == column_id
-    );
+      const columnToUpdate = board.columns.find(
+        (c: IColumn) => c._id!.toString() == column_id
+      );
 
-    columnToUpdate.tasks.push(task);
+      columnToUpdate.tasks.push(task);
 
-    const boardUpdated = await board.save();
+      const boardUpdated = await board.save();
 
-    res.status(200).json(boardUpdated);
+      res.status(200).json(boardUpdated);
+    } catch (error) {
+      res.status(500).json(error);
+    }
   }
 }
