@@ -68,6 +68,7 @@ export default function BoardModal({ board }: { board?: IBoard }) {
       });
 
       router.push(`/board/${newBoard.data._id}`);
+      mutate(`/api/boards?user_id=${session?.id}`);
     } else {
       await axios.patch(`/api/boards/${board!._id}?user_id=${session?.id}`, {
         ...data,

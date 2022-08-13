@@ -34,7 +34,7 @@ export default function TaskModal({ board }: { board: IBoard }) {
   const defaultValues = {
     title: '',
     description: '',
-    status: board.columns[0]._id!.toString(),
+    status: board.columns.length ? board.columns[0]._id!.toString() : '',
     subtasks: [
       { title: '', isCompleted: false },
       { title: '', isCompleted: false },
@@ -64,7 +64,10 @@ export default function TaskModal({ board }: { board: IBoard }) {
     } else {
       setValue('title', '');
       setValue('description', '');
-      setValue('status', board.columns[0]._id!.toString());
+      setValue(
+        'status',
+        board.columns.length ? board.columns[0]._id!.toString() : ''
+      );
       setValue('subtasks', [
         { title: '', isCompleted: false },
         { title: '', isCompleted: false },

@@ -14,9 +14,11 @@
   gap: 24px;
   align-items: stretch;
   overflow: scroll !important;
+  min-height: calc(100vh - 64px);
 
   @include tabletScreen {
     padding: 24px 24px;
+    min-height: calc(100vh - 96px);
   }
 }
 
