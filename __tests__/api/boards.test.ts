@@ -7,6 +7,8 @@ import singleBoardHandler from '@/pages/api/boards/[board_id]';
 
 let initialBoards: any[] = [];
 
+const user_id = '62f651c7693e2295d9a2d41f';
+
 beforeAll(async () => {
   initialBoards = await connect();
 });
@@ -14,8 +16,6 @@ beforeAll(async () => {
 afterAll(async () => {
   closeAndReset();
 });
-
-const user_id = '62f651c7693e2295d9a2d41f';
 
 test('GET /api/boards get correct number and data of all boards ', async () => {
   await testApiHandler({

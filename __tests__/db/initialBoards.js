@@ -9,7 +9,6 @@ export const initialBoards = [
           {
             title: 'Plan Product Hunt launch',
             description: '',
-            status: 'Todo',
             subtasks: [
               {
                 title: 'Find hunter',
@@ -40,7 +39,6 @@ export const initialBoards = [
           {
             title: 'Share on Show HN',
             description: '',
-            status: '',
             subtasks: [
               {
                 title: 'Draft out HN post',
@@ -59,7 +57,6 @@ export const initialBoards = [
           {
             title: 'Write launch article to publish on multiple channels',
             description: '',
-            status: '',
             subtasks: [
               {
                 title: 'Write article',
@@ -101,7 +98,6 @@ export const initialBoards = [
           {
             title: 'Launch version one',
             description: '',
-            status: 'Now',
             subtasks: [
               {
                 title: 'Launch privately to our waitlist',
@@ -117,7 +113,6 @@ export const initialBoards = [
             title: 'Review early feedback and plan next steps for roadmap',
             description:
               "Beyond the initial launch, we're keeping the initial roadmap completely empty. This meeting will help us plan out our next steps based on actual customer feedback.",
-            status: 'Now',
             subtasks: [
               {
                 title: 'Interview 10 customers',

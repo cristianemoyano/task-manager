@@ -8,7 +8,6 @@ export const newBoard = {
         {
           title: 'Build UI for onboarding flow',
           description: '',
-          status: 'Todo',
           subtasks: [
             {
               title: 'Sign up page',
@@ -27,7 +26,6 @@ export const newBoard = {
         {
           title: 'Build UI for search',
           description: '',
-          status: 'Todo',
           subtasks: [
             {
               title: 'Search page',
@@ -38,7 +36,6 @@ export const newBoard = {
         {
           title: 'Build settings UI',
           description: '',
-          status: 'Todo',
           subtasks: [
             {
               title: 'Account page',
@@ -54,7 +51,6 @@ export const newBoard = {
           title: 'QA and test all major user journeys',
           description:
             'Once we feel version one is ready, we need to rigorously test it both internally and externally to identify any major gaps.',
-          status: 'Todo',
           subtasks: [
             {
               title: 'Internal testing',
@@ -74,7 +70,6 @@ export const newBoard = {
         {
           title: 'Design settings and search pages',
           description: '',
-          status: 'Doing',
           subtasks: [
             {
               title: 'Settings - Account page',
@@ -93,7 +88,6 @@ export const newBoard = {
         {
           title: 'Add account management endpoints',
           description: '',
-          status: 'Doing',
           subtasks: [
             {
               title: 'Upgrade plan',
@@ -112,7 +106,6 @@ export const newBoard = {
         {
           title: 'Design onboarding flow',
           description: '',
-          status: 'Doing',
           subtasks: [
             {
               title: 'Sign up page',
@@ -131,7 +124,6 @@ export const newBoard = {
         {
           title: 'Add search enpoints',
           description: '',
-          status: 'Doing',
           subtasks: [
             {
               title: 'Add search endpoint',
@@ -146,7 +138,6 @@ export const newBoard = {
         {
           title: 'Add authentication endpoints',
           description: '',
-          status: 'Doing',
           subtasks: [
             {
               title: 'Define user model',
@@ -163,7 +154,6 @@ export const newBoard = {
             'Research pricing points of various competitors and trial different business models',
           description:
             "We know what we're planning to build for version one. Now we need to finalise the first pricing model we'll use. Keep iterating the subtasks until we have a coherent proposition.",
-          status: 'Doing',
           subtasks: [
             {
               title: 'Research competitor pricing and business models',
@@ -189,7 +179,6 @@ export const newBoard = {
           title: 'Conduct 5 wireframe tests',
           description:
             'Ensure the layout continues to make sense and we have strong buy-in from potential users.',
-          status: 'Done',
           subtasks: [
             {
               title: 'Complete 5 wireframe prototype tests',
@@ -201,7 +190,6 @@ export const newBoard = {
           title: 'Create wireframe prototype',
           description:
             'Create a greyscale clickable wireframe prototype to test our asssumptions so far.',
-          status: 'Done',
           subtasks: [
             {
               title: 'Create clickable wireframe prototype in Balsamiq',
@@ -213,7 +201,6 @@ export const newBoard = {
           title: 'Review results of usability tests and iterate',
           description:
             "Keep iterating through the subtasks until we're clear on the core concepts for the app.",
-          status: 'Done',
           subtasks: [
             {
               title:
@@ -234,7 +221,6 @@ export const newBoard = {
           title:
             'Create paper prototypes and conduct 10 usability tests with potential customers',
           description: '',
-          status: 'Done',
           subtasks: [
             {
               title: 'Create paper prototypes for version one',
@@ -250,7 +236,6 @@ export const newBoard = {
           title: 'Market discovery',
           description:
             'We need to define and refine our core product. Interviews will help us learn common pain points and help us define the strongest MVP.',
-          status: 'Done',
           subtasks: [
             {
               title: 'Interview 10 prospective customers',
@@ -261,7 +246,6 @@ export const newBoard = {
         {
           title: 'Competitor analysis',
           description: '',
-          status: 'Done',
           subtasks: [
             {
               title: 'Find direct and indirect competitors',
@@ -277,7 +261,6 @@ export const newBoard = {
           title: 'Research the market',
           description:
             'We need to get a solid overview of the market to ensure we have up-to-date estimates of market size and demand.',
-          status: 'Done',
           subtasks: [
             {
               title: 'Write up research analysis',
