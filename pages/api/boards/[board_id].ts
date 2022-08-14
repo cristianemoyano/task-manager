@@ -40,7 +40,11 @@ export default async function handler(
     try {
       const board = await Board.findOneAndUpdate(
         { _id: board_id, user_id },
-        { name, columns }
+        { name, columns },
+        {
+          new: true,
+          runValidators: true,
+        }
       );
 
       res.status(200).json(board);

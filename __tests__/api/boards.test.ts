@@ -4,7 +4,6 @@ import { connect, closeAndReset } from '../db/utils/reset-db';
 import { newBoard } from '../db/newBoard';
 import boardsHandler from '@/pages/api/boards/index';
 import singleBoardHandler from '@/pages/api/boards/[board_id]';
-import { IBoard } from '@/typing';
 
 let initialBoards: any[] = [];
 
@@ -88,6 +87,37 @@ test('DELETE /api/boards/[board_id] delete a single board', async () => {
         },
       });
       expect(res.status).toBe(200);
+    },
+  });
+});
+
+test('PATCH /api/boards/[board_id] update a single board', async () => {
+  await testApiHandler({
+    handler: singleBoardHandler,
+    paramsPatcher: (params) => {
+      params.user_id = user_id;
+      params.board_id = initialBoards[0]._id.toString();
+    },
+    test: async ({ fetch }) => {
+      const res = await fetch({
+        method: 'PATCH',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: 'New Marketing Plan',
+          columns: [
+            initialBoards[0].columns[0],
+            initialBoards[0].columns[1],
+            { name: 'Test Column', tasks: [] },
+          ],
+        }),
+      });
+      expect(res.status).toBe(200);
+
+      const json = await res.json();
+      expect(json.name).toBe('New Marketing Plan');
+      expect(json.columns[2].name).toBe('Test Column');
     },
   });
 });

@@ -69,6 +69,8 @@ const SingleBoard: NextPage<Props> = ({
       </HeadOfPage>
     );
 
+  console.log(board);
+
   return (
     <HeadOfPage title='Board' content='Your Board'>
       <>
