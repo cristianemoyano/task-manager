@@ -18,7 +18,7 @@
 }
 
 .modal__container {
-  background: $color-white;
+  background: $color-secondary-bg;
   padding: 24px;
   border-radius: 6px;
   width: 100%;
@@ -44,6 +44,8 @@
 
 .modal__header__title {
   @extend %heading-l;
+
+  color: $color-headings;
 }
 
 .modal__header__title--delete {

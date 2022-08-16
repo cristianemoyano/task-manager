@@ -9,7 +9,7 @@
 }
 
 .register__form {
-  background: $color-white;
+  background: $color-secondary-bg;
   padding: 24px;
   width: 100%;
   max-width: 480px;
@@ -23,6 +23,7 @@
 .register__form__title {
   @extend %heading-xl;
 
+  color: $color-headings;
   margin-bottom: 32px;
 }
 

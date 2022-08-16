@@ -47,18 +47,18 @@
 
   padding: 8px 16px;
   width: calc(100% - 32px);
-  background: #ffffff;
+  background: transparent;
   border: 1px solid rgba(130, 143, 163, 0.25);
   border-radius: 4px;
   justify-content: space-between;
-  color: $color-black;
+  color: $color-headings;
 }
 
 .input__dropdown__content {
   display: none;
   position: absolute;
   top: 57px;
-  background-color: $color-white;
+  background-color: $color-dropdown-bg;
   width: 100%;
   padding: 16px;
   border-radius: 8px;
@@ -77,7 +77,7 @@
   }
 
   &:hover {
-    color: $color-dark-grey;
+    color: $color-purple;
   }
 }
 
@@ -94,7 +94,7 @@
 
 .input__checkbox__control {
   padding: 16px 8px;
-  background: $color-light-gray;
+  background: $color-main-bg;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -110,7 +110,7 @@
   @extend %body-m;
 
   display: block;
-  color: $color-medium-gray;
+  color: $color-label;
   font-weight: 700;
   margin-bottom: 8px;
 }
@@ -120,17 +120,17 @@
 
   padding: 8px 16px;
   width: 100%;
-  background: #ffffff;
+  background: transparent;
   border: 1px solid rgba(130, 143, 163, 0.25);
   border-radius: 4px;
-  color: $color-black;
+  color: $color-headings;
   cursor: pointer;
   font-family: inherit;
 
   &::placeholder {
     @extend %body-l;
 
-    color: rgba(0, 1, 18, 0.25);
+    color: $color-placeholder;
   }
 
   &.error {
@@ -175,11 +175,12 @@
   top: 8px;
   color: $color-red;
 }
+
 .input__checkbox__label {
   @extend %body-m;
 
   font-weight: 700;
-  color: $color-black;
+  color: $color-headings;
 }
 
 .input__checkbox__label--disabled {

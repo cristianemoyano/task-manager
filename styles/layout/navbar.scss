@@ -1,10 +1,9 @@
 .navbar {
-  background: $color-white;
+  background: $color-secondary-bg;
   max-height: 64px;
 
   @include tabletScreen {
     max-height: 96px;
-
     border-bottom: 1px solid $color-light-lines;
   }
 }
@@ -60,8 +59,9 @@
 
 .kanban__logo__title {
   @extend %heading-xl;
-  margin-bottom: 3px;
 
+  color: $color-headings;
+  margin-bottom: 3px;
   display: none;
 
   @include tabletScreen {
@@ -70,8 +70,9 @@
 }
 
 .navbar__title {
-  @extend %heading-l;
+  @extend %heading-xl;
 
+  color: $color-headings;
   display: none;
 
   @include tabletScreen {
@@ -96,6 +97,8 @@
 
 .navbar__dropdown__title {
   @extend %heading-l;
+
+  color: $color-headings;
 }
 
 .navbar__add__button {

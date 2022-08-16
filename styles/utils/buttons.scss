@@ -31,12 +31,12 @@
 
   font-weight: 700;
   padding: 8px 0;
-  background: rgba(99, 95, 199, 0.1);
+  background: $color-secondary-button-bg;
   color: $color-purple;
   border-radius: 20px;
 
   &:hover {
-    background: rgba(99, 95, 199, 0.25);
+    background: $color-secondary-button-bg-hover;
   }
 }
 

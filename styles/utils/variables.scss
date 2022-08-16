@@ -1,21 +1,59 @@
-// html.dark-theme {
-//   --primary-color: #222;
-// }
+html.dark-theme {
+  --color-main-bg: #20212c;
+  --color-secondary-bg: #2b2c37;
+  --color-headings: #fff;
+  --color-light-lines: #3e3f4e;
+  --color-very-light-purple: #fff;
+  --color-gradiant: linear-gradient(
+    180deg,
+    rgba(43, 44, 55, 0.25) 0%,
+    rgba(43, 44, 55, 0.125) 100%
+  );
+  --color-dropdown-bg: #20212c;
+  --color-placeholder: rgba(255, 255, 255, 0.25);
+  --color-label: #fff;
+  --color-secondary-button-bg: #fff;
+  --color-secondary-button-bg-hover: #fff;
+}
 
-// html.light-theme {
-//   --primary-color: #fff;
-// }
+html.light-theme {
+  --color-main-bg: #f4f7fd;
+  --color-secondary-bg: #fff;
+  --color-headings: #000112;
+  --color-light-lines: #e4ebfa;
+  --color-very-light-purple: rgba(99, 95, 199, 0.1);
+  --color-gradiant: linear-gradient(
+    180deg,
+    #e9effa 0%,
+    rgba(233, 239, 250, 0.5) 100%
+  );
+  --color-dropdown-bg: #fff;
+  --color-label: #828fa3;
+  --color-placeholder: rgba(0, 1, 18, 0.25);
+  --color-secondary-button-bg: rgba(99, 95, 199, 0.1);
+  --color-secondary-button-bg-hover: rgba(99, 95, 199, 0.25);
+}
+
+$color-main-bg: var(--color-main-bg);
+$color-secondary-bg: var(--color-secondary-bg);
+$color-headings: var(--color-headings);
+$color-light-lines: var(--color-light-lines);
+$color-very-light-purple: var(--color-very-light-purple);
+$color-gradiant: var(--color-gradiant);
+$color-dropdown-bg: var(--color-dropdown-bg);
+$color-placeholder: var(--color-placeholder);
+$color-label: var(--color-label);
+$color-secondary-button-bg: var(--color-secondary-button-bg);
+$color-secondary-button-bg-hover: var(--color-secondary-button-bg-hover);
 
 $color-purple: #635fc7;
-$color-light-purple: #8aa4ff;
+$color-light-purple: #a8a4ff;
 $color-red: #ea5555;
 $color-light-red: #ff9898;
 $color-very-dark-grey: #20212c;
 $color-dark-grey: #2b2c37;
 $color-medium-gray: #828fa3;
 $color-light-gray: #f4f7fd;
-$color-dark-lines: #3e3f4e;
-$color-light-lines: #e4ebfa;
 $color-black: #000112;
 $color-white: #fff;
 
