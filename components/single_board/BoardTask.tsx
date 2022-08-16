@@ -23,8 +23,6 @@ export default function BoardTask({ task }: { task: ITask }) {
         setTaskInfosModalContent(task);
         toggleTaskInfosModal();
       }}
-      onDragStart={() => console.log('dragged')}
-      draggable={true}
     >
       <h3 className='board__task__title'>{task.title}</h3>
       <p className='board__task__text'>

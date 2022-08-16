@@ -81,7 +81,7 @@ const SingleBoard: NextPage<Props> = ({
           <div className='board__main'>
             <Navbar boards={boards} board={board} />
             {board.columns.length ? (
-              <div className='board__main__container'>
+              <ScrollContainer className='board__main__container'>
                 {board.columns.map((column) => (
                   <BoardColumn key={column._id} column={column} />
                 ))}
@@ -92,7 +92,7 @@ const SingleBoard: NextPage<Props> = ({
                     toggleBoardModal();
                   }}
                 />
-              </div>
+              </ScrollContainer>
             ) : (
               <EmptyState
                 title='This board is empty. Create a new column to get started.'

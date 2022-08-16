@@ -143,6 +143,21 @@ const Register: NextPage = () => {
               {isMember ? 'Sign Up' : 'Login'}
             </span>
           </h3>
+          <h3 className='register__form__toggle'>
+            Access the app without login or sign up?{' '}
+            <span
+              className='register__form__toggle__button'
+              onClick={() =>
+                signIn('credentials', {
+                  email: process.env.NEXT_PUBLIC_EMAIL,
+                  password: process.env.NEXT_PUBLIC_PASSWORD,
+                  redirect: false,
+                })
+              }
+            >
+              Click me
+            </span>
+          </h3>
         </form>
       </main>
     </HeadOfPage>

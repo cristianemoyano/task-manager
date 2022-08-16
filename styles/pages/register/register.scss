@@ -38,6 +38,10 @@
   @extend %heading-m;
 
   color: $color-medium-gray;
+
+  &:last-child {
+    margin-top: 6px;
+  }
 }
 
 .register__form__toggle__button {
