@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import axios from 'axios';
 import ScrollContainer from 'react-indiana-drag-scroll';
+import { isEmpty } from 'lodash';
 
 import { IBoard } from '@/typing';
 import connectMongo from '@/services/connectMongo';
@@ -112,7 +113,8 @@ const SingleBoard: NextPage<Props> = ({
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
-  if (!session) {
+  
+  if (isEmpty(session)) {
     return {
       redirect: {
         permanent: false,

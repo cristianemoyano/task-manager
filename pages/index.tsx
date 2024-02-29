@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
+import { isEmpty } from 'lodash';
 
 import useModal from '@/contexts/useModal';
 import connectMongo from '@/services/connectMongo';
@@ -52,7 +53,8 @@ const Home: NextPage<{ boards: IBoard[] }> = ({ boards = [] }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
-  if (!session) {
+  
+  if (isEmpty(session)) {
     return {
       redirect: {
         permanent: false,
