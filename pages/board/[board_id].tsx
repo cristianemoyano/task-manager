@@ -23,6 +23,7 @@ import EmptyState from '@/components/shared/EmptyState';
 import NewItem from '@/components/shared/NewItem';
 import Sidebar from '@/components/sidebar/Sidebar';
 import { auth } from '@/services/auth';
+import User from '@/models/userModel';
 
 interface Props {
   isrBoards: IBoard[];
@@ -121,9 +122,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (session?.user) {
 
-    const clientSession = await getSession(context);
-
-    console.log("BOARD CLIENT SESSION: ", clientSession);
     const board_id = context.query.board_id;
 
     await connectMongo();
@@ -137,10 +135,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       };
     }
 
-    let board = await Board.findOne({ _id: board_id, user_id: clientSession?.id });
+    let user = await User.findOne({ email: session?.user?.email })
+
+    let board = await Board.findOne({ _id: board_id, user_id: user._id });
     board = JSON.parse(JSON.stringify(board));
 
-    let boards = await Board.find({ user_id: clientSession?.id }).select(['-columns']);
+    let boards = await Board.find({ user_id: user._id }).select(['-columns']);
     boards = JSON.parse(JSON.stringify(boards));
 
     return {
@@ -148,7 +148,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         isrBoards: boards,
         isrBoard: board,
         board_id,
-        user_id: clientSession?.id,
+        user_id: user._id,
       },
     };
 

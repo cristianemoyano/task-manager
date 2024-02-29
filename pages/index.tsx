@@ -16,6 +16,7 @@ import { auth } from '@/services/auth';
 import { getSession, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import User from '@/models/userModel';
 
 const Home: NextPage<{ boards: IBoard[] }> = ({ boards = [] }) => {
   const { toggleBoardModal, setIsNewBoard } = useModal();
@@ -77,7 +78,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     await connectMongo();
 
-    let boards = await Board.find({ user_id: clientSession?.id }).select(['-columns']);
+    let user = await User.findOne({ email: session?.user?.email })
+    let boards = await Board.find({ user_id: user._id }).select(['-columns']);
     boards = JSON.parse(JSON.stringify(boards));
 
     return {
