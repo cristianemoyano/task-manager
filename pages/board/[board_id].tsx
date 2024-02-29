@@ -24,7 +24,7 @@ import NewItem from '@/components/shared/NewItem';
 import Sidebar from '@/components/sidebar/Sidebar';
 import { auth } from '@/services/auth';
 import User from '@/models/userModel';
-import { NEW_COLUMN } from '@/components/constants';
+import { BACK_HOME, BOARD, BOARD_ERROR_CONTENT, BOARD_ERROR_MSG, BOARD_ERROR_TITLE, NEW_COLUMN } from '@/components/constants';
 
 interface Props {
   isrBoards: IBoard[];
@@ -64,17 +64,17 @@ const SingleBoard: NextPage<Props> = ({
 
   if (boardsError || boardError || !boards || !board)
     return (
-      <HeadOfPage title='Board Error' content='No Board'>
+      <HeadOfPage title={BOARD_ERROR_TITLE} content={BOARD_ERROR_CONTENT}>
         <EmptyState
-          title='We did not foun any board, maybe you are trying to access someone else board or one that does not exist.'
-          button='Go back home'
+          title={BOARD_ERROR_MSG}
+          button={BACK_HOME}
           handleClick={() => router.push('/')}
         />
       </HeadOfPage>
     );
 
   return (
-    <HeadOfPage title='Board' content='Your Board'>
+    <HeadOfPage title={board.name} content={board.name}>
       <>
         <BoardModal board={board} user_id={user_id}/>
         <TaskModal board={board} user_id={user_id}/>

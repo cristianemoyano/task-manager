@@ -28,6 +28,11 @@ export const CURRENT_STATUS = "Estado actual"
 export const OF = "de"
 export const DELETE = "Eliminar"
 export const CANCEL = "Cancelar"
+export const BACK_HOME = "Volver al inicio"
+export const BOARD_ERROR_TITLE = "Ups! 404"
+export const BOARD_ERROR_CONTENT = "El tablero elegido no existe."
+export const BOARD_ERROR_MSG = "No encontramos el tablero solicitado."
+
 
 export const confirmMsg = (name:string) => {
     return `Estás seguro de eliminar "${name}"? Ésta acción no podrá ser revertida.`
