@@ -52,18 +52,18 @@ const Home: NextPage<{ boards: IBoard[] }> = ({ boards = [] }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
-  if (!session) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/register',
-      },
-    };
-  }
+  // if (!session) {
+  //   return {
+  //     redirect: {
+  //       permanent: false,
+  //       destination: '/register',
+  //     },
+  //   };
+  // }
 
   await connectMongo();
 
-  let boards = await Board.find({ user_id: session.id }).select(['-columns']);
+  let boards = await Board.find({ user_id: session?.id }).select(['-columns']);
   boards = JSON.parse(JSON.stringify(boards));
 
   return {
