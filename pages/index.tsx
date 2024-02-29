@@ -1,9 +1,6 @@
 import type { NextPage } from 'next';
 
 import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/react';
-
-import { isEmpty } from 'lodash';
 
 import useModal from '@/contexts/useModal';
 import connectMongo from '@/services/connectMongo';
@@ -15,9 +12,22 @@ import EmptyState from '@/components/shared/EmptyState';
 import Navbar from '@/components/navbar/Navbar';
 import BoardModal from '@/components/modals/BoardModal';
 import Sidebar from '@/components/sidebar/Sidebar';
+import { auth } from '@/services/auth';
+import { getSession, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const Home: NextPage<{ boards: IBoard[] }> = ({ boards = [] }) => {
   const { toggleBoardModal, setIsNewBoard } = useModal();
+  const { data: session } = useSession()
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!session) {
+      router.push('/');
+    }
+  }, [router]);
 
   return (
     <HeadOfPage title='Home' content='Welcome Home'>
@@ -54,27 +64,36 @@ const Home: NextPage<{ boards: IBoard[] }> = ({ boards = [] }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-  
-  if (isEmpty(session?.id)) {
+  const session = await auth(
+    context.req,
+    context.res,
+  )
+
+  if (session?.user) {
+
+    const clientSession = await getSession(context);
+
+    await connectMongo();
+
+    let boards = await Board.find({ user_id: clientSession?.id }).select(['-columns']);
+    boards = JSON.parse(JSON.stringify(boards));
+
     return {
-      redirect: {
-        permanent: false,
-        destination: '/register',
+      props: {
+        boards,
+        session: JSON.parse(JSON.stringify(session))
       },
     };
   }
-
-  await connectMongo();
-
-  let boards = await Board.find({ user_id: session?.id }).select(['-columns']);
-  boards = JSON.parse(JSON.stringify(boards));
-
+  
   return {
     props: {
-      boards,
+      boards: [],
+      session,
     },
   };
+
+ 
 };
 
 export default Home;

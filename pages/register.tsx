@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { getSession, signIn, useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import type { GetServerSideProps, NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
-import { isEmpty } from 'lodash';
 
 import HeadOfPage from '@/components/shared/HeadOfPage';
 import InputTextControl from '@/components/shared/InputTextControl';
 import axios from 'axios';
+import { auth } from '@/services/auth';
 
 interface IControllerRegister {
   name?: string;
@@ -18,7 +18,13 @@ interface IControllerRegister {
 
 const Register: NextPage = () => {
 
+  const { data: session } = useSession()
   const router = useRouter();
+
+
+  if (session) {
+    router.push('/');
+  }
 
   const [isMember, setIsMember] = useState(true);
 
@@ -166,22 +172,14 @@ const Register: NextPage = () => {
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-  
-  if (!isEmpty(session?.id)) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/',
-      },
-    };
-  }
-
-
   return {
     props: {
+      session: await auth(
+        context.req,
+        context.res,
+      ),
     },
-  };
+  }
 };
 
 export default Register;
