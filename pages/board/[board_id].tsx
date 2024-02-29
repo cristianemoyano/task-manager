@@ -136,10 +136,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  let board = await Board.findOne({ _id: board_id, user_id: session.id });
+  let board = await Board.findOne({ _id: board_id, user_id: session?.id });
   board = JSON.parse(JSON.stringify(board));
 
-  let boards = await Board.find({ user_id: session.id }).select(['-columns']);
+  let boards = await Board.find({ user_id: session?.id }).select(['-columns']);
   boards = JSON.parse(JSON.stringify(boards));
 
   return {
