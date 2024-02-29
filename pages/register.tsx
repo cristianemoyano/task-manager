@@ -29,9 +29,9 @@ const Register: NextPage = () => {
     },
   });
 
-  useEffect(() => {
-    if (session) router.push('/');
-  }, [session, router]);
+  // useEffect(() => {
+  //   if (session) router.push('/');
+  // }, [session, router]);
 
   const onSubmit: SubmitHandler<IControllerRegister> = async (data) => {
     if (!isMember) {
