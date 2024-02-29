@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import type { GetServerSideProps, NextPage } from 'next';
 import Image from 'next/image';
@@ -21,10 +21,11 @@ const Register: NextPage = () => {
   const { data: session } = useSession()
   const router = useRouter();
 
-
-  if (session) {
-    router.push('/');
-  }
+  useEffect(() => {
+    if (session) {
+      router.push('/');
+    }
+  }, [router]);
 
   const [isMember, setIsMember] = useState(true);
 
