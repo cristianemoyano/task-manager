@@ -7,7 +7,6 @@ import {
 } from 'react-hook-form';
 import axios from 'axios';
 import { mutate } from 'swr';
-import { useSession } from 'next-auth/react';
 
 import { IBoard } from '@/typing';
 import useModal from '@/contexts/useModal';
@@ -30,8 +29,8 @@ interface IControllerTask {
   subtasks: IControllerSubtasks[];
 }
 
-export default function TaskModal({ board }: { board: IBoard }) {
-  const { data: session } = useSession();
+export default function TaskModal({ board, user_id }: { board: IBoard, user_id:string }) {
+
   const defaultValues = {
     title: '',
     description: '',
@@ -79,14 +78,14 @@ export default function TaskModal({ board }: { board: IBoard }) {
 
   const onSubmit: SubmitHandler<IControllerTask> = async (data) => {
     if (isNew) {
-      await axios.patch(`/api/task/add-task?user_id=${session?.id}`, {
+      await axios.patch(`/api/task/add-task?user_id=${user_id}`, {
         task: data,
         board_id: board._id,
         column_id: data.status,
       });
       reset(defaultValues);
     } else if (task.status === data.status) {
-      await axios.patch(`/api/task/edit-task?user_id=${session?.id}`, {
+      await axios.patch(`/api/task/edit-task?user_id=${user_id}`, {
         task: data,
         board_id: board._id,
         column_id: task.status,
@@ -94,15 +93,15 @@ export default function TaskModal({ board }: { board: IBoard }) {
       });
     } else {
       await axios.delete(
-        `/api/task/delete-task?board_id=${board._id}&user_id=${session?.id}&column_id=${task.status}&task_id=${task._id}`
+        `/api/task/delete-task?board_id=${board._id}&user_id=${user_id}&column_id=${task.status}&task_id=${task._id}`
       );
-      await axios.patch(`/api/task/add-task?user_id=${session?.id}`, {
+      await axios.patch(`/api/task/add-task?user_id=${user_id}`, {
         task: data,
         board_id: board._id,
         column_id: data.status,
       });
     }
-    mutate(`/api/boards/${board._id}?user_id=${session?.id}`);
+    mutate(`/api/boards/${board._id}?user_id=${user_id}`);
     toggleTaskModal();
   };
 

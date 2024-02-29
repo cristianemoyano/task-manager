@@ -8,7 +8,6 @@ import {
 import Image from 'next/image';
 import axios from 'axios';
 import { mutate } from 'swr';
-import { useSession } from 'next-auth/react';
 
 import useModal from '@/contexts/useModal';
 import { IBoard, ISubtask } from '@/typing';
@@ -23,8 +22,7 @@ interface IControllerTask {
   subtasks: ISubtask[];
 }
 
-export default function TaskInfosModal({ board }: { board: IBoard }) {
-  const { data: session } = useSession();
+export default function TaskInfosModal({ board, user_id }: { board: IBoard, user_id:string }) {
   const [isTaskDropdownOpen, setIsTaskDropdownOpen] = useState(false);
   const [subtasksCompleted, setSubtasksCompleted] = useState(0);
   const {
@@ -59,7 +57,7 @@ export default function TaskInfosModal({ board }: { board: IBoard }) {
 
   const onSubmit: SubmitHandler<IControllerTask> = async (data) => {
     if (status === data.status) {
-      await axios.patch(`/api/task/edit-task?user_id=${session?.id}`, {
+      await axios.patch(`/api/task/edit-task?user_id=${user_id}`, {
         task: { title, description, subtasks: data.subtasks },
         board_id: board._id,
         column_id: status,
@@ -67,9 +65,9 @@ export default function TaskInfosModal({ board }: { board: IBoard }) {
       });
     } else {
       await axios.delete(
-        `/api/task/delete-task?board_id=${board._id}&user_id=${session?.id}&column_id=${status}&task_id=${_id}`
+        `/api/task/delete-task?board_id=${board._id}&user_id=${user_id}&column_id=${status}&task_id=${_id}`
       );
-      await axios.patch(`/api/task/add-task?user_id=${session?.id}`, {
+      await axios.patch(`/api/task/add-task?user_id=${user_id}`, {
         task: {
           title,
           description,
@@ -81,7 +79,7 @@ export default function TaskInfosModal({ board }: { board: IBoard }) {
       });
     }
 
-    mutate(`/api/boards/${board._id}?user_id=${session?.id}`);
+    mutate(`/api/boards/${board._id}?user_id=${user_id}`);
     toggleTaskInfosModal();
   };
 

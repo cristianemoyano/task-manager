@@ -76,10 +76,10 @@ const SingleBoard: NextPage<Props> = ({
   return (
     <HeadOfPage title='Board' content='Your Board'>
       <>
-        <BoardModal board={board} />
-        <TaskModal board={board} />
-        <DeleteModal board={board} />
-        <TaskInfosModal board={board} />
+        <BoardModal board={board} user_id={user_id}/>
+        <TaskModal board={board} user_id={user_id}/>
+        <DeleteModal board={board} user_id={user_id}/>
+        <TaskInfosModal board={board} user_id={user_id}/>
         <main>
           <Sidebar boards={boards} />
           <div className='board__main'>
