@@ -14,7 +14,7 @@ import Modal from '../shared/Modal';
 import InputTextControl from '../shared/InputTextControl';
 import InputArrayControl from '../shared/InputArrayControl';
 import InputDropdownControl from '../shared/InputDropdownControl';
-import { DESCRIPTION, EDIT_TASK, NEW_COLUMN, NEW_TASK, SAVE, STATUS, SUB_TASKS, TITLE } from '../constants';
+import { DESCRIPTION, EDIT_TASK, NEW_COLUMN, NEW_TASK, SAVE, STATUS, SUB_TASKS, TITLE, TRACK_ID } from '../constants';
 
 interface IControllerSubtasks {
   _id?: string;
@@ -24,6 +24,7 @@ interface IControllerSubtasks {
 
 interface IControllerTask {
   title: string;
+  track_id: string;
   description: string;
   status: string;
   subtasks: IControllerSubtasks[];
@@ -33,6 +34,7 @@ export default function TaskModal({ board, user_id }: { board: IBoard, user_id:s
 
   const defaultValues = {
     title: '',
+    track_id: '',
     description: '',
     status: board.columns.length ? board.columns[0]._id!.toString() : '',
     subtasks: [
@@ -58,11 +60,13 @@ export default function TaskModal({ board, user_id }: { board: IBoard, user_id:s
   useEffect(() => {
     if (!isNew) {
       setValue('title', task.title!);
+      setValue('track_id', task.track_id!)
       setValue('description', task.description!);
       setValue('status', task.status!);
       setValue('subtasks', task.subtasks!);
     } else {
       setValue('title', '');
+      setValue('track_id', '');
       setValue('description', '');
       setValue(
         'status',
@@ -132,10 +136,19 @@ export default function TaskModal({ board, user_id }: { board: IBoard, user_id:s
               error={error}
               name='name'
               label={TITLE}
-              placeholder='e.g. Take cooffe break'
+              placeholder='e.g. Realizar las compras pendientes'
             />
           )}
         />
+
+        <div className='input__textarea__control'>
+          <label className='input__label'>{TRACK_ID}</label>
+          <input
+            className='input__text input__text'
+            placeholder='e.g. SP-2345234534'
+            {...register('track_id')}
+          />
+        </div>
         <div className='input__textarea__control'>
           <label className='input__label'>{DESCRIPTION}</label>
           <textarea

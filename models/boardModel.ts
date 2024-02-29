@@ -11,6 +11,7 @@ const subtasksSchema = new Schema<ISubtask>({
 const tasksSchema = new Schema<ITask>({
   // _id: { type: Number, required: false },
   title: String,
+  track_id: String,
   description: String,
   status: String,
   subtasks: [subtasksSchema],

@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { hash } from 'bcryptjs';
 
+import { Schema, mongo } from 'mongoose';
 import connectMongo from '@/services/connectMongo';
 import User from '@/models/userModel';
 
@@ -18,6 +19,7 @@ export default async function handler(
   }
 
   const user = await User.create({
+    _id: new mongo.ObjectId(),
     email,
     name,
     password: await hash(password, 12),

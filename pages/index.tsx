@@ -27,7 +27,7 @@ const Home: NextPage<{ boards: IBoard[], user_id:string }> = ({ boards = [], use
 
   useEffect(() => {
     if (!session) {
-      router.push('/');
+      router.push('/register');
     }
   }, [router]);
 

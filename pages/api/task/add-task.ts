@@ -25,6 +25,7 @@ export default async function handler(
       );
 
       columnToUpdate.tasks.push(task);
+      console.log("PUSHED TASK: ", task)
 
       const boardUpdated = await board.save();
 

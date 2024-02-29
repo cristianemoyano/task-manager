@@ -25,8 +25,10 @@ export default async function handler(
         .tasks.find((t: ITask) => t._id.toString() === task_id);
 
       taskToUpdate.title = task.title;
+      taskToUpdate.track_id = task.track_id;
       taskToUpdate.description = task.description;
       taskToUpdate.subtasks = task.subtasks;
+      
 
       const boardUpdated = await board.save();
 

@@ -28,7 +28,7 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
   const {
     isTaskInfosModalOpen,
     toggleTaskInfosModal,
-    taskInfosModalContent: { _id, title, description, subtasks, status },
+    taskInfosModalContent: { _id, title, track_id, description, subtasks, status },
   } = useModal();
   const { control, handleSubmit, setValue } = useForm<IControllerTask>({
     defaultValues: {
@@ -58,7 +58,7 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
   const onSubmit: SubmitHandler<IControllerTask> = async (data) => {
     if (status === data.status) {
       await axios.patch(`/api/task/edit-task?user_id=${user_id}`, {
-        task: { title, description, subtasks: data.subtasks },
+        task: { title, description, track_id, subtasks: data.subtasks },
         board_id: board._id,
         column_id: status,
         task_id: _id,
@@ -71,6 +71,7 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
         task: {
           title,
           description,
+          track_id,
           subtasks: data.subtasks,
           status: data.status,
         },
@@ -116,12 +117,14 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
             task={{
               _id: _id!,
               title: title!,
+              track_id: track_id!,
               description: description!,
               subtasks: subtasks!,
               status: status!,
             }}
           />
         </header>
+        <p className='modal__text'>{track_id ? `ID# ${track_id}` : track_id}</p>
         <p className='modal__text'>{description}</p>
         <div className='input__checkbox__container'>
           <p className='input__label'>

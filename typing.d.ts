@@ -13,6 +13,7 @@ export interface IColumn {
 
 export interface ITask {
   _id: string;
+  track_id: string;
   title: string;
   description: string;
   status: string;
@@ -26,7 +27,7 @@ export interface ISubtask {
 }
 
 export interface IUser {
-  _id: string;
+  _id: any;
   name: string;
   email: string;
   password: string;
