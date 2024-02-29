@@ -46,10 +46,10 @@ export default NextAuth({
       return token;
     },
     session: ({ session, token }) => {
-      if (token) {
-        session.id = token.id;
-      }
-      return session;
+      return {
+        ...session,
+        id: token?.id,
+      };
     },
   },
   session: {

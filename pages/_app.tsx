@@ -17,6 +17,7 @@ Router.events.on('routeChangeComplete', nProgress.done);
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
+    <>
     <SessionProvider session={session}>
       <ModalProvider>
         <ThemeProvider>
@@ -26,6 +27,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         </ThemeProvider>
       </ModalProvider>
     </SessionProvider>
+    </>
   );
 }
 
