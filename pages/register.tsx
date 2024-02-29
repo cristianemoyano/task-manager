@@ -53,6 +53,8 @@ const Register: NextPage = () => {
         setError('email', { message: 'invalid credentials' });
         setError('password', { message: 'invalid credentials' });
         return;
+      } else {
+        router.push('/');
       }
     });
   };
