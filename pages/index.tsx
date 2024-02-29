@@ -1,8 +1,8 @@
 import type { NextPage } from 'next';
-import { useEffect } from 'react';
+
 import { GetServerSideProps } from 'next';
-import { getSession, useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { getSession } from 'next-auth/react';
+
 import { isEmpty } from 'lodash';
 
 import useModal from '@/contexts/useModal';
@@ -18,14 +18,6 @@ import Sidebar from '@/components/sidebar/Sidebar';
 
 const Home: NextPage<{ boards: IBoard[] }> = ({ boards = [] }) => {
   const { toggleBoardModal, setIsNewBoard } = useModal();
-  const { data: session } = useSession();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!isEmpty(session?.id)) {
-      router.push('/register');
-    }
-  }, [session, router]);
 
   return (
     <HeadOfPage title='Home' content='Welcome Home'>
@@ -66,7 +58,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   
   if (isEmpty(session?.id)) {
     return {
-      props: {
+      redirect: {
+        permanent: false,
+        destination: '/register',
       },
     };
   }
