@@ -1,5 +1,6 @@
 import useModal from '@/contexts/useModal';
 import { ITask } from '@/typing';
+import { DELETE_TASK, EDIT_TASK } from '../constants';
 
 interface Props {
   isVisible: boolean;
@@ -32,7 +33,7 @@ export default function TaskDropdown({ isVisible, close, task }: Props) {
           toggleTaskModal();
         }}
       >
-        Edit Task
+       {EDIT_TASK}
       </button>
       <button
         className='edit__button__delete'
@@ -48,7 +49,7 @@ export default function TaskDropdown({ isVisible, close, task }: Props) {
           });
         }}
       >
-        Delete Task
+        {DELETE_TASK}
       </button>
     </div>
   );

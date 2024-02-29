@@ -17,6 +17,7 @@ import { getSession, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import User from '@/models/userModel';
+import { HOME_MSG, NEW_BOARD } from '@/components/constants';
 
 const Home: NextPage<{ boards: IBoard[] }> = ({ boards = [] }) => {
   const { toggleBoardModal, setIsNewBoard } = useModal();
@@ -40,8 +41,8 @@ const Home: NextPage<{ boards: IBoard[] }> = ({ boards = [] }) => {
             <Navbar boards={boards} />
             {boards.length ? (
               <EmptyState
-                title='Choose the board that you want to see or create a new one.'
-                button='+ Add New Board'
+                title={HOME_MSG}
+                button={`+ ${NEW_BOARD}`}
                 handleClick={() => {
                   toggleBoardModal();
                   setIsNewBoard(true);
@@ -50,7 +51,7 @@ const Home: NextPage<{ boards: IBoard[] }> = ({ boards = [] }) => {
             ) : (
               <EmptyState
                 title='You have no board yet. Create a new board to get started.'
-                button='+ Add New Board'
+                button={`+ ${NEW_BOARD}`}
                 handleClick={() => {
                   toggleBoardModal();
                   setIsNewBoard(true);

@@ -8,11 +8,14 @@ import AllBoardsModal from './AllBoardsModal';
 import BoardDropdown from './BoardDropdown';
 import { IBoard } from '@/typing';
 import KanbanLogo from '../shared/KanbanLogo';
+import { HOME, NEW_TASK } from '../constants';
 
 interface Props {
   boards: IBoard[];
   board?: IBoard;
 }
+
+
 
 export default function Navbar({ boards, board }: Props) {
   const { toggleTaskModal, setTaskModalContent, isSidebarOpen } = useModal();
@@ -41,7 +44,7 @@ export default function Navbar({ boards, board }: Props) {
               onClick={() => setIsBoardModalOpen(!isBoardModalOpen)}
             >
               <h2 className='navbar__dropdown__title'>
-                {pathname === '/' ? 'Home' : board!.name}
+                {pathname === '/' ? HOME : board!.name}
               </h2>
               {isBoardModalOpen ? (
                 <Image
@@ -62,7 +65,7 @@ export default function Navbar({ boards, board }: Props) {
               )}
             </div>
             <h2 className='navbar__title'>
-              {pathname === '/' ? 'Home' : board!.name}
+              {pathname === '/' ? HOME : board!.name}
             </h2>
           </div>
           <div className='navbar__container'>
@@ -85,7 +88,7 @@ export default function Navbar({ boards, board }: Props) {
                       alt='chevron-down'
                     />
                   </div>
-                  <h3 className='navbar__add__text'>+ Add New Task</h3>
+                  <h3 className='navbar__add__text'>+ {NEW_TASK}</h3>
                 </button>
                 <button
                   className='dropdown__buton'

@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import { BRAND } from '../constants';
+
 
 export default function KanbanLogo() {
   return (
@@ -13,7 +15,7 @@ export default function KanbanLogo() {
           layout='fixed'
           alt='company-logo'
         />
-        <h1 className='kanban__logo__title'>kanban</h1>
+        <h1 className='kanban__logo__title'>{BRAND}</h1>
       </a>
     </Link>
   );

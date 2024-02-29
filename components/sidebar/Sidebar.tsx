@@ -4,6 +4,7 @@ import { IBoard } from '@/typing';
 import useModal from '@/contexts/useModal';
 import AllBoards from '../shared/AllBoards';
 import KanbanLogo from '../shared/KanbanLogo';
+import { HIDE_SIDEBAR } from '../constants';
 
 export default function Sidebar({ boards }: { boards: IBoard[] }) {
   const { isSidebarOpen, toggleSidebar } = useModal();
@@ -24,7 +25,7 @@ export default function Sidebar({ boards }: { boards: IBoard[] }) {
               alt='hide-sidebar-logo'
               className='sidebar__hide__button__logo'
             />
-            <h3 className='sidebar__hide__button__text'>Hide Sidebar</h3>
+            <h3 className='sidebar__hide__button__text'>{HIDE_SIDEBAR}</h3>
           </button>
         </div>
       </aside>

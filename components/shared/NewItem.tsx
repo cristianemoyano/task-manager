@@ -1,3 +1,5 @@
+import { COLUMN, NEW, TASK } from "../constants";
+
 interface Props {
   isColumn: boolean;
   onClick: () => void;
@@ -10,7 +12,7 @@ export default function NewItem({ isColumn, onClick }: Props) {
       onClick={onClick}
     >
       <h1 className='board__new__title'>
-        + New {isColumn ? 'Column' : 'Task'}
+        + {NEW} {isColumn ? COLUMN : TASK}
       </h1>
     </article>
   );

@@ -6,6 +6,7 @@ import { signOut } from 'next-auth/react';
 import { IBoard } from '@/typing';
 import useModal from '@/contexts/useModal';
 import useTheme from '@/contexts/useTheme';
+import { BOARDS, LOGOUT, NEW_BOARD } from '../constants';
 
 interface Props {
   boards: IBoard[];
@@ -21,7 +22,7 @@ export default function AllBoards({ boards, className, close }: Props) {
   return (
     <div className={className}>
       <div>
-        <p className='board__numbers'>all boards ({boards.length})</p>
+        <p className='board__numbers'>{BOARDS} ({boards.length})</p>
         <div className='board__items'>
           {boards.map((item) => (
             <Link href={`/board/${item._id}`} passHref key={item._id}>
@@ -62,7 +63,7 @@ export default function AllBoards({ boards, className, close }: Props) {
               alt='board'
               className='board__item__button__logo'
             />
-            <h3 className='board__item__button__text'>+ Create New Board</h3>
+            <h3 className='board__item__button__text'>+ {NEW_BOARD}</h3>
           </button>
         </div>
       </div>
@@ -88,7 +89,7 @@ export default function AllBoards({ boards, className, close }: Props) {
           className='board__logout'
           onClick={() => signOut({ callbackUrl: '/register' })}
         >
-          Logout
+          {LOGOUT}
         </button>
       </div>
     </div>

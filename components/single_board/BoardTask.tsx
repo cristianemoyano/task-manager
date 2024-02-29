@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { ITask } from '@/typing';
 import useModal from '@/contexts/useModal';
+import { OF, SUB_TASKS } from '../constants';
 
 export default function BoardTask({ task }: { task: ITask }) {
   const { setTaskInfosModalContent, toggleTaskInfosModal } = useModal();
@@ -26,7 +27,7 @@ export default function BoardTask({ task }: { task: ITask }) {
     >
       <h3 className='board__task__title'>{task.title}</h3>
       <p className='board__task__text'>
-        {subtasksCompleted} of {task.subtasks.length} subtasks
+        {subtasksCompleted} {OF} {task.subtasks.length} {SUB_TASKS}
       </p>
     </article>
   );

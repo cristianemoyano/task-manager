@@ -15,6 +15,7 @@ import Modal from '../shared/Modal';
 import InputTextControl from '../shared/InputTextControl';
 import InputArrayControl from '../shared/InputArrayControl';
 import InputDropdownControl from '../shared/InputDropdownControl';
+import { DESCRIPTION, EDIT_TASK, NEW_COLUMN, NEW_TASK, SAVE, STATUS, SUB_TASKS, TITLE } from '../constants';
 
 interface IControllerSubtasks {
   _id?: string;
@@ -118,7 +119,7 @@ export default function TaskModal({ board }: { board: IBoard }) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <header className='modal__header'>
           <h3 className='modal__header__title'>
-            {isNew ? 'Add New Task' : 'Edit Task'}
+            {isNew ? NEW_TASK : EDIT_TASK}
           </h3>
         </header>
         <Controller
@@ -131,13 +132,13 @@ export default function TaskModal({ board }: { board: IBoard }) {
               value={value}
               error={error}
               name='name'
-              label='Title'
+              label={TITLE}
               placeholder='e.g. Take cooffe break'
             />
           )}
         />
         <div className='input__textarea__control'>
-          <label className='input__label'>Description</label>
+          <label className='input__label'>{DESCRIPTION}</label>
           <textarea
             className='input__text input__textarea'
             placeholder='e.g. It’s always good to take a break. This 15 minute break will  recharge the batteries a little.'
@@ -145,7 +146,7 @@ export default function TaskModal({ board }: { board: IBoard }) {
           />
         </div>
         <div className='input__array__container'>
-          <label className='input__label'>Subtasks</label>
+          <label className='input__label'>{SUB_TASKS}</label>
           <div className='input__array__fields'>
             {fields.map((subtask, id) => (
               <Controller
@@ -173,7 +174,7 @@ export default function TaskModal({ board }: { board: IBoard }) {
             type='button'
             onClick={() => append({ title: '', isCompleted: false })}
           >
-            + Add New Column
+            + {NEW_COLUMN}
           </button>
         </div>
         <Controller
@@ -183,13 +184,13 @@ export default function TaskModal({ board }: { board: IBoard }) {
             <InputDropdownControl
               onChange={onChange}
               value={value}
-              label='Status'
+              label={STATUS}
               columns={board.columns}
             />
           )}
         />
         <button className='modal__button__primary__s' type='submit'>
-          {isNew ? 'Create Task' : ' Save Changes'}
+          {isNew ? NEW_TASK : SAVE}
         </button>
       </form>
     </Modal>

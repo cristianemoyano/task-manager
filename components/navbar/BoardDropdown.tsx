@@ -1,5 +1,6 @@
 import useModal from '@/contexts/useModal';
 import { IBoard } from '@/typing';
+import { DELETE_BOARD, EDIT_BOARD } from '../constants';
 
 interface Props {
   isVisible: boolean;
@@ -40,10 +41,10 @@ export default function BoardDropdown({ isVisible, close, board }: Props) {
       }
     >
       <button className='edit__button__edit' onClick={handleEditClick}>
-        Edit Board
+        {EDIT_BOARD}
       </button>
       <button className='edit__button__delete' onClick={handleDeleteClick}>
-        Delete Board
+        {DELETE_BOARD}
       </button>
     </div>
   );

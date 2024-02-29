@@ -24,6 +24,7 @@ import NewItem from '@/components/shared/NewItem';
 import Sidebar from '@/components/sidebar/Sidebar';
 import { auth } from '@/services/auth';
 import User from '@/models/userModel';
+import { NEW_COLUMN } from '@/components/constants';
 
 interface Props {
   isrBoards: IBoard[];
@@ -99,7 +100,7 @@ const SingleBoard: NextPage<Props> = ({
             ) : (
               <EmptyState
                 title='This board is empty. Create a new column to get started.'
-                button='+ Add New Column'
+                button={`+ ${NEW_COLUMN}`}
                 handleClick={() => {
                   setIsNewBoard(false);
                   toggleBoardModal();
@@ -142,6 +143,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     let boards = await Board.find({ user_id: user._id }).select(['-columns']);
     boards = JSON.parse(JSON.stringify(boards));
+
+    user = JSON.parse(JSON.stringify(user));
 
     return {
       props: {

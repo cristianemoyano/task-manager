@@ -15,6 +15,7 @@ import { IBoard, ITask } from '@/typing';
 import Modal from '../shared/Modal';
 import InputTextControl from '../shared/InputTextControl';
 import InputArrayControl from '../shared/InputArrayControl';
+import { BOARD_COLUMNS, BOARD_NAME, EDIT_BOARD, NEW_BOARD, NEW_COLUMN, SAVE } from '../constants';
 
 interface IControllerColumn {
   _id?: string;
@@ -95,7 +96,7 @@ export default function BoardModal({ board }: { board?: IBoard }) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <header className='modal__header'>
           <h3 className='modal__header__title'>
-            {isNewBoard ? 'Add New Board' : 'Edit Board'}
+            {isNewBoard ? NEW_BOARD : EDIT_BOARD}
           </h3>
         </header>
         <Controller
@@ -108,13 +109,13 @@ export default function BoardModal({ board }: { board?: IBoard }) {
               value={value}
               error={error}
               name='name'
-              label='Board Name'
+              label={BOARD_NAME}
               placeholder='e.g. Web Design'
             />
           )}
         />
         <div className='input__array__container'>
-          <label className='input__label'>Board Columns</label>
+          <label className='input__label'>{BOARD_COLUMNS}</label>
           <div className='input__array__fields'>
             {fields.map((column, id) => (
               <Controller
@@ -142,11 +143,11 @@ export default function BoardModal({ board }: { board?: IBoard }) {
             type='button'
             onClick={() => append({ name: '', tasks: [] })}
           >
-            + Add New Column
+            + {NEW_COLUMN}
           </button>
         </div>
         <button className='modal__button__primary__s' type='submit'>
-          {isNewBoard ? 'Create New Board' : 'Save Changes'}
+          {isNewBoard ? NEW_BOARD : SAVE}
         </button>
       </form>
     </Modal>

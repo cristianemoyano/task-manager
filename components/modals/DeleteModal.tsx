@@ -6,6 +6,7 @@ import { mutate } from 'swr';
 import { IBoard } from '@/typing';
 import useModal from '@/contexts/useModal';
 import Modal from '../shared/Modal';
+import { BOARD, CANCEL, DELETE, TASK, confirmMsg } from '../constants';
 
 export default function DeleteModal({ board }: { board: IBoard }) {
   const { data: session } = useSession();
@@ -34,22 +35,20 @@ export default function DeleteModal({ board }: { board: IBoard }) {
       <>
         <header className='modal__header'>
           <h3 className='modal__header__title modal__header__title--delete'>
-            Delete this {isBoard ? 'board' : 'task'}
+            {DELETE} {isBoard ? BOARD : TASK}
           </h3>
         </header>
         <p className='modal__text'>
-          Are you sure you want to delete the &apos;{name}&apos;{' '}
-          {isBoard ? 'board' : 'task'}? This action will remove all columns and
-          tasks and cannot be reversed.
+          {confirmMsg(name)}
         </p>
         <button className='modal__button__delete' onClick={onDelete}>
-          Delete
+          {DELETE}
         </button>
         <button
           className='modal__button__secondary'
           onClick={toggleDeleteModal}
         >
-          Cancel
+          {CANCEL}
         </button>
       </>
     </Modal>

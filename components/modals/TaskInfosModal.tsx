@@ -16,6 +16,7 @@ import Modal from '../shared/Modal';
 import InputCheckboxControl from '../shared/InputCheckboxControl';
 import InputDropdownControl from '../shared/InputDropdownControl';
 import TaskDropdown from './TaskDropdown';
+import { CURRENT_STATUS, OF, SAVE, SUB_TASKS } from '../constants';
 
 interface IControllerTask {
   status: string;
@@ -126,7 +127,7 @@ export default function TaskInfosModal({ board }: { board: IBoard }) {
         <p className='modal__text'>{description}</p>
         <div className='input__checkbox__container'>
           <p className='input__label'>
-            Subtasks ({subtasksCompleted} of {subtasks?.length})
+            {SUB_TASKS} ({subtasksCompleted} {OF} {subtasks?.length})
           </p>
           <div className='input__checkbox__list'>
             {subtasks &&
@@ -155,14 +156,14 @@ export default function TaskInfosModal({ board }: { board: IBoard }) {
               <InputDropdownControl
                 onChange={onChange}
                 value={value}
-                label='Current Status'
+                label={CURRENT_STATUS}
                 columns={board.columns}
               />
             )}
           />
         )}
         <button className='modal__button__primary__s' type='submit'>
-          Save Changes
+          {SAVE}
         </button>
       </form>
     </Modal>
