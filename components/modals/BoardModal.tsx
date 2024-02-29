@@ -31,12 +31,13 @@ interface IControllerBoard {
 const defaultValues = {
   name: '',
   columns: [
-    { name: 'Todo', tasks: [] },
-    { name: 'Doing', tasks: [] },
+    { name: 'Pendiente', tasks: [] },
+    { name: 'En progreso', tasks: [] },
+    { name: 'Realizado', tasks: [] },
   ],
 };
 
-export default function BoardModal({ board, user_id }: { board?: IBoard, user_id:string }) {
+export default function BoardModal({ board, user_id }: { board?: IBoard, user_id?:string }) {
 
   const { isBoardModalOpen, toggleBoardModal, isNewBoard } = useModal();
   const router = useRouter();
@@ -55,8 +56,9 @@ export default function BoardModal({ board, user_id }: { board?: IBoard, user_id
     } else {
       setValue('name', '');
       setValue('columns', [
-        { name: 'Todo', tasks: [] },
-        { name: 'Doing', tasks: [] },
+        { name: 'Pendiente', tasks: [] },
+        { name: 'En progreso', tasks: [] },
+        { name: 'Realizado', tasks: [] },
       ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
