@@ -22,6 +22,7 @@ import BoardColumn from '@/components/single_board/BoardColumn';
 import EmptyState from '@/components/shared/EmptyState';
 import NewItem from '@/components/shared/NewItem';
 import Sidebar from '@/components/sidebar/Sidebar';
+import { auth } from '@/services/auth';
 
 interface Props {
   isrBoards: IBoard[];
@@ -111,45 +112,59 @@ const SingleBoard: NextPage<Props> = ({
   );
 };
 
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-  
-  if (isEmpty(session?.id)) {
+  const session = await auth(
+    context.req,
+    context.res,
+  )
+
+  if (session?.user) {
+
+    const clientSession = await getSession(context);
+
+    console.log("BOARD CLIENT SESSION: ", clientSession);
+    const board_id = context.query.board_id;
+
+    await connectMongo();
+
+    if (board_id?.length !== 24) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: '/',
+        },
+      };
+    }
+
+    let board = await Board.findOne({ _id: board_id, user_id: clientSession?.id });
+    board = JSON.parse(JSON.stringify(board));
+
+    let boards = await Board.find({ user_id: clientSession?.id }).select(['-columns']);
+    boards = JSON.parse(JSON.stringify(boards));
+
     return {
-      redirect: {
-        permanent: false,
-        destination: '/register',
+      props: {
+        isrBoards: boards,
+        isrBoard: board,
+        board_id,
+        user_id: clientSession?.id,
       },
     };
+
+
   }
-
-  const board_id = context.query.board_id;
-
-  await connectMongo();
-
-  if (board_id?.length !== 24) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/',
-      },
-    };
-  }
-
-  let board = await Board.findOne({ _id: board_id, user_id: session?.id });
-  board = JSON.parse(JSON.stringify(board));
-
-  let boards = await Board.find({ user_id: session?.id }).select(['-columns']);
-  boards = JSON.parse(JSON.stringify(boards));
 
   return {
     props: {
-      isrBoards: boards,
-      isrBoard: board,
-      board_id,
-      user_id: session?.id,
+      isrBoards: [],
+      isrBoard: null,
+      board_id: null,
+      user_id: null,
     },
   };
+
+
 };
 
 export default SingleBoard;

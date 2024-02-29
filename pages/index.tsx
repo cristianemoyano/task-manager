@@ -73,6 +73,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const clientSession = await getSession(context);
 
+    console.log("INIT CLIENT SESSION: ", clientSession);
+
     await connectMongo();
 
     let boards = await Board.find({ user_id: clientSession?.id }).select(['-columns']);
