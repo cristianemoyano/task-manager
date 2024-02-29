@@ -1,7 +1,9 @@
 export const HOME = "Inicio";
+export const WELCOME_MSG = "Bienvenido";
 export const BRAND = "Task Manager";
 export const BOARDS = "Tableros";
 export const BOARD = "Tablero";
+export const EMPTY_BOARDS_MSG = "No haz creado ningún tablero aún. Crea un nuevo tablero para empezar."
 export const BOARD_NAME = "Nombre del tablero";
 export const BOARD_COLUMNS = "Columnas del tablero";
 export const NEW_COLUMN = "Nueva columna";

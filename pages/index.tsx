@@ -17,9 +17,9 @@ import { getSession, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import User from '@/models/userModel';
-import { HOME_MSG, NEW_BOARD } from '@/components/constants';
+import { EMPTY_BOARDS_MSG, HOME, HOME_MSG, NEW_BOARD, WELCOME_MSG } from '@/components/constants';
 
-const Home: NextPage<{ boards: IBoard[] }> = ({ boards = [] }) => {
+const Home: NextPage<{ boards: IBoard[], user_id:string }> = ({ boards = [], user_id }) => {
   const { toggleBoardModal, setIsNewBoard } = useModal();
   const { data: session } = useSession()
 
@@ -32,9 +32,9 @@ const Home: NextPage<{ boards: IBoard[] }> = ({ boards = [] }) => {
   }, [router]);
 
   return (
-    <HeadOfPage title='Home' content='Welcome Home'>
+    <HeadOfPage title={HOME} content={WELCOME_MSG}>
       <>
-        <BoardModal />
+        <BoardModal user_id={user_id} />
         <main>
           <Sidebar boards={boards} />
           <div>
@@ -50,7 +50,7 @@ const Home: NextPage<{ boards: IBoard[] }> = ({ boards = [] }) => {
               />
             ) : (
               <EmptyState
-                title='You have no board yet. Create a new board to get started.'
+                title={EMPTY_BOARDS_MSG}
                 button={`+ ${NEW_BOARD}`}
                 handleClick={() => {
                   toggleBoardModal();
@@ -83,10 +83,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     let boards = await Board.find({ user_id: user._id }).select(['-columns']);
     boards = JSON.parse(JSON.stringify(boards));
 
+    user = JSON.parse(JSON.stringify(user));
+
     return {
       props: {
         boards,
-        session: JSON.parse(JSON.stringify(session))
+        session: JSON.parse(JSON.stringify(session)),
+        user_id: user._id,
       },
     };
   }
@@ -95,6 +98,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       boards: [],
       session,
+      user_id: null,
     },
   };
 

@@ -37,7 +37,7 @@ const defaultValues = {
   ],
 };
 
-export default function BoardModal({ board, user_id }: { board?: IBoard, user_id?:string }) {
+export default function BoardModal({ board, user_id }: { board?: IBoard, user_id:string }) {
 
   const { isBoardModalOpen, toggleBoardModal, isNewBoard } = useModal();
   const router = useRouter();
