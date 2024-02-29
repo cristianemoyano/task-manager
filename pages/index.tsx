@@ -54,7 +54,7 @@ const Home: NextPage<{ boards: IBoard[] }> = ({ boards = [] }) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   
-  if (isEmpty(session)) {
+  if (isEmpty(session?.id)) {
     return {
       redirect: {
         permanent: false,

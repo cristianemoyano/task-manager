@@ -114,7 +114,7 @@ const SingleBoard: NextPage<Props> = ({
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   
-  if (isEmpty(session)) {
+  if (isEmpty(session?.id)) {
     return {
       redirect: {
         permanent: false,
@@ -147,7 +147,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       isrBoards: boards,
       isrBoard: board,
       board_id,
-      user_id: session.id,
+      user_id: session?.id,
     },
   };
 };

@@ -4,6 +4,7 @@ import type { NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { isEmpty } from 'lodash';
 
 import HeadOfPage from '@/components/shared/HeadOfPage';
 import InputTextControl from '@/components/shared/InputTextControl';
@@ -29,9 +30,11 @@ const Register: NextPage = () => {
     },
   });
 
-  // useEffect(() => {
-  //   if (session) router.push('/');
-  // }, [session, router]);
+  useEffect(() => {
+    if (!isEmpty(session?.id)) {
+      router.push('/');
+    }
+  }, [session]);
 
   const onSubmit: SubmitHandler<IControllerRegister> = async (data) => {
     if (!isMember) {
