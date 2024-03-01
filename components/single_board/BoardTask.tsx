@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
-import { ITask } from '@/typing';
+import { ITask, IUser } from '@/typing';
 import Image from 'next/image';
 import useModal from '@/contexts/useModal';
-import { ASSIGNEES, OF, SUB_TASKS } from '../constants';
+import { OF, SUB_TASKS } from '../constants';
 import { getInitials } from '@/services/utils';
 
-export default function BoardTask({ task }: { task: ITask }) {
+export default function BoardTask({ task, users }: { task: ITask, users: IUser[] }) {
   const { setTaskInfosModalContent, toggleTaskInfosModal } = useModal();
   const [subtasksCompleted, setSubtasksCompleted] = useState(0);
 
@@ -73,7 +73,7 @@ export default function BoardTask({ task }: { task: ITask }) {
           <div className=""></div>
           <div className="justify-self-end">
             <div className={`w-7 h-7 flex items-center justify-center rounded-full ${assigneeColor} text-white`}>
-              <span className="text-sm font-bold">{getInitials(task.assignee === "0" ? "?" : `${ASSIGNEES.find((c) => c._id === task.assignee)?.name}`)}</span>
+              <span className="text-sm font-bold">{getInitials(task.assignee === "0" ? "?" : `${users?.find((c) => c._id === task.assignee)?.name}`)}</span>
             </div>
           </div>
         </div>

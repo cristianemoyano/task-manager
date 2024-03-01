@@ -72,23 +72,3 @@ export const PRIORITIES:IColumn[] = [
       tasks: [],
     },
   ]
-
-
-export const ASSIGNEES:IColumn[] = [
-  {
-    _id: "0",
-    name: "Indefinido",
-    tasks: [],
-  },
-  {
-    _id: "65e0f2f48119a85322480d5b",
-    name: "Lucas Rodríguez",
-    tasks: [],
-  },
-  {
-    _id: "65e1debb92d58be03ce30ad9",
-    name: "Maria Perez",
-    tasks: [],
-  },
-
-]

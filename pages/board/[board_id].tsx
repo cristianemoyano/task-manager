@@ -28,6 +28,7 @@ import { useEffect, useState } from 'react';
 import { isEmpty } from 'lodash';
 
 import {produce} from "immer";
+import { getUsers } from '@/services/user';
 
 interface Props {
   isrBoards: IBoard[];
@@ -36,6 +37,7 @@ interface Props {
   assignedBoards: IBoard[];
   user_id: string;
   user: IUser;
+  users: IUser[];
 }
 
 
@@ -47,6 +49,7 @@ const SingleBoard: NextPage<Props> = ({
   assignedBoards,
   user_id,
   user,
+  users,
 }) => {
 
   const { data: boards, error: boardsError } = useSWR<IBoard[], any>(
@@ -112,9 +115,9 @@ const SingleBoard: NextPage<Props> = ({
     <HeadOfPage title={board.name} content={board.name}>
       <>
         <BoardModal board={board} user_id={user_id}/>
-        <TaskModal board={board} user_id={user_id}/>
+        <TaskModal board={board} user_id={user_id} users={users}/>
         <DeleteModal board={board} user_id={user_id}/>
-        <TaskInfosModal board={board} user_id={user_id} user={user}/>
+        <TaskInfosModal board={board} user_id={user_id} user={user} users={users}/>
         <main>
           <Sidebar boards={boards} assignedBoards={assignedBoards} user={user}/>
           <div className='board__main'>
@@ -173,6 +176,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     let user = await User.findOne({ email: session?.user?.email })
 
+    let allUsers = await getUsers()
+
     let board = await Board.findOne({ _id: board_id, user_id: user._id });
     board = JSON.parse(JSON.stringify(board));
 
@@ -183,6 +188,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     assignedBoards = JSON.parse(JSON.stringify(assignedBoards));
 
     user = JSON.parse(JSON.stringify(user));
+    allUsers = JSON.parse(JSON.stringify(allUsers));
 
     return {
       props: {
@@ -192,6 +198,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         board_id,
         user_id: user._id,
         user: user,
+        users: allUsers,
       },
     };
 
@@ -205,6 +212,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       board_id: null,
       user_id: null,
       user: null,
+      users: null,
     },
   };
 

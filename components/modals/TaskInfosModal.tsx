@@ -15,7 +15,7 @@ import Modal from '../shared/Modal';
 import InputCheckboxControl from '../shared/InputCheckboxControl';
 import InputDropdownControl from '../shared/InputDropdownControl';
 import TaskDropdown from './TaskDropdown';
-import { ASSIGNEES, COMMENTS, CURRENT_STATUS, OF, PRIORITIES, SAVE, SUB_TASKS } from '../constants';
+import { COMMENTS, CURRENT_STATUS, OF, PRIORITIES, SAVE, SUB_TASKS } from '../constants';
 import InputTextControl from '../shared/InputTextControl';
 import { convertISOToReadableDate, getInitials } from '@/services/utils';
 
@@ -25,7 +25,7 @@ interface IControllerTask {
   subtasks: ISubtask[];
 }
 
-export default function TaskInfosModal({ board, user_id, user }: { board: IBoard, user_id: string, user: IUser }) {
+export default function TaskInfosModal({ board, user_id, user, users }: { board: IBoard, user_id: string, user: IUser, users: IUser[] }) {
   const [isTaskDropdownOpen, setIsTaskDropdownOpen] = useState(false);
   const [subtasksCompleted, setSubtasksCompleted] = useState(0);
   const {
@@ -270,7 +270,7 @@ export default function TaskInfosModal({ board, user_id, user }: { board: IBoard
             <p className='input__label'>
               Asignado:
               <span className='modal__text'>
-                {` ${ASSIGNEES.find((c) => c._id === assignee)?.name}`}
+                {` ${users.find((c) => c._id === assignee)?.name}`}
               </span>
             </p>
 

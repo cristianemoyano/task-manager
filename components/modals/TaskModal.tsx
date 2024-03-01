@@ -8,13 +8,13 @@ import {
 import axios from 'axios';
 import { mutate } from 'swr';
 
-import { IBoard, IColumn } from '@/typing';
+import { IBoard, IColumn, IUser } from '@/typing';
 import useModal from '@/contexts/useModal';
 import Modal from '../shared/Modal';
 import InputTextControl from '../shared/InputTextControl';
 import InputArrayControl from '../shared/InputArrayControl';
 import InputDropdownControl from '../shared/InputDropdownControl';
-import { ASSIGNEE, ASSIGNEES, DESCRIPTION, EDIT_TASK, NEW_SUBTASK, NEW_TASK, PRIORITIES, PRIORITY, SAVE, STATUS, SUBTASK_PLACEHOLDER, SUB_TASKS, TITLE, TRACK_ID } from '../constants';
+import { ASSIGNEE, DESCRIPTION, EDIT_TASK, NEW_SUBTASK, NEW_TASK, PRIORITIES, PRIORITY, SAVE, STATUS, SUBTASK_PLACEHOLDER, SUB_TASKS, TITLE, TRACK_ID } from '../constants';
 
 interface IControllerSubtasks {
   _id?: string;
@@ -32,13 +32,13 @@ interface IControllerTask {
   subtasks: IControllerSubtasks[];
 }
 
-export default function TaskModal({ board, user_id }: { board: IBoard, user_id: string }) {
+export default function TaskModal({ board, user_id, users }: { board: IBoard, user_id: string, users: IUser[] }) {
 
   const defaultValues = {
     title: '',
     track_id: '',
     priority: PRIORITIES.length ? PRIORITIES[0]._id!.toString() : '',
-    assignee: ASSIGNEES.length ? ASSIGNEES[0]._id!.toString() : '',
+    assignee: users.length ? users[0]._id!.toString() : '',
     description: '',
     status: board.columns.length ? board.columns[0]._id!.toString() : '',
     subtasks: [
@@ -84,7 +84,7 @@ export default function TaskModal({ board, user_id }: { board: IBoard, user_id: 
       );
       setValue(
         'assignee',
-        ASSIGNEES.length ? ASSIGNEES[0]._id!.toString() : ''
+        users.length ? users[0]._id!.toString() : ''
       );
       setValue('subtasks', [
         { title: '', isCompleted: false },
@@ -121,6 +121,21 @@ export default function TaskModal({ board, user_id }: { board: IBoard, user_id: 
     mutate(`/api/boards/${board._id}?user_id=${user_id}`);
     toggleTaskModal();
   };
+
+  let defaulOption = {
+    _id: "0",
+    name: "Sin Asignar",
+    tasks: [],
+  } 
+  let userOptions:IColumn[] = [defaulOption]
+  const transformUsers = users.map((us)=>{
+    return {
+      _id: us._id,
+      name: us.name,
+      tasks: [],
+    }
+  })
+  userOptions = userOptions.concat(transformUsers)
 
   return (
     <Modal
@@ -241,7 +256,7 @@ export default function TaskModal({ board, user_id }: { board: IBoard, user_id: 
                   onChange={onChange}
                   value={value}
                   label={ASSIGNEE}
-                  columns={ASSIGNEES}
+                  columns={userOptions}
                 />
               )}
             />
