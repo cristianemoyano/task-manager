@@ -72,17 +72,17 @@ export const ASSIGNEES:IColumn[] = [
   },
   {
     _id: "1",
-    name: "Cristian",
+    name: "Lucas Rodríguez",
     tasks: [],
   },
   {
     _id: "2",
-    name: "Juan",
+    name: "Juan López",
     tasks: [],
   },
   {
     _id: "3",
-    name: "Martín",
+    name: "Martín Gómez",
     tasks: [],
   },
 ]
