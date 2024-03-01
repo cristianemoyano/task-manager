@@ -3,6 +3,9 @@ import axios from "axios";
 import { isEmpty } from "lodash";
 
 export const getInitials = (fullName: string) => {
+    if (isEmpty(fullName)) {
+      return "NA"
+    }
     const words = fullName.split(' ');
     let initials = '';
     words.forEach((char: string) => {

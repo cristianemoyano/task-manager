@@ -25,12 +25,22 @@ export interface ITask {
   description: string;
   status: string;
   subtasks: ISubtask[];
+  comments: IComment[];
 }
 
 export interface ISubtask {
   _id: string;
   title: string;
   isCompleted: boolean;
+}
+
+export interface IComment {
+  _id: string;
+  value: string;
+  author: string;
+  date: string;
+  authorEmail: string,
+  authorName: string,
 }
 
 export interface IUser {

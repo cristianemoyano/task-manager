@@ -32,8 +32,6 @@ const Home: NextPage<{ boards: IBoard[], assignedBoards: IBoard[], user_id:strin
     }
   }, [router]);
 
-  console.log(assignedBoards)
-
   return (
     <HeadOfPage title={HOME} content={WELCOME_MSG}>
       <>

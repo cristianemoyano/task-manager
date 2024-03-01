@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import connectMongo from '@/services/connectMongo';
 import Board from '@/models/boardModel';
 import { IColumn, ITask } from '@/typing';
+import { isEmpty } from 'lodash';
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,7 +14,7 @@ export default async function handler(
 
   if (method === 'PATCH') {
     try {
-      const { board_id, column_id, task_id, task } = body;
+      const { board_id, column_id, task_id, task, comment } = body;
 
       const board = await Board.findOne({
         _id: board_id,
@@ -24,6 +25,11 @@ export default async function handler(
         .find((c: IColumn) => c._id.toString() === column_id)
         .tasks.find((t: ITask) => t._id.toString() === task_id);
 
+      if (!isEmpty(taskToUpdate.comments)) {
+        taskToUpdate.comments.push(comment)
+      } else {
+        taskToUpdate.comments = [comment]
+      }
       taskToUpdate.title = task.title;
       taskToUpdate.track_id = task.track_id;
       taskToUpdate.priority = task.priority;

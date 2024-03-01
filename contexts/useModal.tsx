@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 
-import { ISubtask } from '@/typing';
+import { IComment, ISubtask } from '@/typing';
 
 interface IDeleteModalContent {
   _id: string;
@@ -25,6 +25,7 @@ interface ITaskModalContent {
   priority?: string;
   assignee?: string;
   subtasks?: ISubtask[];
+  comments?: IComment[];
 }
 
 interface ModalProviderProps {

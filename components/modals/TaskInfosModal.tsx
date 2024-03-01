@@ -10,25 +10,28 @@ import axios from 'axios';
 import { mutate } from 'swr';
 
 import useModal from '@/contexts/useModal';
-import { IBoard, ISubtask } from '@/typing';
+import { IBoard, IComment, ISubtask, IUser } from '@/typing';
 import Modal from '../shared/Modal';
 import InputCheckboxControl from '../shared/InputCheckboxControl';
 import InputDropdownControl from '../shared/InputDropdownControl';
 import TaskDropdown from './TaskDropdown';
-import { ASSIGNEES, CURRENT_STATUS, OF, PRIORITIES, SAVE, SUB_TASKS } from '../constants';
+import { ASSIGNEES, COMMENTS, CURRENT_STATUS, OF, PRIORITIES, SAVE, SUB_TASKS } from '../constants';
+import InputTextControl from '../shared/InputTextControl';
+import { getInitials } from '@/services/utils';
 
 interface IControllerTask {
   status: string;
+  comment: string,
   subtasks: ISubtask[];
 }
 
-export default function TaskInfosModal({ board, user_id }: { board: IBoard, user_id: string }) {
+export default function TaskInfosModal({ board, user_id, user }: { board: IBoard, user_id: string, user: IUser }) {
   const [isTaskDropdownOpen, setIsTaskDropdownOpen] = useState(false);
   const [subtasksCompleted, setSubtasksCompleted] = useState(0);
   const {
     isTaskInfosModalOpen,
     toggleTaskInfosModal,
-    taskInfosModalContent: { _id, title, track_id, priority, assignee, description, subtasks, status },
+    taskInfosModalContent: { _id, title, track_id, priority, comments, assignee, description, subtasks, status },
   } = useModal();
   const { control, handleSubmit, setValue } = useForm<IControllerTask>({
     defaultValues: {
@@ -44,6 +47,7 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
   useEffect(() => {
     setValue('status', status!);
     setValue('subtasks', subtasks!);
+    setValue('comment', "");
 
     subtasks &&
       setSubtasksCompleted(
@@ -58,7 +62,14 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
   const onSubmit: SubmitHandler<IControllerTask> = async (data) => {
     if (status === data.status) {
       await axios.patch(`/api/task/edit-task?user_id=${user_id}`, {
-        task: { title, description, track_id, priority, assignee, subtasks: data.subtasks },
+        task: { title, description, track_id, priority, assignee, comments, subtasks: data.subtasks },
+        comment: {
+          value: data.comment,
+          author: String(user_id),
+          authorName: user.name,
+          authorEmail: user.email,
+          date: new Date().toISOString(),
+        },
         board_id: board._id,
         column_id: status,
         task_id: _id,
@@ -74,6 +85,7 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
           track_id,
           priority,
           assignee,
+          comments,
           subtasks: data.subtasks,
           status: data.status,
         },
@@ -86,6 +98,7 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
     toggleTaskInfosModal();
   };
 
+
   return (
     <Modal
       isVisible={isTaskInfosModalOpen}
@@ -96,8 +109,6 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
       <form onSubmit={handleSubmit(onSubmit)}>
         <header className='modal__header modal__header__flex'>
           <h3 className='modal__header__title'>{title}</h3>
-
-
           <button
             className='navbar__edit__buton'
             type='button'
@@ -124,6 +135,7 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
               track_id: track_id!,
               priority: priority!,
               assignee: assignee!,
+              comments: comments!,
               description: description!,
               subtasks: subtasks!,
               status: status!,
@@ -134,7 +146,7 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
         <div className="grid grid-cols-3 gap-2">
           {/* COL 1 */}
           <div className='col-span-2'>
-    
+
             <p className='mb-4'>{description}</p>
             <div className='input__checkbox__container'>
               <p className='input__label'>
@@ -159,7 +171,64 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
                   ))}
               </div>
             </div>
-            
+            {/* COMMENTS */}
+
+            <p className='input__label'>
+              {COMMENTS}
+            </p>
+
+            <div className="grid grid-cols-8 gap-2 items-center">
+              <div className=' mb-3 flex justify-center'>
+                <div title='Tareas sin asignar' className={`w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full bg-gray-400 text-white mr-[-7px]`}>
+                  US
+                </div>
+              </div>
+              <div className='col-span-6'>
+                <Controller
+                  control={control}
+                  name='comment'
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <InputTextControl
+                      onChange={onChange}
+                      value={value}
+                      error={error}
+                      name='comment'
+                      label={""}
+                      placeholder='Agregar un comentario...'
+                    />
+                  )}
+                />
+              </div>
+              <div></div>
+            </div>
+
+            <div className="overflow-y-auto max-h-80 pb-6 mb-6 border rounded-sm border-solid border-indigo-50">
+              {comments?.map((comm) => {
+                return (
+
+                  <div className="grid grid-cols-8 gap-2 items-center pt-1">
+                    <div className=' mb-3 flex justify-center'>
+                      <div title='Tareas sin asignar' className={`w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full bg-gray-400 text-white mr-[-7px]`}>
+                        {getInitials(comm.authorName)}
+                      </div>
+                    </div>
+                    <div className='col-span-6 pb-3'>
+                      <div className="grid grid-rows-2 grid-flow-col gap-2">
+                        <div className='font-bold text-sm'>{comm.authorName ? comm.authorName : "Sin Nombre"}</div>
+                        <div>{comm.value}</div>
+                      </div>
+                      
+                    </div>
+                    <div></div>
+                  </div>
+
+                )
+              })}
+            </div>
+
+            {/* ENDCOMMENTS */}
+
+            {/* SAVE */}
             <button className='modal__button__primary__s' type='submit'>
               {SAVE}
             </button>
@@ -169,7 +238,7 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
           {/* COL 2 */}
           <div >
 
-          {isTaskInfosModalOpen && (
+            {isTaskInfosModalOpen && (
               <Controller
                 control={control}
                 name='status'
@@ -197,24 +266,23 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
                 {` ${ASSIGNEES.find((c) => c._id === assignee)?.name}`}
               </span>
             </p>
-              
+
 
             <p className='input__label'>
-            ID de trazabilidad:
+              ID de trazabilidad:
               <span className='modal__text'>
-              {track_id ? ` ${track_id}` : track_id}
+                {track_id ? ` ${track_id}` : track_id}
               </span>
             </p>
-            
+
 
           </div>
           {/* END COL 2 */}
-
         </div>
 
-
-
       </form>
+
+
     </Modal>
   );
 }

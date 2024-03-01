@@ -15,8 +15,6 @@ export default async function handler(
     } = req;
     await connectMongo();
 
-    console.log(user_ids)
-
     if (method === 'GET' && isString(user_ids)) {
         try {
             const users = await getUsers(user_ids?.split(','))

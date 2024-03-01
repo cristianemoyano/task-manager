@@ -1,11 +1,20 @@
 import mongoose, { Schema, model, models } from 'mongoose';
 
-import { ISubtask, ITask, IColumn, IBoard } from '@/typing';
+import { ISubtask, ITask, IColumn, IBoard, IComment } from '@/typing';
 
 const subtasksSchema = new Schema<ISubtask>({
   // _id: { type: Number, required: false },
   title: String,
   isCompleted: Boolean,
+});
+
+const commentsSchema = new Schema<IComment>({
+  // _id: { type: Number, required: false },
+  value: String,
+  author: String,
+  authorEmail: String,
+  authorName: String,
+  date: String,
 });
 
 const tasksSchema = new Schema<ITask>({
@@ -17,6 +26,7 @@ const tasksSchema = new Schema<ITask>({
   description: String,
   status: String,
   subtasks: [subtasksSchema],
+  comments: [commentsSchema],
 });
 
 const columnsSchema = new Schema<IColumn>({

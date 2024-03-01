@@ -11,9 +11,9 @@ export default function NewItem({ isColumn, onClick }: Props) {
       className={`board__new board__new__${isColumn ? 'column' : 'task'}`}
       onClick={onClick}
     >
-      <h1 className='board__new__title'>
+      <span className='text-zinc-400 font-bold'>
         + {NEW} {isColumn ? COLUMN : TASK}
-      </h1>
+      </span>
     </article>
   );
 }

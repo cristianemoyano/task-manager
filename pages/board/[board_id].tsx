@@ -114,7 +114,7 @@ const SingleBoard: NextPage<Props> = ({
         <BoardModal board={board} user_id={user_id}/>
         <TaskModal board={board} user_id={user_id}/>
         <DeleteModal board={board} user_id={user_id}/>
-        <TaskInfosModal board={board} user_id={user_id}/>
+        <TaskInfosModal board={board} user_id={user_id} user={user}/>
         <main>
           <Sidebar boards={boards} assignedBoards={assignedBoards} user={user}/>
           <div className='board__main'>

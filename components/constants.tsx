@@ -24,6 +24,7 @@ export const NEW = "Nueva"
 export const COLUMN = "columna"
 export const TASK = "tarea"
 export const SUB_TASKS = "Subtareas"
+export const COMMENTS = "Comentarios"
 export const NEW_SUBTASK = "Nueva subtarea";
 export const SUBTASK_PLACEHOLDER = "Escribe la subtarea aquí.";
 export const DESCRIPTION = "Descripción"
