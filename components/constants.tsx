@@ -85,4 +85,19 @@ export const ASSIGNEES:IColumn[] = [
     name: "Martín Gómez",
     tasks: [],
   },
+  {
+    _id: "4",
+    name: "María Pérez",
+    tasks: [],
+  },
+  {
+    _id: "5",
+    name: "Jimena Paz",
+    tasks: [],
+  },
+  {
+    _id: "6",
+    name: "Andrés Gabarre",
+    tasks: [],
+  },
 ]

@@ -1,4 +1,4 @@
-export const getInicials = (fullName: string) => {
+export const getInitials = (fullName: string) => {
     const words = fullName.split(' ');
     let initials = '';
     words.forEach((char: string) => {

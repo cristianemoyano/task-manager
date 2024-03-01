@@ -56,7 +56,7 @@ export default function InputDropdownControl({
             />
           )}
         </button>
-        <div className='input__dropdown__content'>
+        <div className='input__dropdown__content overflow-y-auto max-h-40'>
           {columns.map((item) => (
             <div
               className='dropdown__content__item'

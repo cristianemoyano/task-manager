@@ -8,7 +8,8 @@ import AllBoardsModal from './AllBoardsModal';
 import BoardDropdown from './BoardDropdown';
 import { IBoard } from '@/typing';
 import KanbanLogo from '../shared/KanbanLogo';
-import { HOME, NEW_TASK } from '../constants';
+import { ASSIGNEES, HOME, NEW_TASK } from '../constants';
+import UserList from '../shared/UserList';
 
 interface Props {
   boards: IBoard[];
@@ -64,9 +65,20 @@ export default function Navbar({ boards, board }: Props) {
                 />
               )}
             </div>
-            <h2 className='navbar__title'>
-              {pathname === '/' ? HOME : board!.name}
-            </h2>
+
+            <div className="grid grid-rows-2 grid-flow-col gap-1">
+              {/* TITLE*/}
+              <div>
+                <h2 className='navbar__title'>
+                  {pathname === '/' ? HOME : board!.name}
+                </h2>
+              </div>
+              {/* USERS FILTER */}
+              <div className=''>
+                <UserList users={ASSIGNEES} />
+              </div>
+            </div>
+
           </div>
           <div className='navbar__container'>
             {board && (
