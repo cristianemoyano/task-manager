@@ -125,7 +125,7 @@ const SingleBoard: NextPage<Props> = ({
             {board?.columns.length ? (
               <ScrollContainer className='board__main__container'>
                 {filteredBoard?.columns.map((column) => (
-                  <BoardColumn key={column._id} column={column} />
+                  <BoardColumn key={column._id} column={column} users={users}/>
                 ))}
                 <NewItem
                   isColumn={true}
