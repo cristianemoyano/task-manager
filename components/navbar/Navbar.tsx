@@ -15,11 +15,13 @@ import useSWR from 'swr';
 interface Props {
   boards: IBoard[];
   board?: IBoard;
+  onUserClick?: (user:IUser) => void;
+  onClearFilters?: () => void;
 }
 
 
 
-export default function Navbar({ boards, board }: Props) {
+export default function Navbar({ boards, board, onUserClick, onClearFilters }: Props) {
   const { toggleTaskModal, setTaskModalContent, isSidebarOpen } = useModal();
   const [isBoardModalOpen, setIsBoardModalOpen] = useState(false);
   const [isBoardDropdownOpen, setIsBoardDropdownOpen] = useState(false);
@@ -88,7 +90,7 @@ export default function Navbar({ boards, board }: Props) {
               </div>
               {/* USERS FILTER */}
               <div className=''>
-              {pathname === '/' ? "" : <UserList users={users} />}
+              {pathname === '/' ? "" : <UserList users={users} onUserClick={onUserClick} onClearFilters={onClearFilters} />}
                 
               </div>
             </div>

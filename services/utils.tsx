@@ -1,5 +1,6 @@
 import { IBoard } from "@/typing";
 import axios from "axios";
+import { isEmpty } from "lodash";
 
 export const getInitials = (fullName: string) => {
     const words = fullName.split(' ');
@@ -28,3 +29,16 @@ export const getBoardAssignees = (board?:IBoard):String[] => {
 
 
 export const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+
+
+export const filterTasksByAssignee = (board:IBoard, assigneeId:string) => {
+  if (isEmpty(board) || isEmpty(assigneeId)) {
+    return board
+  }
+
+  board.columns = board.columns.map(column => {
+    column.tasks = column.tasks.filter(task => task.assignee === assigneeId);
+    return column;
+  });
+  return board;
+};

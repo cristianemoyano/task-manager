@@ -2,7 +2,6 @@ import type { NextPage } from 'next';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import axios from 'axios';
 import ScrollContainer from 'react-indiana-drag-scroll';
 
 import { IBoard, IUser } from '@/typing';
@@ -22,9 +21,13 @@ import NewItem from '@/components/shared/NewItem';
 import Sidebar from '@/components/sidebar/Sidebar';
 import { auth } from '@/services/auth';
 import User from '@/models/userModel';
-import { BACK_HOME, BOARD, BOARD_ERROR_CONTENT, BOARD_ERROR_MSG, BOARD_ERROR_TITLE, NEW_COLUMN } from '@/components/constants';
-import { fetcher } from '@/services/utils';
+import { BACK_HOME, BOARD_ERROR_CONTENT, BOARD_ERROR_MSG, BOARD_ERROR_TITLE, NEW_COLUMN } from '@/components/constants';
+import { fetcher, filterTasksByAssignee } from '@/services/utils';
 import { getAsignedBoardsByUser } from '@/services/board';
+import { useEffect, useState } from 'react';
+import { isEmpty } from 'lodash';
+
+import {produce} from "immer";
 
 interface Props {
   isrBoards: IBoard[];
@@ -67,6 +70,33 @@ const SingleBoard: NextPage<Props> = ({
   const { setIsNewBoard, toggleBoardModal } = useModal();
   const router = useRouter();
 
+  const [filteredBoard, filterBoard] = useState<IBoard|undefined>(undefined);
+
+  useEffect(() => {
+    const nextBoardState = produce(board, draftBoard => {
+      draftBoard = draftBoard
+    })
+    filterBoard(nextBoardState)
+  }, [board]);
+
+  const onUserClick = (user:IUser) => {
+    if (isEmpty(board)) {
+      return
+    }
+
+    const nextBoardState = produce(board, draftBoard => {
+      draftBoard = filterTasksByAssignee(draftBoard, user._id)
+    })
+    filterBoard(nextBoardState)
+  }
+
+  const onClearFilters = () => {
+    const nextBoardState = produce(board, draftBoard => {
+      draftBoard = draftBoard
+    })
+    filterBoard(nextBoardState)
+  }
+
   if (boardsError || boardError || !boards || !board)
     return (
       <HeadOfPage title={BOARD_ERROR_TITLE} content={BOARD_ERROR_CONTENT}>
@@ -88,10 +118,10 @@ const SingleBoard: NextPage<Props> = ({
         <main>
           <Sidebar boards={boards} assignedBoards={assignedBoards} user={user}/>
           <div className='board__main'>
-            <Navbar boards={boards} board={board} />
-            {board.columns.length ? (
+            <Navbar boards={boards} board={board} onUserClick={onUserClick} onClearFilters={onClearFilters}/>
+            {board?.columns.length ? (
               <ScrollContainer className='board__main__container'>
-                {board.columns.map((column) => (
+                {filteredBoard?.columns.map((column) => (
                   <BoardColumn key={column._id} column={column} />
                 ))}
                 <NewItem
