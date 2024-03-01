@@ -25,8 +25,9 @@ export default async function handler(
         .find((c: IColumn) => c._id.toString() === column_id)
         .tasks.find((t: ITask) => t._id.toString() === task_id);
 
-
-      taskToUpdate.comments.push(comment)
+      if (!isEmpty(comment)) {
+        taskToUpdate.comments.push(comment)
+      }
       taskToUpdate.title = task.title;
       taskToUpdate.track_id = task.track_id;
       taskToUpdate.priority = task.priority;
