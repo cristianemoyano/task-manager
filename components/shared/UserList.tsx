@@ -39,12 +39,19 @@ function UserList({ users, onUserClick, onClearFilters }: Props) {
     const remainingUsers = users?.slice(MAX_USERS_LIMIT, users.length);
     const remainingUsersCount = users ? users.length - MAX_USERS_LIMIT : 0;
 
+    const undefinedUser:IUser = {
+        _id: "0",
+        name: "?",
+        email: "noreply@email.com",
+        password: ""
+      }
+
     return (
         <div className="flex invisible lg:visible">
             <div className="w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full text-black ">
                 {
                     isFiltered ? (
-                        <button onClick={() => handleClearFilter()} className="text-md font-bold">
+                        <button title='Remover filtros' onClick={() => handleClearFilter()} className="text-md font-bold">
                             <Image
                                 src='/assets/filter-reset.svg'
                                 width={40}
@@ -58,10 +65,17 @@ function UserList({ users, onUserClick, onClearFilters }: Props) {
                 }
 
             </div>
+            <button onClick={() => handleUserClick(undefinedUser)} className="text-md font-bold">
+            <div title='Tareas sin asignar' className={`w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full bg-gray-400 text-white mr-[-7px]`}>
+                {getInitials(undefinedUser.name)}
+            </div>
+            </button>
             {firstSliceUsers?.map((user, index) => (
-                <div key={index} className={`w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full ${COLORS[index % COLORS.length]} text-white mr-[-7px]`}>
-                    <button onClick={() => handleUserClick(user)} className="text-md font-bold">{getInitials(user.name)}</button>
+                <button onClick={() => handleUserClick(user)} className="text-md font-bold">
+                <div title={user.name} key={index} className={`w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full ${COLORS[index % COLORS.length]} text-white mr-[-7px]`}>
+                    {getInitials(user.name)}
                 </div>
+                </button>
             ))}
             {remainingUsersCount > 0 && (
                 <div className="w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full bg-indigo-400 text-white mr-[-7px] ">

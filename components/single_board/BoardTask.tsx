@@ -18,6 +18,8 @@ export default function BoardTask({ task }: { task: ITask }) {
     );
   }, [task]);
 
+  const assigneeColor = task.assignee === "0" ? "bg-gray-400" : "bg-indigo-400"
+
   return (
     <article
       className='board__task relative'
@@ -33,8 +35,8 @@ export default function BoardTask({ task }: { task: ITask }) {
 
       {/* ASSIGNEE */}
       <div className="absolute bottom-0 right-0 mb-4 mr-4">
-        <div className="w-8 h-8 flex items-center justify-center rounded-full bg-indigo-400 text-white">
-          <span className="text-md font-bold">{getInitials(`${ASSIGNEES.find((c) => c._id === task.assignee)?.name}`)}</span>
+        <div className={`w-8 h-8 flex items-center justify-center rounded-full ${assigneeColor} text-white`}>
+          <span className="text-md font-bold">{getInitials(task.assignee === "0" ? "?" : `${ASSIGNEES.find((c) => c._id === task.assignee)?.name}`)}</span>
         </div>
       </div>
 
