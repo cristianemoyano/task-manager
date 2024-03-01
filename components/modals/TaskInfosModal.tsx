@@ -100,7 +100,6 @@ export default function TaskInfosModal({ board, user_id, user }: { board: IBoard
 
   const reversedComments = comments?.slice().reverse();
 
-
   return (
     <Modal
       isVisible={isTaskInfosModalOpen}
@@ -205,9 +204,9 @@ export default function TaskInfosModal({ board, user_id, user }: { board: IBoard
             </div>
 
             <div className="overflow-y-auto max-h-80 pb-6 mb-6 border rounded-sm border-solid border-indigo-50">
-              {reversedComments?.map((comm) => {
+              {reversedComments?.map((comm, index) => {
                 return (
-                  <div className="grid grid-cols-8 gap-2 items-center pt-1">
+                  <div key={index} className="grid grid-cols-8 gap-2 items-center pt-1">
                     <div className=' mb-3 flex justify-center'>
                       <div title='Tareas sin asignar' className={`w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full bg-gray-400 text-white mr-[-7px]`}>
                         {getInitials(comm.authorName)}

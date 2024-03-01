@@ -71,7 +71,7 @@ function UserList({ users, onUserClick, onClearFilters }: Props) {
             </div>
             </button>
             {firstSliceUsers?.map((user, index) => (
-                <button onClick={() => handleUserClick(user)} className="text-md font-bold">
+                <button key={index} onClick={() => handleUserClick(user)} className="text-md font-bold">
                 <div title={user.name} key={index} className={`w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full ${COLORS[index % COLORS.length]} text-white mr-[-7px]`}>
                     {getInitials(user.name)}
                 </div>
