@@ -6,7 +6,7 @@ import { signOut } from 'next-auth/react';
 import { IBoard } from '@/typing';
 import useModal from '@/contexts/useModal';
 import useTheme from '@/contexts/useTheme';
-import { ASSIGNED_BOARDS, BOARDS, LOGOUT, NEW_BOARD, OWNED_BOARDS } from '../constants';
+import { ASSIGNED_BOARDS, LOGOUT, NEW_BOARD, OWNED_BOARDS } from '../constants';
 
 interface Props {
   boards?: IBoard[];

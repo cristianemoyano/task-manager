@@ -5,7 +5,7 @@ import { getInitials } from '@/services/utils';
 import { isEmpty } from 'lodash';
 
 interface Props {
-    users: IUser[];
+    users?: IUser[];
 }
 
 const MAX_USERS_LIMIT = 10;
@@ -15,16 +15,18 @@ const COLORS = ['bg-gray-400', 'bg-blue-400', 'bg-green-400', 'bg-yellow-400', '
 function UserList({ users }: Props) {
 
     if (isEmpty(users)) {
-        return
+        return (
+            <></>
+        )
     }
 
-    const firstSliceUsers = users.slice(0, MAX_USERS_LIMIT);
-    const remainingUsers = users.slice(MAX_USERS_LIMIT, users.length);
-    const remainingUsersCount = users.length - MAX_USERS_LIMIT;
+    const firstSliceUsers = users?.slice(0, MAX_USERS_LIMIT);
+    const remainingUsers = users?.slice(MAX_USERS_LIMIT, users.length);
+    const remainingUsersCount = users ? users.length - MAX_USERS_LIMIT : 0;
 
     return (
         <div className="flex invisible lg:visible">
-            {firstSliceUsers.map((user, index) => (
+            {firstSliceUsers?.map((user, index) => (
                 <div key={index} className={`w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full ${COLORS[index % COLORS.length]} text-white mr-[-7px]`}>
                     <span className="text-md font-bold">{getInitials(user.name)}</span>
                 </div>

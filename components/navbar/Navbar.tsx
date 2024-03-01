@@ -36,6 +36,7 @@ export default function Navbar({ boards, board }: Props) {
     }
   );
 
+
   return (
     <>
       <nav className='navbar'>
