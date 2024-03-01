@@ -15,7 +15,7 @@ import Modal from '../shared/Modal';
 import InputCheckboxControl from '../shared/InputCheckboxControl';
 import InputDropdownControl from '../shared/InputDropdownControl';
 import TaskDropdown from './TaskDropdown';
-import { CURRENT_STATUS, OF, PRIORITIES, SAVE, SUB_TASKS } from '../constants';
+import { ASSIGNEES, CURRENT_STATUS, OF, PRIORITIES, SAVE, SUB_TASKS } from '../constants';
 
 interface IControllerTask {
   status: string;
@@ -28,7 +28,7 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
   const {
     isTaskInfosModalOpen,
     toggleTaskInfosModal,
-    taskInfosModalContent: { _id, title, track_id, priority, description, subtasks, status },
+    taskInfosModalContent: { _id, title, track_id, priority, assignee, description, subtasks, status },
   } = useModal();
   const { control, handleSubmit, setValue } = useForm<IControllerTask>({
     defaultValues: {
@@ -58,7 +58,7 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
   const onSubmit: SubmitHandler<IControllerTask> = async (data) => {
     if (status === data.status) {
       await axios.patch(`/api/task/edit-task?user_id=${user_id}`, {
-        task: { title, description, track_id, priority, subtasks: data.subtasks },
+        task: { title, description, track_id, priority, assignee, subtasks: data.subtasks },
         board_id: board._id,
         column_id: status,
         task_id: _id,
@@ -73,6 +73,7 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
           description,
           track_id,
           priority,
+          assignee,
           subtasks: data.subtasks,
           status: data.status,
         },
@@ -122,6 +123,7 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
               title: title!,
               track_id: track_id!,
               priority: priority!,
+              assignee: assignee!,
               description: description!,
               subtasks: subtasks!,
               status: status!,
@@ -186,6 +188,13 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
               Prioridad:
               <span className='modal__text'>
                 {` ${PRIORITIES.find((c) => c._id === priority)?.name}`}
+              </span>
+            </p>
+
+            <p className='input__label'>
+              Asignado:
+              <span className='modal__text'>
+                {` ${ASSIGNEES.find((c) => c._id === assignee)?.name}`}
               </span>
             </p>
               

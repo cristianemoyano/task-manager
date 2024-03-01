@@ -20,6 +20,7 @@ export interface ITask {
   _id: string;
   track_id: string;
   priority: string;
+  assignee: string;
   title: string;
   description: string;
   status: string;

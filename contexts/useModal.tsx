@@ -23,6 +23,7 @@ interface ITaskModalContent {
   track_id?: string;
   status?: string;
   priority?: string;
+  assignee?: string;
   subtasks?: ISubtask[];
 }
 

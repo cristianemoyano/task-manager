@@ -13,6 +13,7 @@ const tasksSchema = new Schema<ITask>({
   title: String,
   track_id: String,
   priority: String,
+  assignee: String,
   description: String,
   status: String,
   subtasks: [subtasksSchema],

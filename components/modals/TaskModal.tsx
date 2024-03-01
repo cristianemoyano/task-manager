@@ -14,7 +14,7 @@ import Modal from '../shared/Modal';
 import InputTextControl from '../shared/InputTextControl';
 import InputArrayControl from '../shared/InputArrayControl';
 import InputDropdownControl from '../shared/InputDropdownControl';
-import { DESCRIPTION, EDIT_TASK, NEW_SUBTASK, NEW_TASK, PRIORITIES, PRIORITY, SAVE, STATUS, SUBTASK_PLACEHOLDER, SUB_TASKS, TITLE, TRACK_ID } from '../constants';
+import { ASSIGNEE, ASSIGNEES, DESCRIPTION, EDIT_TASK, NEW_SUBTASK, NEW_TASK, PRIORITIES, PRIORITY, SAVE, STATUS, SUBTASK_PLACEHOLDER, SUB_TASKS, TITLE, TRACK_ID } from '../constants';
 
 interface IControllerSubtasks {
   _id?: string;
@@ -28,6 +28,7 @@ interface IControllerTask {
   description: string;
   status: string;
   priority: string;
+  assignee: string;
   subtasks: IControllerSubtasks[];
 }
 
@@ -37,6 +38,7 @@ export default function TaskModal({ board, user_id }: { board: IBoard, user_id: 
     title: '',
     track_id: '',
     priority: PRIORITIES.length ? PRIORITIES[0]._id!.toString() : '',
+    assignee: ASSIGNEES.length ? ASSIGNEES[0]._id!.toString() : '',
     description: '',
     status: board.columns.length ? board.columns[0]._id!.toString() : '',
     subtasks: [
@@ -65,8 +67,9 @@ export default function TaskModal({ board, user_id }: { board: IBoard, user_id: 
       setValue('description', task.description!);
       setValue('status', task.status!);
       setValue('priority', task.priority!);
+      setValue('assignee', task.assignee!);
       setValue('subtasks', task.subtasks!);
-      
+
     } else {
       setValue('title', '');
       setValue('track_id', '');
@@ -78,6 +81,10 @@ export default function TaskModal({ board, user_id }: { board: IBoard, user_id: 
       setValue(
         'priority',
         PRIORITIES.length ? PRIORITIES[0]._id!.toString() : ''
+      );
+      setValue(
+        'assignee',
+        ASSIGNEES.length ? ASSIGNEES[0]._id!.toString() : ''
       );
       setValue('subtasks', [
         { title: '', isCompleted: false },
@@ -212,7 +219,7 @@ export default function TaskModal({ board, user_id }: { board: IBoard, user_id: 
                 />
               )}
             />
-            
+
             <Controller
               control={control}
               {...register('priority')}
@@ -222,6 +229,19 @@ export default function TaskModal({ board, user_id }: { board: IBoard, user_id: 
                   value={value}
                   label={PRIORITY}
                   columns={PRIORITIES}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              {...register('assignee')}
+              render={({ field: { onChange, value } }) => (
+                <InputDropdownControl
+                  onChange={onChange}
+                  value={value}
+                  label={ASSIGNEE}
+                  columns={ASSIGNEES}
                 />
               )}
             />

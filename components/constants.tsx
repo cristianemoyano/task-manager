@@ -30,6 +30,7 @@ export const TITLE = "Título"
 export const TRACK_ID = "ID de trazabilidad"
 export const STATUS = "Estado"
 export const PRIORITY = "Prioridad"
+export const ASSIGNEE = "Asignado"
 export const CURRENT_STATUS = "Estado actual"
 export const OF = "de"
 export const DELETE = "Eliminar"
@@ -61,3 +62,27 @@ export const PRIORITIES:IColumn[] = [
       tasks: [],
     },
   ]
+
+
+export const ASSIGNEES:IColumn[] = [
+  {
+    _id: "0",
+    name: "Indefinido",
+    tasks: [],
+  },
+  {
+    _id: "1",
+    name: "Cristian",
+    tasks: [],
+  },
+  {
+    _id: "2",
+    name: "Juan",
+    tasks: [],
+  },
+  {
+    _id: "3",
+    name: "Martín",
+    tasks: [],
+  },
+]
