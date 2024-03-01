@@ -153,7 +153,8 @@ export default function TaskInfosModal({ board, user_id, user, users }: { board:
               <p className='input__label'>
                 {SUB_TASKS} ({subtasksCompleted} {OF} {subtasks?.length})
               </p>
-              <div className='input__checkbox__list'>
+              
+              <div className='input__checkbox__list overflow-y-auto max-h-40'>
                 {subtasks &&
                   fields.map((subtask, id) => (
                     <Controller
@@ -203,7 +204,7 @@ export default function TaskInfosModal({ board, user_id, user, users }: { board:
               <div></div>
             </div>
 
-            <div className="overflow-y-auto max-h-80 pb-6 mb-6 border rounded-sm border-solid border-indigo-50">
+            <div className="overflow-y-auto max-h-60 pb-6 mb-6 border rounded-sm border-solid border-indigo-50">
               {reversedComments?.map((comm, index) => {
                 return (
                   <div key={index} className="grid grid-cols-8 gap-2 items-center pt-1">

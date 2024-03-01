@@ -25,7 +25,7 @@ export default async function handler(
         .find((c: IColumn) => c._id.toString() === column_id)
         .tasks.find((t: ITask) => t._id.toString() === task_id);
 
-      if (!isEmpty(comment.value)) {
+      if (!isEmpty(comment?.value)) {
         taskToUpdate.comments.push(comment)
       }
       taskToUpdate.title = task.title;
