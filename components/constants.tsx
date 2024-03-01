@@ -1,3 +1,5 @@
+import { IColumn } from "@/typing";
+
 export const HOME = "Inicio";
 export const WELCOME_MSG = "Bienvenido";
 export const BRAND = "Task Manager";
@@ -21,10 +23,13 @@ export const NEW = "Nueva"
 export const COLUMN = "columna"
 export const TASK = "tarea"
 export const SUB_TASKS = "Subtareas"
+export const NEW_SUBTASK = "Nueva subtarea";
+export const SUBTASK_PLACEHOLDER = "Escribe la subtarea aquí.";
 export const DESCRIPTION = "Descripción"
 export const TITLE = "Título"
 export const TRACK_ID = "ID de trazabilidad"
 export const STATUS = "Estado"
+export const PRIORITY = "Prioridad"
 export const CURRENT_STATUS = "Estado actual"
 export const OF = "de"
 export const DELETE = "Eliminar"
@@ -38,3 +43,21 @@ export const BOARD_ERROR_MSG = "No encontramos el tablero solicitado."
 export const confirmMsg = (name:string) => {
     return `Estás seguro de eliminar "${name}"? Ésta acción no podrá ser revertida.`
 }
+
+export const PRIORITIES:IColumn[] = [
+    {
+      _id: "0",
+      name: "Baja",
+      tasks: [],
+    },
+    {
+      _id: "1",
+      name: "Media",
+      tasks: [],
+    },
+    {
+      _id: "2",
+      name: "Alta",
+      tasks: [],
+    },
+  ]

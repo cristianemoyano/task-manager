@@ -8,13 +8,13 @@ import {
 import axios from 'axios';
 import { mutate } from 'swr';
 
-import { IBoard } from '@/typing';
+import { IBoard, IColumn } from '@/typing';
 import useModal from '@/contexts/useModal';
 import Modal from '../shared/Modal';
 import InputTextControl from '../shared/InputTextControl';
 import InputArrayControl from '../shared/InputArrayControl';
 import InputDropdownControl from '../shared/InputDropdownControl';
-import { DESCRIPTION, EDIT_TASK, NEW_COLUMN, NEW_TASK, SAVE, STATUS, SUB_TASKS, TITLE, TRACK_ID } from '../constants';
+import { DESCRIPTION, EDIT_TASK, NEW_SUBTASK, NEW_TASK, PRIORITIES, PRIORITY, SAVE, STATUS, SUBTASK_PLACEHOLDER, SUB_TASKS, TITLE, TRACK_ID } from '../constants';
 
 interface IControllerSubtasks {
   _id?: string;
@@ -27,18 +27,19 @@ interface IControllerTask {
   track_id: string;
   description: string;
   status: string;
+  priority: string;
   subtasks: IControllerSubtasks[];
 }
 
-export default function TaskModal({ board, user_id }: { board: IBoard, user_id:string }) {
+export default function TaskModal({ board, user_id }: { board: IBoard, user_id: string }) {
 
   const defaultValues = {
     title: '',
     track_id: '',
+    priority: PRIORITIES.length ? PRIORITIES[0]._id!.toString() : '',
     description: '',
     status: board.columns.length ? board.columns[0]._id!.toString() : '',
     subtasks: [
-      { title: '', isCompleted: false },
       { title: '', isCompleted: false },
     ],
   };
@@ -63,7 +64,9 @@ export default function TaskModal({ board, user_id }: { board: IBoard, user_id:s
       setValue('track_id', task.track_id!)
       setValue('description', task.description!);
       setValue('status', task.status!);
+      setValue('priority', task.priority!);
       setValue('subtasks', task.subtasks!);
+      
     } else {
       setValue('title', '');
       setValue('track_id', '');
@@ -72,8 +75,11 @@ export default function TaskModal({ board, user_id }: { board: IBoard, user_id:s
         'status',
         board.columns.length ? board.columns[0]._id!.toString() : ''
       );
+      setValue(
+        'priority',
+        PRIORITIES.length ? PRIORITIES[0]._id!.toString() : ''
+      );
       setValue('subtasks', [
-        { title: '', isCompleted: false },
         { title: '', isCompleted: false },
       ]);
     }
@@ -121,89 +127,118 @@ export default function TaskModal({ board, user_id }: { board: IBoard, user_id:s
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <header className='modal__header'>
-          <h3 className='modal__header__title'>
+          <h4 className='modal__header__title'>
             {isNew ? NEW_TASK : EDIT_TASK}
-          </h3>
+          </h4>
         </header>
-        <Controller
-          control={control}
-          name='title'
-          rules={{ required: "can't be empty" }}
-          render={({ field: { onChange, value }, fieldState: { error } }) => (
-            <InputTextControl
-              onChange={onChange}
-              value={value}
-              error={error}
-              name='name'
-              label={TITLE}
-              placeholder='e.g. Realizar las compras pendientes'
-            />
-          )}
-        />
 
-        <div className='input__textarea__control'>
-          <label className='input__label'>{TRACK_ID}</label>
-          <input
-            className='input__text input__text'
-            placeholder='e.g. SP-2345234534'
-            {...register('track_id')}
-          />
-        </div>
-        <div className='input__textarea__control'>
-          <label className='input__label'>{DESCRIPTION}</label>
-          <textarea
-            className='input__text input__textarea'
-            placeholder='e.g. It’s always good to take a break. This 15 minute break will  recharge the batteries a little.'
-            {...register('description')}
-          />
-        </div>
-        <div className='input__array__container'>
-          <label className='input__label'>{SUB_TASKS}</label>
-          <div className='input__array__fields'>
-            {fields.map((subtask, id) => (
-              <Controller
-                key={subtask.id}
-                control={control}
-                defaultValue={subtask.title}
-                name={`subtasks.${id}.title`}
-                rules={{ required: "can't be empty" }}
-                render={({
-                  field: { value, onChange },
-                  fieldState: { error },
-                }) => (
-                  <InputArrayControl
-                    onChange={onChange}
-                    value={value}
-                    error={error}
-                    remove={() => remove(id)}
-                  />
-                )}
-              />
-            ))}
-          </div>
-          <button
-            className='modal__button__secondary'
-            type='button'
-            onClick={() => append({ title: '', isCompleted: false })}
-          >
-            + {NEW_COLUMN}
-          </button>
-        </div>
-        <Controller
-          control={control}
-          name='status'
-          render={({ field: { onChange, value } }) => (
-            <InputDropdownControl
-              onChange={onChange}
-              value={value}
-              label={STATUS}
-              columns={board.columns}
+        <div className="grid grid-cols-3 gap-2">
+          {/* COL 1 */}
+          <div className='col-span-2'>
+            <Controller
+              control={control}
+              name='title'
+              rules={{ required: "Este campo es requerido." }}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <InputTextControl
+                  onChange={onChange}
+                  value={value}
+                  error={error}
+                  name='name'
+                  label={TITLE}
+                  placeholder='Título de la tarea'
+                />
+              )}
             />
-          )}
-        />
-        <button className='modal__button__primary__s' type='submit'>
-          {isNew ? NEW_TASK : SAVE}
-        </button>
+
+            <div className='input__textarea__control'>
+              <label className='input__label'>{DESCRIPTION}</label>
+              <textarea
+                className='input__text input__textarea'
+                placeholder='Aquí puedes detallar la tarea a realizar'
+                {...register('description')}
+              />
+            </div>
+            <div className=' input__array__container'>
+              <label className='input__label'>{SUB_TASKS}</label>
+              <div className='overflow-scroll h-32 border-solid border-2 border-gray-100 p-3 input__array__fields'>
+                {fields.map((subtask, id) => (
+                  <Controller
+                    key={subtask.id}
+                    control={control}
+                    defaultValue={subtask.title}
+                    name={`subtasks.${id}.title`}
+                    rules={{ required: "Este campo es requerido." }}
+                    render={({
+                      field: { value, onChange },
+                      fieldState: { error },
+                    }) => (
+                      <InputArrayControl
+                        onChange={onChange}
+                        value={value}
+                        error={error}
+                        remove={() => remove(id)}
+                        placeholder={SUBTASK_PLACEHOLDER}
+                      />
+                    )}
+                  />
+                ))}
+              </div>
+              <button
+                className='modal__button__secondary'
+                type='button'
+                onClick={() => append({ title: '', isCompleted: false })}
+              >
+                + {NEW_SUBTASK}
+              </button>
+            </div>
+
+            <button className='modal__button__primary__s' type='submit'>
+              {isNew ? NEW_TASK : SAVE}
+            </button>
+          </div>
+          {/* END COL 1 */}
+          {/* COL 2 */}
+          <div className='' >
+            <Controller
+              control={control}
+              name='status'
+              render={({ field: { onChange, value } }) => (
+                <InputDropdownControl
+                  onChange={onChange}
+                  value={value}
+                  label={STATUS}
+                  columns={board.columns}
+                />
+              )}
+            />
+            
+            <Controller
+              control={control}
+              {...register('priority')}
+              render={({ field: { onChange, value } }) => (
+                <InputDropdownControl
+                  onChange={onChange}
+                  value={value}
+                  label={PRIORITY}
+                  columns={PRIORITIES}
+                />
+              )}
+            />
+
+            <div className=''>
+              <label className='input__label'>{TRACK_ID}</label>
+              <input
+                className='input__text input__text'
+                placeholder='e.g. SP-2345234534'
+                {...register('track_id')}
+              />
+            </div>
+
+
+          </div>
+          {/* END COL 2 */}
+        </div>
       </form>
     </Modal>
   );

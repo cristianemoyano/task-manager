@@ -7,6 +7,7 @@ interface Props {
   value: string | undefined;
   error: FieldError | undefined;
   remove: (value: any) => void;
+  placeholder?: string;
 }
 
 export default function InputArrayControl({
@@ -14,12 +15,14 @@ export default function InputArrayControl({
   value,
   error,
   remove,
+  placeholder,
 }: Props) {
   return (
     <div className='input__array__control'>
       <input
         type='text'
         className={error ? 'input__text error' : 'input__text'}
+        placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />

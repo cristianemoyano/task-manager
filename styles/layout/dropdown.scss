@@ -1,5 +1,6 @@
 .edit__dropdown {
   display: none;
+  z-index: 120;
   position: absolute;
   padding: 16px;
   background: $color-secondary-bg;

@@ -15,20 +15,20 @@ import Modal from '../shared/Modal';
 import InputCheckboxControl from '../shared/InputCheckboxControl';
 import InputDropdownControl from '../shared/InputDropdownControl';
 import TaskDropdown from './TaskDropdown';
-import { CURRENT_STATUS, OF, SAVE, SUB_TASKS } from '../constants';
+import { CURRENT_STATUS, OF, PRIORITIES, SAVE, SUB_TASKS } from '../constants';
 
 interface IControllerTask {
   status: string;
   subtasks: ISubtask[];
 }
 
-export default function TaskInfosModal({ board, user_id }: { board: IBoard, user_id:string }) {
+export default function TaskInfosModal({ board, user_id }: { board: IBoard, user_id: string }) {
   const [isTaskDropdownOpen, setIsTaskDropdownOpen] = useState(false);
   const [subtasksCompleted, setSubtasksCompleted] = useState(0);
   const {
     isTaskInfosModalOpen,
     toggleTaskInfosModal,
-    taskInfosModalContent: { _id, title, track_id, description, subtasks, status },
+    taskInfosModalContent: { _id, title, track_id, priority, description, subtasks, status },
   } = useModal();
   const { control, handleSubmit, setValue } = useForm<IControllerTask>({
     defaultValues: {
@@ -58,7 +58,7 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
   const onSubmit: SubmitHandler<IControllerTask> = async (data) => {
     if (status === data.status) {
       await axios.patch(`/api/task/edit-task?user_id=${user_id}`, {
-        task: { title, description, track_id, subtasks: data.subtasks },
+        task: { title, description, track_id, priority, subtasks: data.subtasks },
         board_id: board._id,
         column_id: status,
         task_id: _id,
@@ -72,6 +72,7 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
           title,
           description,
           track_id,
+          priority,
           subtasks: data.subtasks,
           status: data.status,
         },
@@ -94,6 +95,8 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
       <form onSubmit={handleSubmit(onSubmit)}>
         <header className='modal__header modal__header__flex'>
           <h3 className='modal__header__title'>{title}</h3>
+
+
           <button
             className='navbar__edit__buton'
             type='button'
@@ -118,54 +121,90 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
               _id: _id!,
               title: title!,
               track_id: track_id!,
+              priority: priority!,
               description: description!,
               subtasks: subtasks!,
               status: status!,
             }}
           />
         </header>
-        <p className='modal__text'>{track_id ? `ID# ${track_id}` : track_id}</p>
-        <p className='modal__text'>{description}</p>
-        <div className='input__checkbox__container'>
-          <p className='input__label'>
-            {SUB_TASKS} ({subtasksCompleted} {OF} {subtasks?.length})
-          </p>
-          <div className='input__checkbox__list'>
-            {subtasks &&
-              fields.map((subtask, id) => (
-                <Controller
-                  key={subtask.id}
-                  control={control}
-                  defaultValue={subtask.isCompleted}
-                  name={`subtasks.${id}.isCompleted`}
-                  render={({ field: { value, onChange } }) => (
-                    <InputCheckboxControl
-                      onChange={onChange}
-                      value={value}
-                      name={subtask.title}
+
+        <div className="grid grid-cols-3 gap-2">
+          {/* COL 1 */}
+          <div className='col-span-2'>
+    
+            <p className='modal__text'>{description}</p>
+            <div className='input__checkbox__container'>
+              <p className='input__label'>
+                {SUB_TASKS} ({subtasksCompleted} {OF} {subtasks?.length})
+              </p>
+              <div className='input__checkbox__list'>
+                {subtasks &&
+                  fields.map((subtask, id) => (
+                    <Controller
+                      key={subtask.id}
+                      control={control}
+                      defaultValue={subtask.isCompleted}
+                      name={`subtasks.${id}.isCompleted`}
+                      render={({ field: { value, onChange } }) => (
+                        <InputCheckboxControl
+                          onChange={onChange}
+                          value={value}
+                          name={subtask.title}
+                        />
+                      )}
                     />
-                  )}
-                />
-              ))}
+                  ))}
+              </div>
+            </div>
+            
+            <button className='modal__button__primary__s' type='submit'>
+              {SAVE}
+            </button>
           </div>
-        </div>
-        {isTaskInfosModalOpen && (
-          <Controller
-            control={control}
-            name='status'
-            render={({ field: { onChange, value } }) => (
-              <InputDropdownControl
-                onChange={onChange}
-                value={value}
-                label={CURRENT_STATUS}
-                columns={board.columns}
+          {/* END COL 1 */}
+
+          {/* COL 2 */}
+          <div >
+
+          {isTaskInfosModalOpen && (
+              <Controller
+                control={control}
+                name='status'
+                render={({ field: { onChange, value } }) => (
+                  <InputDropdownControl
+                    onChange={onChange}
+                    value={value}
+                    label={CURRENT_STATUS}
+                    columns={board.columns}
+                  />
+                )}
               />
             )}
-          />
-        )}
-        <button className='modal__button__primary__s' type='submit'>
-          {SAVE}
-        </button>
+
+            <p className='input__label'>
+              Prioridad:
+              <span className='modal__text'>
+                {` ${PRIORITIES.find((c) => c._id === priority)?.name}`}
+              </span>
+            </p>
+              
+
+            <p className='input__label'>
+            ID de trazabilidad:
+              <span className='modal__text'>
+              {track_id ? ` ${track_id}` : track_id}
+              </span>
+            </p>
+            
+
+          </div>
+          {/* END COL 2 */}
+
+        </div>
+
+
+
       </form>
     </Modal>
   );

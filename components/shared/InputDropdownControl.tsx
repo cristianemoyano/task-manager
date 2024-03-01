@@ -23,7 +23,7 @@ export default function InputDropdownControl({
   };
 
   return (
-    <div className='input__dropdown__control'>
+    <div className='input__dropdown__control z-50'>
       <label className='input__label'>{label}</label>
       <div
         className={

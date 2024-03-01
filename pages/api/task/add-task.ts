@@ -25,11 +25,9 @@ export default async function handler(
       );
 
       columnToUpdate.tasks.push(task);
-      console.log("PUSHED TASK: ", task)
+      await board.save();
 
-      const boardUpdated = await board.save();
-
-      res.status(200).json(boardUpdated);
+      res.status(200).json(task);
     } catch (error) {
       res.status(500).json(error);
     }

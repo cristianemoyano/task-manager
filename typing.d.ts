@@ -11,9 +11,15 @@ export interface IColumn {
   tasks: ITask[];
 }
 
+export interface IPriority{
+  _id: string;
+  name: string;
+}
+
 export interface ITask {
   _id: string;
   track_id: string;
+  priority: string;
   title: string;
   description: string;
   status: string;

@@ -5,7 +5,9 @@ import nProgress from 'nprogress';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
+import '@/styles/globals.css'
 import '../styles/index.scss';
+
 import { ModalProvider } from '@/contexts/useModal';
 import { ThemeProvider } from '@/contexts/useTheme';
 

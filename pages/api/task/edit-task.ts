@@ -26,13 +26,13 @@ export default async function handler(
 
       taskToUpdate.title = task.title;
       taskToUpdate.track_id = task.track_id;
+      taskToUpdate.priority = task.priority;
       taskToUpdate.description = task.description;
       taskToUpdate.subtasks = task.subtasks;
-      
+  
+      await board.save();
 
-      const boardUpdated = await board.save();
-
-      res.status(200).json(boardUpdated);
+      res.status(200).json(task);
     } catch (error) {
       res.status(500).json(error);
     }

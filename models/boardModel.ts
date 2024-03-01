@@ -12,6 +12,7 @@ const tasksSchema = new Schema<ITask>({
   // _id: { type: Number, required: false },
   title: String,
   track_id: String,
+  priority: String,
   description: String,
   status: String,
   subtasks: [subtasksSchema],
