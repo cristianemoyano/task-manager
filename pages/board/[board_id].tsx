@@ -24,11 +24,13 @@ import { auth } from '@/services/auth';
 import User from '@/models/userModel';
 import { BACK_HOME, BOARD, BOARD_ERROR_CONTENT, BOARD_ERROR_MSG, BOARD_ERROR_TITLE, NEW_COLUMN } from '@/components/constants';
 import { fetcher } from '@/services/utils';
+import { getAsignedBoardsByUser } from '@/services/board';
 
 interface Props {
   isrBoards: IBoard[];
   isrBoard: IBoard;
   board_id: string;
+  assignedBoards: IBoard[];
   user_id: string;
   user: IUser;
 }
@@ -39,6 +41,7 @@ const SingleBoard: NextPage<Props> = ({
   isrBoards,
   isrBoard,
   board_id,
+  assignedBoards,
   user_id,
   user,
 }) => {
@@ -83,7 +86,7 @@ const SingleBoard: NextPage<Props> = ({
         <DeleteModal board={board} user_id={user_id}/>
         <TaskInfosModal board={board} user_id={user_id}/>
         <main>
-          <Sidebar boards={boards} user={user}/>
+          <Sidebar boards={boards} assignedBoards={assignedBoards} user={user}/>
           <div className='board__main'>
             <Navbar boards={boards} board={board} />
             {board.columns.length ? (
@@ -146,12 +149,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     let boards = await Board.find({ user_id: user._id }).select(['-columns']);
     boards = JSON.parse(JSON.stringify(boards));
 
+    let assignedBoards = await getAsignedBoardsByUser(String(user._id))
+    assignedBoards = JSON.parse(JSON.stringify(assignedBoards));
+
     user = JSON.parse(JSON.stringify(user));
 
     return {
       props: {
         isrBoards: boards,
         isrBoard: board,
+        assignedBoards: assignedBoards,
         board_id,
         user_id: user._id,
         user: user,

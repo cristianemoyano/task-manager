@@ -16,7 +16,7 @@ export default async function handler(
 
   if (method === 'GET') {
     try {
-      const board = await Board.findOne({ _id: board_id, user_id });
+      const board = await Board.findOne({ _id: board_id });
 
       res.status(200).json(board);
     } catch (error) {

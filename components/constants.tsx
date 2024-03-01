@@ -3,7 +3,8 @@ import { IColumn } from "@/typing";
 export const HOME = "Inicio";
 export const WELCOME_MSG = "Bienvenido";
 export const BRAND = "Task Manager";
-export const BOARDS = "Tableros";
+export const OWNED_BOARDS = "Mis tableros";
+export const ASSIGNED_BOARDS = "Tableros asignados";
 export const BOARD = "Tablero";
 export const EMPTY_BOARDS_MSG = "No haz creado ningún tablero aún. Crea un nuevo tablero para empezar."
 export const BOARD_NAME = "Nombre del tablero";

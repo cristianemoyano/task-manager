@@ -6,7 +6,7 @@ import AllBoards from '../shared/AllBoards';
 import KanbanLogo from '../shared/KanbanLogo';
 import { HIDE_SIDEBAR } from '../constants';
 
-export default function Sidebar({ boards, user }: { boards: IBoard[], user?: IUser }) {
+export default function Sidebar({ boards, assignedBoards, user }: { boards: IBoard[], assignedBoards?: IBoard[], user?: IUser }) {
   const { isSidebarOpen, toggleSidebar } = useModal();
 
   return (
@@ -14,7 +14,7 @@ export default function Sidebar({ boards, user }: { boards: IBoard[], user?: IUs
       <aside className={isSidebarOpen ? 'sidebar sidebar--open' : 'sidebar'}>
         <div className='sidebar__wrapper'>
           <KanbanLogo />
-          <AllBoards boards={boards} className='sidebar__boards' />
+          <AllBoards boards={boards} assignedBoards={assignedBoards}  className='sidebar__boards' />
           {/* show / hide sidebar */}
           <p className='text-center pt-3 text-gray-500 text-md'>
           <span className='font-bold'>{user?.name}</span>

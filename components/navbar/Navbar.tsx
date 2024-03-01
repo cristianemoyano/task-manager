@@ -7,10 +7,9 @@ import AllBoardsModal from './AllBoardsModal';
 import BoardDropdown from './BoardDropdown';
 import { IBoard, IUser } from '@/typing';
 import KanbanLogo from '../shared/KanbanLogo';
-import { ASSIGNEES, HOME, NEW_TASK } from '../constants';
+import { HOME, NEW_TASK } from '../constants';
 import UserList from '../shared/UserList';
 import { fetcher, getBoardAssignees } from '@/services/utils';
-import { getUsers } from '@/services/user';
 import useSWR from 'swr';
 
 interface Props {
