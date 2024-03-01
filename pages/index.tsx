@@ -5,7 +5,7 @@ import { GetServerSideProps } from 'next';
 import useModal from '@/contexts/useModal';
 import connectMongo from '@/services/connectMongo';
 import Board from '@/models/boardModel';
-import { IBoard } from '@/typing';
+import { IBoard, IUser } from '@/typing';
 
 import HeadOfPage from '@/components/shared/HeadOfPage';
 import EmptyState from '@/components/shared/EmptyState';
@@ -19,7 +19,7 @@ import { useEffect } from 'react';
 import User from '@/models/userModel';
 import { EMPTY_BOARDS_MSG, HOME, HOME_MSG, NEW_BOARD, WELCOME_MSG } from '@/components/constants';
 
-const Home: NextPage<{ boards: IBoard[], user_id:string }> = ({ boards = [], user_id }) => {
+const Home: NextPage<{ boards: IBoard[], user_id:string, user:IUser }> = ({ boards = [], user_id, user }) => {
   const { toggleBoardModal, setIsNewBoard } = useModal();
   const { data: session } = useSession()
 
@@ -36,7 +36,7 @@ const Home: NextPage<{ boards: IBoard[], user_id:string }> = ({ boards = [], use
       <>
         <BoardModal user_id={user_id} />
         <main>
-          <Sidebar boards={boards} />
+          <Sidebar boards={boards} user={user}/>
           <div>
             <Navbar boards={boards} />
             {boards.length ? (
@@ -75,8 +75,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const clientSession = await getSession(context);
 
-    console.log("INIT CLIENT SESSION: ", clientSession);
-
     await connectMongo();
 
     let user = await User.findOne({ email: session?.user?.email })
@@ -90,6 +88,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         boards,
         session: JSON.parse(JSON.stringify(session)),
         user_id: user._id,
+        user: user,
       },
     };
   }
@@ -99,6 +98,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       boards: [],
       session,
       user_id: null,
+      user: null,
     },
   };
 

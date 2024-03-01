@@ -9,6 +9,7 @@ import HeadOfPage from '@/components/shared/HeadOfPage';
 import InputTextControl from '@/components/shared/InputTextControl';
 import axios from 'axios';
 import { auth } from '@/services/auth';
+import { REGISTER_CONTENT, REGISTER_EMAIL_PLACEHOLDER, REGISTER_INVALID_CREDENTIALES, REGISTER_LOGIN_BTN, REGISTER_NAME_PLACEHOLDER, REGISTER_PWD_PLACEHOLDER, REGISTER_SIGNUP_BTN, REGISTER_TITLE } from '@/components/constants';
 
 interface IControllerRegister {
   name?: string;
@@ -43,8 +44,8 @@ const Register: NextPage = () => {
       try {
         await axios.post('/api/auth/register', { ...data });
       } catch (error) {
-        setError('email', { message: 'invalid credentials' });
-        setError('password', { message: 'invalid credentials' });
+        setError('email', { message: REGISTER_INVALID_CREDENTIALES });
+        setError('password', { message: REGISTER_INVALID_CREDENTIALES });
         return;
       }
     }
@@ -55,8 +56,8 @@ const Register: NextPage = () => {
       redirect: false,
     }).then(({ error }: any) => {
       if (error) {
-        setError('email', { message: 'invalid credentials' });
-        setError('password', { message: 'invalid credentials' });
+        setError('email', { message: REGISTER_INVALID_CREDENTIALES });
+        setError('password', { message: REGISTER_INVALID_CREDENTIALES });
         return;
       } else {
         router.push('/');
@@ -65,7 +66,7 @@ const Register: NextPage = () => {
   };
 
   return (
-    <HeadOfPage title='Login / Register' content='login or create an account'>
+    <HeadOfPage title={REGISTER_TITLE} content={REGISTER_CONTENT}>
       <main className='register'>
         <Image
           src='/assets/logo-mobile.svg'
@@ -95,7 +96,7 @@ const Register: NextPage = () => {
                     error={error}
                     name='name'
                     label='Name'
-                    placeholder='Your name'
+                    placeholder={REGISTER_NAME_PLACEHOLDER}
                   />
                 )}
               />
@@ -114,7 +115,7 @@ const Register: NextPage = () => {
                   error={error}
                   name='email'
                   label='Email'
-                  placeholder='Your email'
+                  placeholder={REGISTER_EMAIL_PLACEHOLDER}
                 />
               )}
             />
@@ -132,37 +133,22 @@ const Register: NextPage = () => {
                   error={error}
                   name='password'
                   label='Passord'
-                  placeholder='Your password'
+                  placeholder={REGISTER_PWD_PLACEHOLDER}
                   isPassword={true}
                 />
               )}
             />
           </div>
           <button className='register__form__button' type='submit'>
-            {isMember ? 'Login to your account' : 'Create an account'}
+            {isMember ? REGISTER_LOGIN_BTN : REGISTER_SIGNUP_BTN}
           </button>
           <h3 className='register__form__toggle'>
-            {isMember ? "Don't" : 'Already'} have an account?{' '}
+            {isMember ? "No" : 'Ya'} tienes una cuenta?{' '}
             <span
               className='register__form__toggle__button'
               onClick={() => setIsMember(!isMember)}
             >
-              {isMember ? 'Sign Up' : 'Login'}
-            </span>
-          </h3>
-          <h3 className='register__form__toggle'>
-            Access the app without login or sign up?{' '}
-            <span
-              className='register__form__toggle__button'
-              onClick={() =>
-                signIn('credentials', {
-                  email: process.env.NEXT_PUBLIC_EMAIL,
-                  password: process.env.NEXT_PUBLIC_PASSWORD,
-                  redirect: false,
-                })
-              }
-            >
-              Click me
+              {isMember ? REGISTER_SIGNUP_BTN : REGISTER_LOGIN_BTN}
             </span>
           </h3>
         </form>

@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { IColumn } from '@/typing';
+import { IUser } from '@/typing';
 import { getInitials } from '@/services/utils';
+import { isEmpty } from 'lodash';
 
 interface Props {
-    users: IColumn[];
+    users: IUser[];
 }
 
 const MAX_USERS_LIMIT = 10;
@@ -12,6 +13,10 @@ const MAX_USERS_LIMIT = 10;
 const COLORS = ['bg-gray-400', 'bg-blue-400', 'bg-green-400', 'bg-yellow-400', 'bg-red-400', 'bg-purple-400', 'bg-pink-400', 'bg-cyan-400', 'bg-orange-400', 'bg-teal-400'];
 
 function UserList({ users }: Props) {
+
+    if (isEmpty(users)) {
+        return
+    }
 
     const firstSliceUsers = users.slice(0, MAX_USERS_LIMIT);
     const remainingUsers = users.slice(MAX_USERS_LIMIT, users.length);

@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import useModal from '@/contexts/useModal';
 import AllBoardsModal from './AllBoardsModal';
 import BoardDropdown from './BoardDropdown';
-import { IBoard } from '@/typing';
+import { IBoard, IUser } from '@/typing';
 import KanbanLogo from '../shared/KanbanLogo';
 import { ASSIGNEES, HOME, NEW_TASK } from '../constants';
 import UserList from '../shared/UserList';
+import { fetcher, getBoardAssignees } from '@/services/utils';
+import { getUsers } from '@/services/user';
+import useSWR from 'swr';
 
 interface Props {
   boards: IBoard[];
@@ -23,6 +25,17 @@ export default function Navbar({ boards, board }: Props) {
   const [isBoardModalOpen, setIsBoardModalOpen] = useState(false);
   const [isBoardDropdownOpen, setIsBoardDropdownOpen] = useState(false);
   const { pathname } = useRouter();
+
+  const assigneesIds = getBoardAssignees(board);
+
+  const { data: users, error: usersError } = useSWR<IUser[], any>(
+    `/api/users/?user_ids=${assigneesIds.join(',')}`,
+    fetcher,
+    {
+      fallbackData: [],
+      revalidateOnFocus: false,
+    }
+  );
 
   return (
     <>
@@ -75,7 +88,8 @@ export default function Navbar({ boards, board }: Props) {
               </div>
               {/* USERS FILTER */}
               <div className=''>
-                <UserList users={ASSIGNEES} />
+              {pathname === '/' ? "" : <UserList users={users} />}
+                
               </div>
             </div>
 

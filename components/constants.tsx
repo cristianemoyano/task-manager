@@ -40,6 +40,14 @@ export const BOARD_ERROR_TITLE = "Ups! 404"
 export const BOARD_ERROR_CONTENT = "El tablero elegido no existe."
 export const BOARD_ERROR_MSG = "No encontramos el tablero solicitado."
 
+export const REGISTER_INVALID_CREDENTIALES = "Credenciales inválidas."
+export const REGISTER_TITLE = "Iniciar sesión"
+export const REGISTER_CONTENT = "Iniciar sesión o registrarse."
+export const REGISTER_NAME_PLACEHOLDER = "Tu nombre"
+export const REGISTER_EMAIL_PLACEHOLDER = "Tu email"
+export const REGISTER_PWD_PLACEHOLDER = "Tu contraseña"
+export const REGISTER_LOGIN_BTN = "Iniciar sesión"
+export const REGISTER_SIGNUP_BTN = "Registrarse"
 
 export const confirmMsg = (name:string) => {
     return `Estás seguro de eliminar "${name}"? Ésta acción no podrá ser revertida.`
@@ -71,70 +79,14 @@ export const ASSIGNEES:IColumn[] = [
     tasks: [],
   },
   {
-    _id: "1",
+    _id: "65e0f2f48119a85322480d5b",
     name: "Lucas Rodríguez",
     tasks: [],
   },
   {
-    _id: "2",
-    name: "Juan López",
-    tasks: [],
-  },
-  {
-    _id: "3",
-    name: "Martín Gómez",
-    tasks: [],
-  },
-  {
-    _id: "4",
-    name: "María Pérez",
-    tasks: [],
-  },
-  {
-    _id: "5",
-    name: "Jimena Paz",
-    tasks: [],
-  },
-  {
-    _id: "6",
-    name: "Andrés Gabarre",
+    _id: "65e1debb92d58be03ce30ad9",
+    name: "Maria Perez",
     tasks: [],
   },
 
-
-  {
-    _id: "7",
-    name: "Miguel Bueno",
-    tasks: [],
-  },
-  {
-    _id: "8",
-    name: "Ulises Zamorano",
-    tasks: [],
-  },
-  {
-    _id: "9",
-    name: "Cintia Lorca",
-    tasks: [],
-  },
-  {
-    _id: "10",
-    name: "Nadia López",
-    tasks: [],
-  },
-  {
-    _id: "11",
-    name: "José Pérez",
-    tasks: [],
-  },
-  {
-    _id: "12",
-    name: "Guillermo Paz",
-    tasks: [],
-  },
-  {
-    _id: "13",
-    name: "Pedro Gabarre",
-    tasks: [],
-  },
 ]

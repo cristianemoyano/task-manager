@@ -1,3 +1,6 @@
+import { IBoard } from "@/typing";
+import axios from "axios";
+
 export const getInitials = (fullName: string) => {
     const words = fullName.split(' ');
     let initials = '';
@@ -8,3 +11,20 @@ export const getInitials = (fullName: string) => {
     });
     return initials;
 }
+
+export const getBoardAssignees = (board?:IBoard):String[] => {
+    if (!board) {
+        return []
+    }
+    return board.columns.map((col)=>{
+        let assignees = col.tasks.map((task)=>{
+          return task.assignee
+        })
+        return assignees
+      }).flat().filter((value, index, self) => {
+        return self.indexOf(value) === index;
+      });
+}
+
+
+export const fetcher = (url: string) => axios.get(url).then((res) => res.data);

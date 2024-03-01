@@ -1,11 +1,9 @@
 import type { NextPage } from 'next';
 import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import axios from 'axios';
 import ScrollContainer from 'react-indiana-drag-scroll';
-import { isEmpty } from 'lodash';
 
 import { IBoard, IUser } from '@/typing';
 import connectMongo from '@/services/connectMongo';
@@ -25,6 +23,7 @@ import Sidebar from '@/components/sidebar/Sidebar';
 import { auth } from '@/services/auth';
 import User from '@/models/userModel';
 import { BACK_HOME, BOARD, BOARD_ERROR_CONTENT, BOARD_ERROR_MSG, BOARD_ERROR_TITLE, NEW_COLUMN } from '@/components/constants';
+import { fetcher } from '@/services/utils';
 
 interface Props {
   isrBoards: IBoard[];
@@ -34,7 +33,7 @@ interface Props {
   user: IUser;
 }
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+
 
 const SingleBoard: NextPage<Props> = ({
   isrBoards,
@@ -43,6 +42,7 @@ const SingleBoard: NextPage<Props> = ({
   user_id,
   user,
 }) => {
+
   const { data: boards, error: boardsError } = useSWR<IBoard[], any>(
     `/api/boards?user_id=${user_id}`,
     fetcher,
