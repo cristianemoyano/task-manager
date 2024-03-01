@@ -44,8 +44,29 @@ export default function BoardTask({ task }: { task: ITask }) {
 
         <div className="grid grid-cols-3 gap-4 mt-3 items-center">
           <div className="...">
-            {/* Priority */}
-            <div title="Prioridad" className={`w-3 h-3 flex items-center justify-center font-bold  text-white rounded-full ${priorityColors[Number(task.priority)]} text-white`}>
+
+
+
+            <div className="grid grid-cols-4 gap-4 items-center">
+              <div>
+                {/* Priority */}
+                <div title="Prioridad" className={`w-3 h-3 flex items-center justify-center font-bold  text-white rounded-full ${priorityColors[Number(task.priority)]} text-white`}>
+                </div>
+              </div>
+              {task.comments.length > 0 ? (
+                <>
+              <div>
+                <Image
+                  src='/assets/comment.svg'
+                  width={15}
+                  height={24}
+                  layout='fixed'
+                  alt='comments'
+                  className='register__logo'
+                /> 
+              </div>
+              <div className='text-xs'>({task.comments.length})</div>
+              </>) : ""}
             </div>
 
           </div>
