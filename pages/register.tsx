@@ -84,7 +84,7 @@ const Register: NextPage = () => {
               <Controller
                 control={control}
                 name='name'
-                rules={{ required: "can't be empty" }}
+                rules={{ required: "Este campo es requerido." }}
                 render={({
                   field: { onChange, value },
                   fieldState: { error },
@@ -103,7 +103,7 @@ const Register: NextPage = () => {
             <Controller
               control={control}
               name='email'
-              rules={{ required: "can't be empty" }}
+              rules={{ required: "Este campo es requerido." }}
               render={({
                 field: { onChange, value },
                 fieldState: { error },
@@ -121,7 +121,7 @@ const Register: NextPage = () => {
             <Controller
               control={control}
               name='password'
-              rules={{ required: "can't be empty" }}
+              rules={{ required: "Este campo es requerido." }}
               render={({
                 field: { onChange, value },
                 fieldState: { error },

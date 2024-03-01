@@ -33,6 +33,7 @@ const defaultValues = {
   columns: [
     { name: 'Pendiente', tasks: [] },
     { name: 'En progreso', tasks: [] },
+    { name: 'Bloqueado', tasks: [] },
     { name: 'Realizado', tasks: [] },
   ],
 };
@@ -58,6 +59,7 @@ export default function BoardModal({ board, user_id }: { board?: IBoard, user_id
       setValue('columns', [
         { name: 'Pendiente', tasks: [] },
         { name: 'En progreso', tasks: [] },
+        { name: 'Bloqueado', tasks: [] },
         { name: 'Realizado', tasks: [] },
       ]);
     }
@@ -104,7 +106,7 @@ export default function BoardModal({ board, user_id }: { board?: IBoard, user_id
         <Controller
           control={control}
           name='name'
-          rules={{ required: "can't be empty" }}
+          rules={{ required: "Este campo es requerido." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputTextControl
               onChange={onChange}
@@ -112,20 +114,20 @@ export default function BoardModal({ board, user_id }: { board?: IBoard, user_id
               error={error}
               name='name'
               label={BOARD_NAME}
-              placeholder='e.g. Web Design'
+              placeholder='ej. Equipo Azul'
             />
           )}
         />
         <div className='input__array__container'>
           <label className='input__label'>{BOARD_COLUMNS}</label>
-          <div className='input__array__fields'>
+          <div className='input__array__fields overflow-y-auto max-h-40 p-3 border border-solid border-gray-200'>
             {fields.map((column, id) => (
               <Controller
                 key={column.id}
                 control={control}
                 defaultValue={column.name}
                 name={`columns.${id}.name`}
-                rules={{ required: "can't be empty" }}
+                rules={{ required: "Este campo es requerido." }}
                 render={({
                   field: { value, onChange },
                   fieldState: { error },

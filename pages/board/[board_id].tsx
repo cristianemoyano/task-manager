@@ -7,7 +7,7 @@ import axios from 'axios';
 import ScrollContainer from 'react-indiana-drag-scroll';
 import { isEmpty } from 'lodash';
 
-import { IBoard } from '@/typing';
+import { IBoard, IUser } from '@/typing';
 import connectMongo from '@/services/connectMongo';
 import Board from '@/models/boardModel';
 import useModal from '@/contexts/useModal';
@@ -31,6 +31,7 @@ interface Props {
   isrBoard: IBoard;
   board_id: string;
   user_id: string;
+  user: IUser;
 }
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
@@ -40,6 +41,7 @@ const SingleBoard: NextPage<Props> = ({
   isrBoard,
   board_id,
   user_id,
+  user,
 }) => {
   const { data: boards, error: boardsError } = useSWR<IBoard[], any>(
     `/api/boards?user_id=${user_id}`,
@@ -81,7 +83,7 @@ const SingleBoard: NextPage<Props> = ({
         <DeleteModal board={board} user_id={user_id}/>
         <TaskInfosModal board={board} user_id={user_id}/>
         <main>
-          <Sidebar boards={boards} />
+          <Sidebar boards={boards} user={user}/>
           <div className='board__main'>
             <Navbar boards={boards} board={board} />
             {board.columns.length ? (
@@ -152,6 +154,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         isrBoard: board,
         board_id,
         user_id: user._id,
+        user: user,
       },
     };
 
@@ -164,6 +167,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       isrBoard: null,
       board_id: null,
       user_id: null,
+      user: null,
     },
   };
 

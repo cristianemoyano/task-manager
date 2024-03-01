@@ -1,12 +1,12 @@
 import Image from 'next/image';
 
-import { IBoard } from '@/typing';
+import { IBoard, IUser } from '@/typing';
 import useModal from '@/contexts/useModal';
 import AllBoards from '../shared/AllBoards';
 import KanbanLogo from '../shared/KanbanLogo';
 import { HIDE_SIDEBAR } from '../constants';
 
-export default function Sidebar({ boards }: { boards: IBoard[] }) {
+export default function Sidebar({ boards, user }: { boards: IBoard[], user?: IUser }) {
   const { isSidebarOpen, toggleSidebar } = useModal();
 
   return (
@@ -16,6 +16,13 @@ export default function Sidebar({ boards }: { boards: IBoard[] }) {
           <KanbanLogo />
           <AllBoards boards={boards} className='sidebar__boards' />
           {/* show / hide sidebar */}
+          <p className='text-center pt-3 text-gray-500 text-md'>
+          <span className='font-bold'>{user?.name}</span>
+          </p>
+          <p className='text-center p-3 text-gray-400 text-sm'>
+          <span className='font-bold'>{user?.email}</span>
+          </p>
+          
           <button onClick={toggleSidebar} className='sidebar__hide__button'>
             <Image
               src='/assets/icon-hide-sidebar.svg'
@@ -29,6 +36,7 @@ export default function Sidebar({ boards }: { boards: IBoard[] }) {
           </button>
         </div>
       </aside>
+      
       <button
         className={
           isSidebarOpen
