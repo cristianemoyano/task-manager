@@ -17,7 +17,7 @@ import InputDropdownControl from '../shared/InputDropdownControl';
 import TaskDropdown from './TaskDropdown';
 import { ASSIGNEES, COMMENTS, CURRENT_STATUS, OF, PRIORITIES, SAVE, SUB_TASKS } from '../constants';
 import InputTextControl from '../shared/InputTextControl';
-import { getInitials } from '@/services/utils';
+import { convertISOToReadableDate, getInitials } from '@/services/utils';
 
 interface IControllerTask {
   status: string;
@@ -97,6 +97,8 @@ export default function TaskInfosModal({ board, user_id, user }: { board: IBoard
     mutate(`/api/boards/${board._id}?user_id=${user_id}`);
     toggleTaskInfosModal();
   };
+
+  const reversedComments = comments?.slice().reverse();
 
 
   return (
@@ -203,9 +205,8 @@ export default function TaskInfosModal({ board, user_id, user }: { board: IBoard
             </div>
 
             <div className="overflow-y-auto max-h-80 pb-6 mb-6 border rounded-sm border-solid border-indigo-50">
-              {comments?.map((comm) => {
+              {reversedComments?.map((comm) => {
                 return (
-
                   <div className="grid grid-cols-8 gap-2 items-center pt-1">
                     <div className=' mb-3 flex justify-center'>
                       <div title='Tareas sin asignar' className={`w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full bg-gray-400 text-white mr-[-7px]`}>
@@ -214,14 +215,21 @@ export default function TaskInfosModal({ board, user_id, user }: { board: IBoard
                     </div>
                     <div className='col-span-6 pb-3'>
                       <div className="grid grid-rows-2 grid-flow-col gap-2">
-                        <div className='font-bold text-sm'>{comm.authorName ? comm.authorName : "Sin Nombre"}</div>
+                        <div className='text-sm'>
+
+                          <div className="grid grid-cols-2 gap-2">
+                            <div className='font-bold'>{comm.authorName ? comm.authorName : "Sin Nombre"}</div>
+                            <div className='text-left'>
+                              {convertISOToReadableDate(comm.date)}
+                            </div>
+                          </div>
+                        </div>
                         <div>{comm.value}</div>
                       </div>
-                      
+
                     </div>
                     <div></div>
                   </div>
-
                 )
               })}
             </div>

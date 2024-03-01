@@ -45,3 +45,10 @@ export const filterTasksByAssignee = (board:IBoard, assigneeId:string) => {
   });
   return board;
 };
+
+
+export const convertISOToReadableDate = (isoDate:string) => {
+  const date = new Date(isoDate);
+  const options: Intl.DateTimeFormatOptions  ={ day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', weekday: 'short'};
+  return date.toLocaleString('es-AR',options);
+}
