@@ -180,8 +180,8 @@ export default function TaskInfosModal({ board, user_id, user }: { board: IBoard
 
             <div className="grid grid-cols-8 gap-2 items-center">
               <div className=' mb-3 flex justify-center'>
-                <div title='Tareas sin asignar' className={`w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full bg-gray-400 text-white mr-[-7px]`}>
-                  US
+                <div title='Tareas sin asignar' className={`w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full bg-indigo-400 text-white mr-[-7px]`}>
+                {getInitials(user?.name)}
                 </div>
               </div>
               <div className='col-span-6'>
@@ -208,8 +208,8 @@ export default function TaskInfosModal({ board, user_id, user }: { board: IBoard
                 return (
                   <div key={index} className="grid grid-cols-8 gap-2 items-center pt-1">
                     <div className=' mb-3 flex justify-center'>
-                      <div title='Tareas sin asignar' className={`w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full bg-gray-400 text-white mr-[-7px]`}>
-                        {getInitials(comm.authorName)}
+                      <div title='Tareas sin asignar' className={`w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full bg-indigo-400 text-white mr-[-7px]`}>
+                        {getInitials(comm?.authorName)}
                       </div>
                     </div>
                     <div className='col-span-6 pb-3'>
@@ -217,13 +217,13 @@ export default function TaskInfosModal({ board, user_id, user }: { board: IBoard
                         <div className='text-sm'>
 
                           <div className="grid grid-cols-2 gap-2">
-                            <div className='font-bold'>{comm.authorName ? comm.authorName : "Sin Nombre"}</div>
+                            <div className='font-bold'>{comm?.authorName ? comm.authorName : "Sin Nombre"}</div>
                             <div className='text-left'>
-                              {convertISOToReadableDate(comm.date)}
+                              {convertISOToReadableDate(comm?.date)}
                             </div>
                           </div>
                         </div>
-                        <div>{comm.value}</div>
+                        <div>{comm?.value}</div>
                       </div>
 
                     </div>
