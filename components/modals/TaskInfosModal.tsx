@@ -133,7 +133,7 @@ export default function TaskInfosModal({ board, user_id }: { board: IBoard, user
           {/* COL 1 */}
           <div className='col-span-2'>
     
-            <p className='modal__text'>{description}</p>
+            <p className='mb-4'>{description}</p>
             <div className='input__checkbox__container'>
               <p className='input__label'>
                 {SUB_TASKS} ({subtasksCompleted} {OF} {subtasks?.length})

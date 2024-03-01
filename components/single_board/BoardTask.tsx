@@ -27,7 +27,7 @@ export default function BoardTask({ task }: { task: ITask }) {
     >
       <h3 className='board__task__title'>{task.title}</h3>
       <p className='board__task__text'>
-        {subtasksCompleted} {OF} {task.subtasks.length} {SUB_TASKS}
+        {SUB_TASKS} ({subtasksCompleted} {OF} {task.subtasks.length})
       </p>
     </article>
   );
