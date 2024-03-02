@@ -147,7 +147,7 @@ export default function SearchForm({ }: Props) {
         toggleTaskInfosModal,
         taskInfosModalContent: { _id, title, track_id, priority, comments, assignee, description, subtasks, status },
       } = useModal();
-
+    
     return (
         <div className="mt-3 bg-white p-3 m-3 max-h-screen" >
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -227,7 +227,7 @@ export default function SearchForm({ }: Props) {
                         <hr />
                     </h4>
                 </header>
-
+                <TaskInfosModal board={board} user_id="1" user={user} users={users}/>
                 <div className="grid grid-cols-2 gap-1">
 
                     <div className="overflow-y-auto max-h-96">
@@ -235,7 +235,7 @@ export default function SearchForm({ }: Props) {
                             {tasks.map((task) => {
                                 return (
                                     <div className="p-3">
-                                        <BoardTask task={task} users={users} />
+                                        <BoardTask task={task} users={users} isToggleDisabled={true} />
                                     </div>
                                 )
                             })}
@@ -244,6 +244,7 @@ export default function SearchForm({ }: Props) {
 
                     <div>
                         Title: { title}
+                        <button onClick={()=> toggleTaskInfosModal()}>Abrir</button>
                     </div>
 
                 </div>
