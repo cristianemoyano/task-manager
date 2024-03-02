@@ -7,6 +7,7 @@ import TaskInfosModal from "../modals/TaskInfosModal";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
+import useModal from "@/contexts/useModal";
 
 interface Props {
 
@@ -26,9 +27,14 @@ const usersOptions: IColumn[] = [
     },
     {
         _id: "0",
-        name: "Pepe P",
+        name: "User 1",
         tasks: [],
-    }
+    },
+    {
+        _id: "1",
+        name: "User 2",
+        tasks: [],
+    },
 ]
 
 const board: IBoard = {
@@ -74,8 +80,39 @@ const priorities = [
 ]
 
 const tasks: ITask[] = [
-
-
+    {
+        _id: "string",
+        track_id: "string",
+        priority: "string",
+        assignee: "string",
+        title: "Task 1",
+        description: "string",
+        status: "string",
+        subtasks: [],
+        comments: [],
+    },
+    {
+        _id: "string",
+        track_id: "string",
+        priority: "string",
+        assignee: "string",
+        title: "Task 2",
+        description: "string",
+        status: "string",
+        subtasks: [],
+        comments: [],
+    },
+    {
+        _id: "string",
+        track_id: "string",
+        priority: "string",
+        assignee: "string",
+        title: "Task 3",
+        description: "string",
+        status: "string",
+        subtasks: [],
+        comments: [],
+    },
 ]
 
 export default function SearchForm({ }: Props) {
@@ -104,6 +141,12 @@ export default function SearchForm({ }: Props) {
     const onSubmit: SubmitHandler<IControllerTask> = async (data) => {
         alert(JSON.stringify(data))
     };
+
+    const {
+        isTaskInfosModalOpen,
+        toggleTaskInfosModal,
+        taskInfosModalContent: { _id, title, track_id, priority, comments, assignee, description, subtasks, status },
+      } = useModal();
 
     return (
         <div className="mt-3 bg-white p-3 m-3 max-h-screen" >
@@ -184,17 +227,25 @@ export default function SearchForm({ }: Props) {
                         <hr />
                     </h4>
                 </header>
-                <TaskInfosModal board={board} user_id="1" user={user} users={[]} />
-                <div className="overflow-y-auto max-h-96">
-                    <div className="grid grid-cols-3 gap-1">
-                        {tasks.map((task) => {
-                            return (
-                                <div className="p-3">
-                                    <BoardTask task={task} users={users} />
-                                </div>
-                            )
-                        })}
+
+                <div className="grid grid-cols-2 gap-1">
+
+                    <div className="overflow-y-auto max-h-96">
+                        <div className="grid grid-cols-1 gap-1">
+                            {tasks.map((task) => {
+                                return (
+                                    <div className="p-3">
+                                        <BoardTask task={task} users={users} />
+                                    </div>
+                                )
+                            })}
+                        </div>
                     </div>
+
+                    <div>
+                        Title: { title}
+                    </div>
+
                 </div>
             </div>
         </div>
