@@ -10,7 +10,7 @@ import axios from 'axios';
 import { mutate } from 'swr';
 
 import useModal from '@/contexts/useModal';
-import { IBoard, IComment, ISubtask, IUser } from '@/typing';
+import { IBoard, ISubtask, IUser } from '@/typing';
 import Modal from '../shared/Modal';
 import InputCheckboxControl from '../shared/InputCheckboxControl';
 import InputDropdownControl from '../shared/InputDropdownControl';

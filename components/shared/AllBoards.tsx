@@ -6,7 +6,7 @@ import { signOut } from 'next-auth/react';
 import { IBoard } from '@/typing';
 import useModal from '@/contexts/useModal';
 import useTheme from '@/contexts/useTheme';
-import { ASSIGNED_BOARDS, LOGOUT, NEW_BOARD, OWNED_BOARDS } from '../constants';
+import { ASSIGNED_BOARDS, LOGOUT, NEW_BOARD, OWNED_BOARDS, SEARCH } from '../constants';
 
 interface Props {
   boards?: IBoard[];
@@ -22,6 +22,19 @@ export default function AllBoards({ boards, assignedBoards, className, close }: 
 
   return (
     <div className={className}>
+      {/* Search */}
+      <div>
+        <Link href={`/search`} >
+          <a>
+            <div
+              className={'board__item'}
+            >
+              <h3 className='board__item__name'>{SEARCH}</h3>
+            </div>
+          </a>
+        </Link>
+      </div>
+      {/* END BOARDS */}
       {/* BOARDS */}
       <div>
         <p className='board__numbers'>{OWNED_BOARDS} ({boards ? boards.length : 0})</p>
@@ -71,8 +84,8 @@ export default function AllBoards({ boards, assignedBoards, className, close }: 
 
       </div>
       {/* END BOARDS */}
-       {/* ASSIGNED BOARDS */}
-       <div>
+      {/* ASSIGNED BOARDS */}
+      <div>
         <p className='board__numbers'>{ASSIGNED_BOARDS} ({assignedBoards ? assignedBoards.length : 0})</p>
         <div className='board__items'>
           {assignedBoards?.map((item) => (
