@@ -9,7 +9,7 @@ export const getInitials = (fullName: string) => {
     const words = fullName.split(' ');
     let initials = '';
     words.forEach((char: string) => {
-        if (char.length > 0) {
+        if (char.length > 0 && initials.length < 2) {
             initials += char[0].toUpperCase();
         }
     });
