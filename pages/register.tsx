@@ -159,12 +159,15 @@ const Register: NextPage = () => {
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+
+  const session = await auth(
+    context.req,
+    context.res,
+  )
+
   return {
     props: {
-      session: await auth(
-        context.req,
-        context.res,
-      ),
+      session: JSON.parse(JSON.stringify(session)),
     },
   }
 };

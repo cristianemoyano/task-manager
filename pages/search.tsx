@@ -23,10 +23,6 @@ const Search: NextPage<{ }> = ({  }) => {
           <div>
             <Navbar boards={[]} />
             <SearchForm
-                title={""}
-                button={`33`}
-                handleClick={() => {
-                }}
               />
           </div>
         </main>
