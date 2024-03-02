@@ -4,6 +4,9 @@ import InputTextControl from "./InputTextControl";
 import { IBoard, IColumn, ITask, IUser } from "@/typing";
 import BoardTask from "../single_board/BoardTask";
 import TaskInfosModal from "../modals/TaskInfosModal";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 interface Props {
 
@@ -76,6 +79,15 @@ const tasks: ITask[] = [
 ]
 
 export default function SearchForm({ }: Props) {
+
+    const router = useRouter();
+    const { data: session } = useSession()
+
+    useEffect(() => {
+        if (!session) {
+            router.push('/register');
+        }
+    }, [router]);
 
     const defaultValues = {
         assignee: "-",
