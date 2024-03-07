@@ -37,7 +37,7 @@ const Search: NextPage<{ user_id:string, user:IUser }> = ({ user_id, user }) => 
         <main>
           <Sidebar boards={[]} assignedBoards={[]} user={user}/>
           <div>
-            <Navbar boards={[]} />
+            <Navbar boards={[]} title='Buscar tareas'/>
             <SearchForm user={user}
               />
           </div>

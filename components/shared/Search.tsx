@@ -21,30 +21,11 @@ interface Props {
 
 }
 interface IControllerTask {
-    assignee: string;
+    assigneeSelected: string;
+    prioritySelected: string;
     text: string;
-    priority: string;
-    track_id: string;
+    trackIdSelected: string;
 }
-
-const usersOptions: IColumn[] = [
-    {
-        _id: "",
-        name: "Seleccionar",
-        tasks: [],
-    },
-    {
-        _id: "65e0f2f48119a85322480d5b",
-        name: "User 1",
-        tasks: [],
-    },
-    {
-        _id: "65e1debb92d58be03ce30ad9",
-        name: "User 2",
-        tasks: [],
-    },
-]
-
 
 const priorities = [
     {
@@ -70,7 +51,7 @@ const priorities = [
 ]
 
 
-export default function SearchForm({user }: Props) {
+export default function SearchForm({ user }: Props) {
 
     const {
         isTaskInfosModalOpen,
@@ -79,10 +60,10 @@ export default function SearchForm({user }: Props) {
     } = useModal();
 
     const defaultValues = {
-        assignee: "",
-        priority: "",
+        assigneeSelected: "",
+        prioritySelected: "",
         text: "",
-        track_id: "",
+        trackIdSelected: "",
     };
 
     const { control, handleSubmit, reset, register, setValue } =
@@ -101,7 +82,7 @@ export default function SearchForm({user }: Props) {
     const [boardID, setBoardID] = useState<string>("");
 
     const { data: tasks, error: taskError } = useSWR<ITask[], any>(
-        `/api/tasks/search?text=${query?.text}&assignee=${query?.assignee}&priority=${query?.priority}&track_id=${query?.track_id}`,
+        `/api/tasks/search?text=${query?.text}&assignee=${query?.assigneeSelected}&priority=${query?.prioritySelected}&track_id=${query?.trackIdSelected}`,
         fetcher,
         {
             fallbackData: [],
@@ -118,28 +99,28 @@ export default function SearchForm({user }: Props) {
         }
     );
 
-    const { data: board, error: boardError } = useSWR<IUser[], any>(
+    const { data: board, error: boardError } = useSWR<IBoard, any>(
         `/api/boards/${boardID}/`,
         fetcher,
         {
-            fallbackData: [],
+            fallbackData: { _id: "", name: "", user_id: "", columns: [] },
             revalidateOnFocus: false,
         }
     );
 
     useEffect(() => {
         if (!isEmpty(title)) {
-            const targetTask = tasks?.find((task)=> task._id === _id)
+            const targetTask = tasks?.find((task) => task._id === _id)
             setBoardID(String(targetTask?.board_id))
         }
-      }, [title]);
+    }, [title]);
 
     const taskContent = (
         <>
             <header className='modal__header modal__header__flex'>
                 <h3 className='modal__header__title'>{title}</h3>
             </header>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
                 {/* COL 1 */}
                 <div className='col-span-2'>
                     <p className='mb-4'>{description}</p>
@@ -169,7 +150,7 @@ export default function SearchForm({user }: Props) {
                     </p>
 
                     {board?.columns?.find((c) => c._id === status)?.name}
-                    
+
                 </div>
                 {/* END COL 2 */}
             </div>
@@ -179,10 +160,32 @@ export default function SearchForm({user }: Props) {
         </>
     )
 
+    let defaulOption = {
+        _id: "",
+        name: "Seleccionar",
+        tasks: [],
+    }
+    let userOptions: IColumn[] = [defaulOption]
+    const transformUsers = users?.map((us) => {
+        return {
+            _id: us._id,
+            name: us.name,
+            tasks: [],
+        }
+    })
+    userOptions = transformUsers ? userOptions.concat(transformUsers) : userOptions
+
+    const userAssignee:IUser = {
+        _id: assignee,
+        name: "",
+        email: "",
+        password: "",
+    }
+
     return (
-        <div className="mt-3 bg-white p-3 m-3 max-h-full  overflow-x-auto" >
+        <div className="mt-3 bg-white p-3 m-3 max-h-full" >
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="grid grid-cols-6 gap-4 items-center">
+                <div className="grid grid-cols-3 lg:grid-cols-6 gap-1 items-center">
                     <div className="col-span-2">
                         <Controller
                             control={control}
@@ -207,7 +210,7 @@ export default function SearchForm({user }: Props) {
                     <div>
                         <Controller
                             control={control}
-                            name='track_id'
+                            name='trackIdSelected'
                             render={({ field: { onChange, value }, fieldState: { error } }) => (
                                 <InputTextControl
                                     onChange={onChange}
@@ -223,13 +226,13 @@ export default function SearchForm({user }: Props) {
                     <div>
                         <Controller
                             control={control}
-                            name='assignee'
+                            name='assigneeSelected'
                             render={({ field: { onChange, value } }) => (
                                 <InputDropdownControl
                                     onChange={onChange}
                                     value={value}
                                     label={"Asignado"}
-                                    columns={users}
+                                    columns={userOptions}
                                 />
                             )}
                         />
@@ -237,7 +240,7 @@ export default function SearchForm({user }: Props) {
                     <div>
                         <Controller
                             control={control}
-                            name='priority'
+                            name='prioritySelected'
                             render={({ field: { onChange, value } }) => (
                                 <InputDropdownControl
                                     onChange={onChange}
@@ -260,7 +263,7 @@ export default function SearchForm({user }: Props) {
                 </header>
                 <TaskModal board={board} user_id={user._id} users={users} />
                 <DeleteModal board={board} user_id={user._id} />
-                <TaskInfosModal board={board} user_id={user._id} user={assignee} users={users} />
+                <TaskInfosModal board={board} user_id={user._id} user={userAssignee} users={users} />
                 <div className="grid grid-cols-2 gap-1">
 
                     <div className="overflow-y-auto max-h-96">
@@ -276,7 +279,7 @@ export default function SearchForm({user }: Props) {
                     </div>
 
                     <div>
-                            {title ? taskContent : "Seleccionar una tarea."}
+                        {title ? taskContent : "Seleccionar una tarea."}
                     </div>
 
                 </div>

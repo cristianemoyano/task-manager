@@ -25,7 +25,7 @@ interface IControllerTask {
   subtasks: ISubtask[];
 }
 
-export default function TaskInfosModal({ board, user_id, user, users }: { board: IBoard, user_id: string, user: IUser, users: IUser[] }) {
+export default function TaskInfosModal({ board, user_id, user, users }: { board?: IBoard, user_id: string, user?: IUser, users?: IUser[] }) {
   const [isTaskDropdownOpen, setIsTaskDropdownOpen] = useState(false);
   const [subtasksCompleted, setSubtasksCompleted] = useState(0);
   const {
@@ -66,17 +66,17 @@ export default function TaskInfosModal({ board, user_id, user, users }: { board:
         comment: {
           value: data.comment,
           author: String(user_id),
-          authorName: user.name,
-          authorEmail: user.email,
+          authorName: user?.name,
+          authorEmail: user?.email,
           date: new Date().toISOString(),
         },
-        board_id: board._id,
+        board_id: board?._id,
         column_id: status,
         task_id: _id,
       });
     } else {
       await axios.delete(
-        `/api/task/delete-task?board_id=${board._id}&user_id=${user_id}&column_id=${status}&task_id=${_id}`
+        `/api/task/delete-task?board_id=${board?._id}&user_id=${user_id}&column_id=${status}&task_id=${_id}`
       );
       await axios.patch(`/api/task/add-task?user_id=${user_id}`, {
         task: {
@@ -89,12 +89,12 @@ export default function TaskInfosModal({ board, user_id, user, users }: { board:
           subtasks: data.subtasks,
           status: data.status,
         },
-        board_id: board._id,
+        board_id: board?._id,
         column_id: data.status,
       });
     }
 
-    mutate(`/api/boards/${board._id}?user_id=${user_id}`);
+    mutate(`/api/boards/${board?._id}?user_id=${user_id}`);
     toggleTaskInfosModal();
   };
 
@@ -182,7 +182,7 @@ export default function TaskInfosModal({ board, user_id, user, users }: { board:
             <div className="grid grid-cols-8 gap-2 items-center">
               <div className=' mb-3 flex justify-center'>
                 <div title='Tareas sin asignar' className={`w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full bg-indigo-400 text-white mr-[-7px]`}>
-                {getInitials(user?.name)}
+                {getInitials(String(user?.name))}
                 </div>
               </div>
               <div className='col-span-6'>
@@ -255,7 +255,7 @@ export default function TaskInfosModal({ board, user_id, user, users }: { board:
                     onChange={onChange}
                     value={value}
                     label={CURRENT_STATUS}
-                    columns={board.columns}
+                    columns={board ? board.columns : []}
                   />
                 )}
               />
@@ -271,7 +271,7 @@ export default function TaskInfosModal({ board, user_id, user, users }: { board:
             <p className='input__label'>
               Asignado:
               <span className='modal__text'>
-                {` ${users.find((c) => c._id === assignee)?.name}`}
+                {` ${users?.find((c) => c._id === assignee)?.name}`}
               </span>
             </p>
 

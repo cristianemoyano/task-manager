@@ -6,7 +6,7 @@ import useModal from '@/contexts/useModal';
 import { OF, SUB_TASKS } from '../constants';
 import { getInitials } from '@/services/utils';
 
-export default function BoardTask({ task, users, isToggleDisabled=false }: { task: ITask, users: IUser[], isToggleDisabled?: boolean }) {
+export default function BoardTask({ task, users, isToggleDisabled=false }: { task: ITask, users?: IUser[], isToggleDisabled?: boolean }) {
   const { setTaskInfosModalContent, toggleTaskInfosModal } = useModal();
   const [subtasksCompleted, setSubtasksCompleted] = useState(0);
 

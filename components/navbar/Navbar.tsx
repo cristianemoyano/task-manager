@@ -17,11 +17,12 @@ interface Props {
   board?: IBoard;
   onUserClick?: (user:IUser) => void;
   onClearFilters?: () => void;
+  title?: string;
 }
 
 
 
-export default function Navbar({ boards, board, onUserClick, onClearFilters }: Props) {
+export default function Navbar({ boards, board, onUserClick, onClearFilters, title }: Props) {
   const { toggleTaskModal, setTaskModalContent, isSidebarOpen } = useModal();
   const [isBoardModalOpen, setIsBoardModalOpen] = useState(false);
   const [isBoardDropdownOpen, setIsBoardDropdownOpen] = useState(false);
@@ -85,12 +86,12 @@ export default function Navbar({ boards, board, onUserClick, onClearFilters }: P
               {/* TITLE*/}
               <div>
                 <h2 className='navbar__title'>
-                  {pathname === '/' ? HOME : board?.name}
+                  {pathname === '/' ? HOME : pathname.includes("board") ? board?.name : title}
                 </h2>
               </div>
               {/* USERS FILTER */}
               <div className=''>
-              {pathname === '/' ? "" : <UserList users={users} onUserClick={onUserClick} onClearFilters={onClearFilters} />}
+              {pathname.includes("board") ? <UserList users={users} onUserClick={onUserClick} onClearFilters={onClearFilters} /> : ""}
                 
               </div>
             </div>

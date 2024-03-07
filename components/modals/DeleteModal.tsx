@@ -7,7 +7,7 @@ import useModal from '@/contexts/useModal';
 import Modal from '../shared/Modal';
 import { BOARD, CANCEL, DELETE, TASK, confirmMsg } from '../constants';
 
-export default function DeleteModal({ board, user_id }: { board: IBoard, user_id: string }) {
+export default function DeleteModal({ board, user_id }: { board?: IBoard, user_id: string }) {
 
   const {
     toggleDeleteModal,
@@ -22,9 +22,9 @@ export default function DeleteModal({ board, user_id }: { board: IBoard, user_id
       router.push('/');
     } else {
       await axios.delete(
-        `/api/task/delete-task?board_id=${board._id}&user_id=${user_id}&column_id=${column_id}&task_id=${_id}`
+        `/api/task/delete-task?board_id=${board?._id}&user_id=${user_id}&column_id=${column_id}&task_id=${_id}`
       );
-      mutate(`/api/boards/${board._id}?user_id=${user_id}`);
+      mutate(`/api/boards/${board?._id}?user_id=${user_id}`);
     }
     toggleDeleteModal();
   };

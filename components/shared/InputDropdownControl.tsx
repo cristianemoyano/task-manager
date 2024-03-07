@@ -38,7 +38,7 @@ export default function InputDropdownControl({
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           type='button'
         >
-          {value && columns.find((c) => c._id === value)?.name}
+          {columns?.find((c) => c._id === value)?.name}
           {isDropdownOpen ? (
             <Image
               src='/assets/icon-chevron-up.svg'

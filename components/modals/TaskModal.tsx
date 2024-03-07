@@ -32,7 +32,7 @@ interface IControllerTask {
   subtasks: IControllerSubtasks[];
 }
 
-export default function TaskModal({ board, user_id, users }: { board: IBoard, user_id: string, users: IUser[] | undefined }) {
+export default function TaskModal({ board, user_id, users }: { board?: IBoard, user_id: string, users: IUser[] | undefined }) {
 
   const defaultValues = {
     title: '',
@@ -40,7 +40,7 @@ export default function TaskModal({ board, user_id, users }: { board: IBoard, us
     priority: PRIORITIES.length ? PRIORITIES[0]._id!.toString() : '',
     assignee: users?.length ? users[0]._id!.toString() : '',
     description: '',
-    status: board.columns?.length ? board.columns[0]._id!.toString() : '',
+    status: board?.columns?.length ? board.columns[0]._id!.toString() : '',
     subtasks: [
       { title: '', isCompleted: false },
     ],
@@ -76,7 +76,7 @@ export default function TaskModal({ board, user_id, users }: { board: IBoard, us
       setValue('description', '');
       setValue(
         'status',
-        board.columns?.length ? board.columns[0]._id!.toString() : ''
+        board?.columns?.length ? board.columns[0]._id!.toString() : ''
       );
       setValue(
         'priority',
@@ -97,28 +97,28 @@ export default function TaskModal({ board, user_id, users }: { board: IBoard, us
     if (isNew) {
       await axios.patch(`/api/task/add-task?user_id=${user_id}`, {
         task: data,
-        board_id: board._id,
+        board_id: board?._id,
         column_id: data.status,
       });
       reset(defaultValues);
     } else if (task.status === data.status) {
       await axios.patch(`/api/task/edit-task?user_id=${user_id}`, {
         task: data,
-        board_id: board._id,
+        board_id: board?._id,
         column_id: task.status,
         task_id: task._id,
       });
     } else {
       await axios.delete(
-        `/api/task/delete-task?board_id=${board._id}&user_id=${user_id}&column_id=${task.status}&task_id=${task._id}`
+        `/api/task/delete-task?board_id=${board?._id}&user_id=${user_id}&column_id=${task.status}&task_id=${task._id}`
       );
       await axios.patch(`/api/task/add-task?user_id=${user_id}`, {
         task: data,
-        board_id: board._id,
+        board_id: board?._id,
         column_id: data.status,
       });
     }
-    mutate(`/api/boards/${board._id}?user_id=${user_id}`);
+    mutate(`/api/boards/${board?._id}?user_id=${user_id}`);
     toggleTaskModal();
   };
 
@@ -135,7 +135,7 @@ export default function TaskModal({ board, user_id, users }: { board: IBoard, us
       tasks: [],
     }
   })
-  userOptions = userOptions.concat(transformUsers)
+  userOptions = transformUsers ? userOptions.concat(transformUsers) : userOptions
 
   return (
     <Modal
@@ -230,7 +230,7 @@ export default function TaskModal({ board, user_id, users }: { board: IBoard, us
                   onChange={onChange}
                   value={value}
                   label={STATUS}
-                  columns={board.columns}
+                  columns={board ? board.columns : []}
                 />
               )}
             />
