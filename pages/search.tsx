@@ -16,9 +16,10 @@ import { useEffect } from 'react';
 import { auth } from '@/services/auth';
 import connectMongo from '@/services/connectMongo';
 import { getUserByEmail } from '@/services/user';
-import { IUser } from '@/typing';
+import { IBoard, IUser } from '@/typing';
+import { getAsignedBoardsByUser, getOwnedBoardsByUser } from '@/services/board';
 
-const Search: NextPage<{ user_id:string, user:IUser }> = ({ user_id, user }) => {
+const Search: NextPage<{ boards: IBoard[], assignedBoards: IBoard[], user_id:string, user:IUser }> = ({ boards = [], assignedBoards =[], user_id, user }) => {
 
   const router = useRouter();
   const { data: session } = useSession()
@@ -35,9 +36,9 @@ const Search: NextPage<{ user_id:string, user:IUser }> = ({ user_id, user }) => 
       <>
         <BoardModal user_id={user_id} />
         <main>
-          <Sidebar boards={[]} assignedBoards={[]} user={user}/>
+          <Sidebar boards={boards} assignedBoards={assignedBoards} user={user}/>
           <div>
-            <Navbar boards={[]} title='Buscar tareas'/>
+            <Navbar boards={boards} title='Buscar tareas'/>
             <SearchForm user={user}
               />
           </div>
@@ -61,10 +62,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     await connectMongo();
 
     let user = await getUserByEmail(String(session?.user?.email))
+    let ownedBoards = await getOwnedBoardsByUser(String(user._id))
+    let assignedBoards = await getAsignedBoardsByUser(String(user._id))
+
+    ownedBoards = JSON.parse(JSON.stringify(ownedBoards));
+    assignedBoards = JSON.parse(JSON.stringify(assignedBoards));
     user = JSON.parse(JSON.stringify(user));
 
     return {
       props: {
+        boards: ownedBoards,
+        assignedBoards: assignedBoards,
+        session: JSON.parse(JSON.stringify(session)),
         user_id: user._id,
         user: user,
       },
@@ -73,6 +82,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   
   return {
     props: {
+      boards: [],
+      assignedBoards: [],
+      session,
       user_id: null,
       user: null,
     },
