@@ -16,11 +16,7 @@ export default async function handler(
   if (method === 'GET') {
     await connectMongo()
     try {
-
       const tasks = await searchTasks(String(text), String(assignee), String(priority), String(track_id))
-
-      console.log("tasks", tasks)
-
       res.status(200).json(tasks);
     } catch (error) {
       console.error(error)

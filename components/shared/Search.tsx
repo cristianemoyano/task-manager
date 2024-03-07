@@ -197,7 +197,7 @@ export default function SearchForm({ user }: Props) {
                                     error={error}
                                     name='text'
                                     label={"Buscar"}
-                                    placeholder='Título de la tarea, descripción, id de trazabilidad...'
+                                    placeholder='Título de la tarea'
                                 />
                             )}
                         />
