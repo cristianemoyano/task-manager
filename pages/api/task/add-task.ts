@@ -17,7 +17,6 @@ export default async function handler(
 
       const board = await Board.findOne({
         _id: board_id,
-        user_id: query.user_id,
       });
 
       const columnToUpdate = board.columns.find(
@@ -29,6 +28,7 @@ export default async function handler(
 
       res.status(200).json(task);
     } catch (error) {
+      console.error(error)
       res.status(500).json(error);
     }
   }

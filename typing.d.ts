@@ -27,6 +27,7 @@ export interface ITask {
   subtasks: ISubtask[];
   comments: IComment[];
   board_id?: string;
+  is_closed: boolean;
 }
 
 export interface ISubtask {

@@ -25,6 +25,7 @@ interface IControllerSubtasks {
 interface IControllerTask {
   title: string;
   track_id: string;
+  is_closed: boolean;
   description: string;
   status: string;
   priority: string;
@@ -44,6 +45,7 @@ export default function TaskModal({ board, user_id, users }: { board?: IBoard, u
     subtasks: [
       { title: '', isCompleted: false },
     ],
+    is_closed: false,
   };
 
   const { control, handleSubmit, reset, register, setValue } =
@@ -69,11 +71,13 @@ export default function TaskModal({ board, user_id, users }: { board?: IBoard, u
       setValue('priority', task.priority!);
       setValue('assignee', task.assignee!);
       setValue('subtasks', task.subtasks!);
+      setValue('is_closed', task.is_closed!);
 
     } else {
       setValue('title', '');
       setValue('track_id', '');
       setValue('description', '');
+      setValue('is_closed', false);
       setValue(
         'status',
         board?.columns?.length ? board.columns[0]._id!.toString() : ''

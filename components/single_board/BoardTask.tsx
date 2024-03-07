@@ -39,7 +39,11 @@ export default function BoardTask({ task, users, isToggleDisabled=false }: { tas
         }}
       >
 
-        <h3 className='board__task__title'>{task.title}</h3>
+        <h3 className='board__task__title'>
+          <span className={task.is_closed ? `line-through text-gray-400` : ""}>
+          {task.title}
+          </span>
+        </h3>
         <p className='board__task__text'>
           {SUB_TASKS} ({subtasksCompleted} {OF} {task.subtasks.length})
         </p>

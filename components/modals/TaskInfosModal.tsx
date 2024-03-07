@@ -23,6 +23,7 @@ interface IControllerTask {
   status: string;
   comment: string,
   subtasks: ISubtask[];
+  is_closed: boolean;
 }
 
 export default function TaskInfosModal({ board, user_id, user, users }: { board?: IBoard, user_id: string, user?: IUser, users?: IUser[] }) {
@@ -31,7 +32,7 @@ export default function TaskInfosModal({ board, user_id, user, users }: { board?
   const {
     isTaskInfosModalOpen,
     toggleTaskInfosModal,
-    taskInfosModalContent: { _id, title, track_id, priority, comments, assignee, description, subtasks, status },
+    taskInfosModalContent: { _id, title, track_id, priority, comments, assignee, description, subtasks, status, is_closed },
   } = useModal();
   const { control, handleSubmit, setValue } = useForm<IControllerTask>({
     defaultValues: {
@@ -48,6 +49,7 @@ export default function TaskInfosModal({ board, user_id, user, users }: { board?
     setValue('status', status!);
     setValue('subtasks', subtasks!);
     setValue('comment', "");
+    setValue('is_closed', is_closed!);
 
     subtasks &&
       setSubtasksCompleted(
@@ -62,7 +64,7 @@ export default function TaskInfosModal({ board, user_id, user, users }: { board?
   const onSubmit: SubmitHandler<IControllerTask> = async (data) => {
     if (status === data.status) {
       await axios.patch(`/api/task/edit-task?user_id=${user_id}`, {
-        task: { title, description, track_id, priority, assignee, comments, subtasks: data.subtasks },
+        task: { title, description, track_id, priority, assignee, comments, subtasks: data.subtasks, is_closed: data.is_closed },
         comment: {
           value: data.comment,
           author: String(user_id),
@@ -85,6 +87,7 @@ export default function TaskInfosModal({ board, user_id, user, users }: { board?
           track_id,
           priority,
           assignee,
+          is_closed,
           comments,
           subtasks: data.subtasks,
           status: data.status,
@@ -109,7 +112,16 @@ export default function TaskInfosModal({ board, user_id, user, users }: { board?
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <header className='modal__header modal__header__flex'>
-          <h3 className='modal__header__title'>{title}</h3>
+          <h3 className='modal__header__title'>
+            <span className={is_closed ? `text-gray-400` : ""}>
+          {title}
+          </span>
+            
+          </h3>
+
+
+          { !is_closed && (
+            <>
           <button
             className='navbar__edit__buton'
             type='button'
@@ -123,7 +135,7 @@ export default function TaskInfosModal({ board, user_id, user, users }: { board?
               alt='vertical-ellipsis'
               className='navbar__dropdown__icon'
             />
-          </button>
+          </button>          
           <TaskDropdown
             close={() => {
               setIsTaskDropdownOpen(false);
@@ -135,13 +147,16 @@ export default function TaskInfosModal({ board, user_id, user, users }: { board?
               title: title!,
               track_id: track_id!,
               priority: priority!,
+              is_closed: is_closed!,
               assignee: assignee!,
               comments: comments!,
               description: description!,
               subtasks: subtasks!,
               status: status!,
+
             }}
           />
+          </>)}
         </header>
 
         <div className="grid grid-cols-3 gap-2">
@@ -246,7 +261,7 @@ export default function TaskInfosModal({ board, user_id, user, users }: { board?
           {/* COL 2 */}
           <div >
 
-            {isTaskInfosModalOpen && (
+            {isTaskInfosModalOpen && !is_closed && (
               <Controller
                 control={control}
                 name='status'
@@ -260,6 +275,7 @@ export default function TaskInfosModal({ board, user_id, user, users }: { board?
                 )}
               />
             )}
+            
 
             <p className='input__label'>
               Prioridad:
@@ -282,6 +298,24 @@ export default function TaskInfosModal({ board, user_id, user, users }: { board?
                 {track_id ? ` ${track_id}` : track_id}
               </span>
             </p>
+
+
+            { is_closed ?  <span className='text-red-500'>
+            Tarea cerrada
+            </span> : (
+            <Controller
+            control={control}
+            defaultValue={is_closed}
+            name={`is_closed`}
+            render={({ field: { value, onChange } }) => (
+              <InputCheckboxControl
+                onChange={onChange}
+                value={value}
+                name={"Tarea cerrada?"}
+              />
+            )}
+          />
+            )}
 
 
           </div>

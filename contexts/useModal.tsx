@@ -26,6 +26,7 @@ interface ITaskModalContent {
   assignee?: string;
   subtasks?: ISubtask[];
   comments?: IComment[];
+  is_closed?: boolean;
 }
 
 interface ModalProviderProps {

@@ -27,6 +27,7 @@ const tasksSchema = new Schema<ITask>({
   status: String,
   subtasks: [subtasksSchema],
   comments: [commentsSchema],
+  is_closed: Boolean,
 });
 
 const columnsSchema = new Schema<IColumn>({
