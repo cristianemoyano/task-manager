@@ -2,6 +2,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import InputDropdownControl from "./InputDropdownControl";
 import InputTextControl from "./InputTextControl";
 import { IBoard, IColumn, ITask, IUser } from "@/typing";
+import Image from 'next/image';
 import BoardTask from "../single_board/BoardTask";
 import TaskInfosModal from "../modals/TaskInfosModal";
 
@@ -175,12 +176,44 @@ export default function SearchForm({ user }: Props) {
     })
     userOptions = transformUsers ? userOptions.concat(transformUsers) : userOptions
 
-    const userAssignee:IUser = {
+    const userAssignee: IUser = {
         _id: assignee,
         name: "",
         email: "",
         password: "",
     }
+
+    const emptyState = (
+        <div className="flex items-center justify-center">
+            <Image
+                src='/assets/empty_state.jpg'
+                className="w-full h-auto"
+                width={480}
+                height={330}
+                layout='fixed'
+                alt='empty'
+            />
+        </div>
+    )
+
+    const taskResults = (
+        <div className="grid grid-cols-2 gap-1">
+            <div className="overflow-y-auto max-h-96">
+                <div className="grid grid-cols-1 gap-1">
+                    {tasks?.map((task, index) => {
+                        return (
+                            <div className="p-3" key={index}>
+                                <BoardTask task={task} users={users} isToggleDisabled={true} />
+                            </div>
+                        )
+                    })}
+                </div>
+            </div>
+            <div>
+                {title ? taskContent : ""}
+            </div>
+        </div>
+    )
 
     return (
         <div className="mt-3 bg-white p-3 m-3 max-h-full" >
@@ -264,25 +297,10 @@ export default function SearchForm({ user }: Props) {
                 <TaskModal board={board} user_id={user._id} users={users} />
                 <DeleteModal board={board} user_id={user._id} />
                 <TaskInfosModal board={board} user_id={user._id} user={userAssignee} users={users} />
-                <div className="grid grid-cols-2 gap-1">
 
-                    <div className="overflow-y-auto max-h-96">
-                        <div className="grid grid-cols-1 gap-1">
-                            {tasks?.map((task, index) => {
-                                return (
-                                    <div className="p-3" key={index}>
-                                        <BoardTask task={task} users={users} isToggleDisabled={true} />
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </div>
 
-                    <div>
-                        {title ? taskContent : "Seleccionar una tarea."}
-                    </div>
+                {!isEmpty(tasks) ? taskResults : emptyState}
 
-                </div>
             </div>
         </div>
     );
