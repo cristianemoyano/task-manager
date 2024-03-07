@@ -55,7 +55,7 @@ export default function BoardTask({ task, users, isToggleDisabled=false }: { tas
                 <div title="Prioridad" className={`w-3 h-3 flex items-center justify-center font-bold  text-white rounded-full ${priorityColors[Number(task.priority)]} text-white`}>
                 </div>
               </div>
-              {task.comments.length > 0 ? (
+              {task.comments?.length > 0 ? (
                 <>
               <div>
                 <Image

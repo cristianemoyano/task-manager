@@ -32,15 +32,15 @@ interface IControllerTask {
   subtasks: IControllerSubtasks[];
 }
 
-export default function TaskModal({ board, user_id, users }: { board: IBoard, user_id: string, users: IUser[] }) {
+export default function TaskModal({ board, user_id, users }: { board: IBoard, user_id: string, users: IUser[] | undefined }) {
 
   const defaultValues = {
     title: '',
     track_id: '',
     priority: PRIORITIES.length ? PRIORITIES[0]._id!.toString() : '',
-    assignee: users.length ? users[0]._id!.toString() : '',
+    assignee: users?.length ? users[0]._id!.toString() : '',
     description: '',
-    status: board.columns.length ? board.columns[0]._id!.toString() : '',
+    status: board.columns?.length ? board.columns[0]._id!.toString() : '',
     subtasks: [
       { title: '', isCompleted: false },
     ],
@@ -76,7 +76,7 @@ export default function TaskModal({ board, user_id, users }: { board: IBoard, us
       setValue('description', '');
       setValue(
         'status',
-        board.columns.length ? board.columns[0]._id!.toString() : ''
+        board.columns?.length ? board.columns[0]._id!.toString() : ''
       );
       setValue(
         'priority',
@@ -84,7 +84,7 @@ export default function TaskModal({ board, user_id, users }: { board: IBoard, us
       );
       setValue(
         'assignee',
-        users.length ? users[0]._id!.toString() : ''
+        users?.length ? users[0]._id!.toString() : ''
       );
       setValue('subtasks', [
         { title: '', isCompleted: false },
@@ -128,7 +128,7 @@ export default function TaskModal({ board, user_id, users }: { board: IBoard, us
     tasks: [],
   } 
   let userOptions:IColumn[] = [defaulOption]
-  const transformUsers = users.map((us)=>{
+  const transformUsers = users?.map((us)=>{
     return {
       _id: us._id,
       name: us.name,

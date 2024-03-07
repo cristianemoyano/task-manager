@@ -26,6 +26,7 @@ export interface ITask {
   status: string;
   subtasks: ISubtask[];
   comments: IComment[];
+  board_id?: string;
 }
 
 export interface ISubtask {

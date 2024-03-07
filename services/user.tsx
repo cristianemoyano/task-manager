@@ -8,15 +8,15 @@ const filterValidUserIds = (userIds: string[]) => {
 };
 
 export const getUsers = async (userIds?: string | string[] | undefined) => {
+    if (isEmpty(userIds)) {
+        const users = await User.find({});
+        return users
+    }
     if (isArray(userIds)) {
         const validUserIds = filterValidUserIds(userIds);
         const objectIds = validUserIds.map(id => new ObjectId(id));
         const users = await User.find({ _id: { $in: objectIds } })
         return users;
-    }
-    if (isEmpty(userIds)) {
-        const users = await User.find({});
-        return users
     }
     return []
 }

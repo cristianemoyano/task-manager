@@ -10,19 +10,35 @@ import BoardModal from '@/components/modals/BoardModal';
 import Sidebar from '@/components/sidebar/Sidebar';
 import Navbar from '@/components/navbar/Navbar';
 import SearchForm from '@/components/shared/Search';
+import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
+import { useEffect } from 'react';
+import { auth } from '@/services/auth';
+import connectMongo from '@/services/connectMongo';
+import { getUserByEmail } from '@/services/user';
+import { IUser } from '@/typing';
 
+const Search: NextPage<{ user_id:string, user:IUser }> = ({ user_id, user }) => {
 
-const Search: NextPage<{ }> = ({  }) => {
+  const router = useRouter();
+  const { data: session } = useSession()
+
+  useEffect(() => {
+      if (!session) {
+        router.push('/register', router.asPath);
+      }
+  }, [router]);
+
  
   return (
     <HeadOfPage title={SEARCH_TITLE} content={SEARCH_CONTENT}>
       <>
-        <BoardModal user_id={""} />
+        <BoardModal user_id={user_id} />
         <main>
-          <Sidebar boards={[]} assignedBoards={[]} user={undefined}/>
+          <Sidebar boards={[]} assignedBoards={[]} user={user}/>
           <div>
             <Navbar boards={[]} />
-            <SearchForm
+            <SearchForm user={user}
               />
           </div>
         </main>
@@ -33,11 +49,32 @@ const Search: NextPage<{ }> = ({  }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
 
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await auth(
+    context.req,
+    context.res,
+  )
+
+  if (session?.user) {
+
+    await connectMongo();
+
+    let user = await getUserByEmail(String(session?.user?.email))
+    user = JSON.parse(JSON.stringify(user));
+
+    return {
+      props: {
+        user_id: user._id,
+        user: user,
+      },
+    };
+  }
   
   return {
     props: {
+      user_id: null,
+      user: null,
     },
   };
 

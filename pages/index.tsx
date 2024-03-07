@@ -28,7 +28,7 @@ const Home: NextPage<{ boards: IBoard[], assignedBoards: IBoard[], user_id:strin
 
   useEffect(() => {
     if (!session) {
-      router.push('/register');
+      router.push('/register', router.asPath);
     }
   }, [router]);
 

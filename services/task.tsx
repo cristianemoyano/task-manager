@@ -3,24 +3,37 @@ import { IColumn, ITask } from "@/typing";
 import { isEmpty, isEqual } from "lodash";
 import { FilterQuery } from "mongoose";
 
-function buildQuery(text: string = '', assignee?: string, priority?: string): any {
-    const query: FilterQuery<any>  = {};
+function buildQuery(text: string = '', assignee?: string, priority?: string, track_id?: string): any {
+    let expr: FilterQuery<any> = {};
+
     if (!isEmpty(text)) {
-        query['columns'] = { $elemMatch: { 'tasks.title': text } } ;
+      expr['columns.tasks.title'] = { '$regex': text, '$options': 'i' };
     }
-    // if (!isEmpty(assignee)) {
-    //     query['columns.tasks.assignee'] = assignee;
-    // }
-    // if (!isEmpty(priority)) {
-    //     query['columns.tasks.priority'] = priority;
-    // }
+    if (!isEmpty(assignee)) {
+      expr['columns.tasks.assignee'] = assignee;
+    }
+    if (!isEmpty(priority)) {
+      expr['columns.tasks.priority'] = priority;
+    }
+    if (!isEmpty(track_id)) {
+      expr['columns.tasks.track_id'] = track_id;
+    }
+    const query = [
+      {
+        $match: {
+          '$and': [
+            expr
+          ]
+        }
+      },
+    ]
     return query;
 }
 
-export const searchTasks = async (text: string, assignee: string, priority: string) => {
-    const query = buildQuery(text, assignee, priority);
+export const searchTasks = async (text: string, assignee: string, priority: string, track_id:string) => {
+    const query = buildQuery(text, assignee, priority, track_id);
 
-    let boards = await Board.find({ });
+    let boards = await Board.aggregate(query);
     const allTasks: ITask[] = boards.flatMap(board => {
         const tasks = board.columns.flatMap((column:IColumn) => column.tasks)
         return tasks.map((task:ITask)=>{
@@ -29,23 +42,28 @@ export const searchTasks = async (text: string, assignee: string, priority: stri
         })}
     );
     return allTasks.filter((task:ITask)=>{
-        let query1, query2, query3 = false;
+        let query1, query2, query3, query4 = false;
         if (!isEmpty(text)) {
             query1 = task.title.toUpperCase().includes(text.toUpperCase()) || task.description.toUpperCase().includes(text.toUpperCase()) || task.track_id.toUpperCase() === text.toUpperCase() 
         } else {
             query1 = true
         }
-        if (!isEqual(assignee, "-")) {
+        if (!isEqual(assignee, "")) {
             query2 = task.assignee === assignee
         } else {
             query2 = true
         }
-        if (!isEqual(priority, "-")) {
+        if (!isEqual(priority, "")) {
             query3 = task.priority === priority
         } else {
             query3 = true
         }
-        return query1 && (query2 && query3)
+        if (!isEmpty(track_id)) {
+            query4 = task.track_id.toUpperCase() === track_id.toUpperCase() 
+        } else {
+            query4 = true
+        }
+        return query1 && (query2 && query3) && query4
         
     })
 }

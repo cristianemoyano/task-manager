@@ -4,28 +4,32 @@ import InputTextControl from "./InputTextControl";
 import { IBoard, IColumn, ITask, IUser } from "@/typing";
 import BoardTask from "../single_board/BoardTask";
 import TaskInfosModal from "../modals/TaskInfosModal";
-import { useRouter } from "next/router";
+
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+
 import useModal from "@/contexts/useModal";
 import { fetcher } from "@/services/utils";
-import { isEqual } from "lodash";
+
 import useSWR from "swr";
 import TaskModal from "../modals/TaskModal";
 import DeleteModal from "../modals/DeleteModal";
+import { PRIORITIES } from "../constants";
+import { isEmpty } from "lodash";
 
 interface Props {
+    user: IUser,
 
 }
 interface IControllerTask {
     assignee: string;
     text: string;
     priority: string;
+    track_id: string;
 }
 
 const usersOptions: IColumn[] = [
     {
-        _id: "-",
+        _id: "",
         name: "Seleccionar",
         tasks: [],
     },
@@ -41,28 +45,10 @@ const usersOptions: IColumn[] = [
     },
 ]
 
-const board: IBoard = {
-    _id: "any",
-    name: "string",
-    user_id: "122",
-    columns: [],
-}
-
-const user: IUser = {
-    _id: "any",
-    name: "string",
-    email: "string",
-    password: "string",
-}
-
-
-const users: IUser[] = [
-    user,
-]
 
 const priorities = [
     {
-        _id: "-",
+        _id: "",
         name: "Seleccionar",
         tasks: [],
     },
@@ -84,21 +70,19 @@ const priorities = [
 ]
 
 
-export default function SearchForm({ }: Props) {
+export default function SearchForm({user }: Props) {
 
-    const router = useRouter();
-    const { data: session } = useSession()
-
-    useEffect(() => {
-        if (!session) {
-            router.push('/register');
-        }
-    }, [router]);
+    const {
+        isTaskInfosModalOpen,
+        toggleTaskInfosModal,
+        taskInfosModalContent: { _id, title, track_id, priority, comments, assignee, description, subtasks, status },
+    } = useModal();
 
     const defaultValues = {
-        assignee: "-",
-        priority: "-",
+        assignee: "",
+        priority: "",
         text: "",
+        track_id: "",
     };
 
     const { control, handleSubmit, reset, register, setValue } =
@@ -110,16 +94,14 @@ export default function SearchForm({ }: Props) {
         setQuery(data)
     };
 
-    const {
-        isTaskInfosModalOpen,
-        toggleTaskInfosModal,
-        taskInfosModalContent: { _id, title, track_id, priority, comments, assignee, description, subtasks, status },
-    } = useModal();
+
 
     const [query, setQuery] = useState<IControllerTask>();
+    const [userIds, setUserIds] = useState<string>("");
+    const [boardID, setBoardID] = useState<string>("");
 
     const { data: tasks, error: taskError } = useSWR<ITask[], any>(
-        `/api/tasks/search?text=${query?.text}&assignee=${query?.assignee}&priority=${query?.priority}`,
+        `/api/tasks/search?text=${query?.text}&assignee=${query?.assignee}&priority=${query?.priority}&track_id=${query?.track_id}`,
         fetcher,
         {
             fallbackData: [],
@@ -127,10 +109,80 @@ export default function SearchForm({ }: Props) {
         }
     );
 
+    const { data: users, error: userError } = useSWR<IUser[], any>(
+        `/api/users?user_ids=${userIds}`,
+        fetcher,
+        {
+            fallbackData: [],
+            revalidateOnFocus: false,
+        }
+    );
+
+    const { data: board, error: boardError } = useSWR<IUser[], any>(
+        `/api/boards/${boardID}/`,
+        fetcher,
+        {
+            fallbackData: [],
+            revalidateOnFocus: false,
+        }
+    );
+
+    useEffect(() => {
+        if (!isEmpty(title)) {
+            const targetTask = tasks?.find((task)=> task._id === _id)
+            setBoardID(String(targetTask?.board_id))
+        }
+      }, [title]);
+
+    const taskContent = (
+        <>
+            <header className='modal__header modal__header__flex'>
+                <h3 className='modal__header__title'>{title}</h3>
+            </header>
+            <div className="grid grid-cols-3 gap-2">
+                {/* COL 1 */}
+                <div className='col-span-2'>
+                    <p className='mb-4'>{description}</p>
+                </div>
+                {/* END COL 1 */}
+
+                {/* COL 2 */}
+                <div >
+                    <p className='input__label'>
+                        Prioridad:
+                        <span className='modal__text'>
+                            {` ${PRIORITIES.find((c) => c._id === priority)?.name}`}
+                        </span>
+                    </p>
+
+                    <p className='input__label'>
+                        Asignado:
+                        <span className='modal__text'>
+                            {` ${users?.find((c) => c._id === assignee)?.name}`}
+                        </span>
+                    </p>
+                    <p className='input__label'>
+                        ID de trazabilidad:
+                        <span className='modal__text'>
+                            {track_id ? ` ${track_id}` : track_id}
+                        </span>
+                    </p>
+
+                    {board?.columns?.find((c) => c._id === status)?.name}
+                    
+                </div>
+                {/* END COL 2 */}
+            </div>
+            <button className="mt-3 bg-indigo-600 hover:bg-indigo-400 text-white font-bold py-2 px-4 rounded" onClick={() => toggleTaskInfosModal()}>
+                Abrir
+            </button>
+        </>
+    )
+
     return (
-        <div className="mt-3 bg-white p-3 m-3 max-h-screen" >
+        <div className="mt-3 bg-white p-3 m-3 max-h-full  overflow-x-auto" >
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="grid grid-cols-5 gap-4 items-center">
+                <div className="grid grid-cols-6 gap-4 items-center">
                     <div className="col-span-2">
                         <Controller
                             control={control}
@@ -155,13 +207,29 @@ export default function SearchForm({ }: Props) {
                     <div>
                         <Controller
                             control={control}
+                            name='track_id'
+                            render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                <InputTextControl
+                                    onChange={onChange}
+                                    value={value}
+                                    error={error}
+                                    name='text'
+                                    label={"ID Trazabilidad"}
+                                    placeholder=''
+                                />
+                            )}
+                        />
+                    </div>
+                    <div>
+                        <Controller
+                            control={control}
                             name='assignee'
                             render={({ field: { onChange, value } }) => (
                                 <InputDropdownControl
                                     onChange={onChange}
                                     value={value}
                                     label={"Asignado"}
-                                    columns={usersOptions}
+                                    columns={users}
                                 />
                             )}
                         />
@@ -190,9 +258,9 @@ export default function SearchForm({ }: Props) {
                         <hr />
                     </h4>
                 </header>
-                <TaskModal board={board} user_id="1" users={users} />
-                <DeleteModal board={board} user_id="1" />
-                <TaskInfosModal board={board} user_id="1" user={user} users={users} />
+                <TaskModal board={board} user_id={user._id} users={users} />
+                <DeleteModal board={board} user_id={user._id} />
+                <TaskInfosModal board={board} user_id={user._id} user={assignee} users={users} />
                 <div className="grid grid-cols-2 gap-1">
 
                     <div className="overflow-y-auto max-h-96">
@@ -208,8 +276,7 @@ export default function SearchForm({ }: Props) {
                     </div>
 
                     <div>
-                        Title: {title}
-                        <button onClick={() => toggleTaskInfosModal()}>Abrir</button>
+                            {title ? taskContent : "Seleccionar una tarea."}
                     </div>
 
                 </div>

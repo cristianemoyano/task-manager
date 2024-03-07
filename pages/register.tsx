@@ -24,7 +24,7 @@ const Register: NextPage = () => {
 
   useEffect(() => {
     if (session) {
-      router.push('/');
+      router.push(router.asPath);
     }
   }, [router]);
 
