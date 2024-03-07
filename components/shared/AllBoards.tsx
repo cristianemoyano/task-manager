@@ -27,7 +27,11 @@ export default function AllBoards({ boards, assignedBoards, className, close }: 
         <Link href={`/search`} >
           <a>
             <div
-              className={'board__item'}
+              className={
+                router.pathname.includes("search")
+                  ? 'board__item board__item--active'
+                  : 'board__item'
+              }
             >
               <h3 className='board__item__name'>{SEARCH}</h3>
             </div>
