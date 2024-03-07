@@ -61,7 +61,7 @@ export default function Navbar({ boards, board, onUserClick, onClearFilters, tit
               onClick={() => setIsBoardModalOpen(!isBoardModalOpen)}
             >
               <h2 className='navbar__dropdown__title'>
-                {pathname === '/' ? HOME : board?.name}
+              {pathname === '/' ? HOME : pathname.includes("board") ? board?.name : title}
               </h2>
               {isBoardModalOpen ? (
                 <Image

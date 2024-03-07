@@ -23,7 +23,7 @@ export default function AllBoards({ boards, assignedBoards, className, close }: 
   return (
     <div className={className}>
       {/* Search */}
-      <div>
+      <div className='mb-4'>
         <Link href={`/search`} >
           <a>
             <div
