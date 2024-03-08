@@ -35,7 +35,6 @@ export default async function handler(
       taskToUpdate.description = task.description;
       taskToUpdate.subtasks = task.subtasks;
       taskToUpdate.is_closed = task.is_closed;
-      console.log(task)
   
       await board.save();
 

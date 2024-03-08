@@ -26,6 +26,7 @@ interface IControllerTask {
     prioritySelected: string;
     text: string;
     trackIdSelected: string;
+    isClosedSelected: string;
 }
 
 const priorities = [
@@ -51,6 +52,24 @@ const priorities = [
     }
 ]
 
+const isClosedOptions = [
+    {
+        _id: "",
+        name: "Seleccionar",
+        tasks: [],
+    },
+    {
+        _id: "1",
+        name: "Si",
+        tasks: [],
+    },
+    {
+        _id: "0",
+        name: "No",
+        tasks: [],
+    },
+]
+
 
 export default function SearchForm({ user }: Props) {
 
@@ -65,6 +84,7 @@ export default function SearchForm({ user }: Props) {
         prioritySelected: "",
         text: "",
         trackIdSelected: "",
+        isClosedSelected: "0",
     };
 
     const { control, handleSubmit, reset, register, setValue } =
@@ -83,7 +103,7 @@ export default function SearchForm({ user }: Props) {
     const [boardID, setBoardID] = useState<string>("");
 
     const { data: tasks, error: taskError } = useSWR<ITask[], any>(
-        `/api/tasks/search?text=${query?.text}&assignee=${query?.assigneeSelected}&priority=${query?.prioritySelected}&track_id=${query?.trackIdSelected}`,
+        `/api/tasks/search?text=${query?.text}&assignee=${query?.assigneeSelected}&priority=${query?.prioritySelected}&track_id=${query?.trackIdSelected}&is_closed=${query?.isClosedSelected}`,
         fetcher,
         {
             fallbackData: [],
@@ -219,7 +239,7 @@ export default function SearchForm({ user }: Props) {
         <div className="mt-3 bg-white p-3 m-3 max-h-full" >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid grid-cols-3 lg:grid-cols-6 gap-1 items-center">
-                    <div className="col-span-2">
+                    <div className="lg:col-span-5">
                         <Controller
                             control={control}
                             name='text'
@@ -280,6 +300,20 @@ export default function SearchForm({ user }: Props) {
                                     value={value}
                                     label={"Prioridad"}
                                     columns={priorities}
+                                />
+                            )}
+                        />
+                    </div>
+                    <div>
+                        <Controller
+                            control={control}
+                            name='isClosedSelected'
+                            render={({ field: { onChange, value } }) => (
+                                <InputDropdownControl
+                                    onChange={onChange}
+                                    value={value}
+                                    label={"Tarea cerrada"}
+                                    columns={isClosedOptions}
                                 />
                             )}
                         />

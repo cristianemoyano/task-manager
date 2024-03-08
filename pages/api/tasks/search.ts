@@ -10,13 +10,13 @@ export default async function handler(
   const {
     method,
     body,
-    query: { text, assignee, priority, track_id },
+    query: { text, assignee, priority, track_id, is_closed },
   } = req;
 
   if (method === 'GET') {
     await connectMongo()
     try {
-      const tasks = await searchTasks(String(text), String(assignee), String(priority), String(track_id))
+      const tasks = await searchTasks(String(text), String(assignee), String(priority), String(track_id), String(is_closed))
       res.status(200).json(tasks);
     } catch (error) {
       console.error(error)
