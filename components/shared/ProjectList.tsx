@@ -26,19 +26,21 @@ export default function ProjectList({ }: Props) {
             className={''}
         >
             <div className='modal__container'>
-            <header className='modal__header'>
+                <header className='modal__header'>
                     <h4 className='modal__header__title'>
                         <span className="">Proyectos</span>
                         <hr />
                     </h4>
                 </header>
-            {projects?.map((project:IProject)=>{
-                return (
-                    <div key={project._id}>
-                    <ProjectItem project={project}/>
-                    </div>
-                )
-            })}
+                <div className='overflow-y-auto max-h-60'>
+                    {projects?.map((project: IProject) => {
+                        return (
+                            <div key={project._id}>
+                                <ProjectItem project={project} />
+                            </div>
+                        )
+                    })}
+                </div>
             </div>
         </div>
     );
