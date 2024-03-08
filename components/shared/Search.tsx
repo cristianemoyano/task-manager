@@ -84,7 +84,7 @@ export default function SearchForm({ user }: Props) {
         prioritySelected: "",
         text: "",
         trackIdSelected: "",
-        isClosedSelected: "0",
+        isClosedSelected: "",
     };
 
     const { control, handleSubmit, reset, register, setValue } =
