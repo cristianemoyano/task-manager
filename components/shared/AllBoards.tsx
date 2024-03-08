@@ -6,7 +6,7 @@ import { signOut } from 'next-auth/react';
 import { IBoard } from '@/typing';
 import useModal from '@/contexts/useModal';
 import useTheme from '@/contexts/useTheme';
-import { ASSIGNED_BOARDS, LOGOUT, NEW_BOARD, OWNED_BOARDS, SEARCH } from '../constants';
+import { ASSIGNED_BOARDS, LOGOUT, NEW_BOARD, OWNED_BOARDS, PROJECTS, SEARCH } from '../constants';
 
 interface Props {
   boards?: IBoard[];
@@ -23,7 +23,7 @@ export default function AllBoards({ boards, assignedBoards, className, close }: 
   return (
     <div className={className}>
       {/* Search */}
-      <div className='mb-4'>
+      <div className='mb-3'>
         <Link href={`/search`} >
           <a>
             <div
@@ -34,6 +34,22 @@ export default function AllBoards({ boards, assignedBoards, className, close }: 
               }
             >
               <h3 className='board__item__name'>{SEARCH}</h3>
+            </div>
+          </a>
+        </Link>
+      </div>
+      {/* Projects */}
+      <div className='mb-4'>
+        <Link href={`/projects`} >
+          <a>
+            <div
+              className={
+                router.pathname.includes("projects")
+                  ? 'board__item board__item--active'
+                  : 'board__item'
+              }
+            >
+              <h3 className='board__item__name'>{PROJECTS}</h3>
             </div>
           </a>
         </Link>

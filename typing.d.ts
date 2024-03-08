@@ -30,6 +30,18 @@ export interface ITask {
   is_closed: boolean;
 }
 
+export interface IProject {
+  _id: string;
+  track_id: string;
+  priority: string;
+  assignee: string;
+  title: string;
+  description: string;
+  status: string;
+  comments: IComment[];
+  is_closed: boolean;
+}
+
 export interface ISubtask {
   _id: string;
   title: string;

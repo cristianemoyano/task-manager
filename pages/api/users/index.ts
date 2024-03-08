@@ -15,11 +15,11 @@ export default async function handler(
     } = req;
     await connectMongo();
 
-    if (method === 'GET' && isString(user_ids)) {
+    if (method === 'GET') {
         try {
             let queryUserIds:any[] = []
             if (!isEmpty(user_ids)) {
-                queryUserIds = user_ids?.split(',')
+                queryUserIds = String(user_ids)?.split(',')
             }
             const users = await getUsers(queryUserIds)
             res.status(200).json(users);

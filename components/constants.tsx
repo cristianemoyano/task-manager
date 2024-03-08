@@ -9,6 +9,7 @@ export const WELCOME_MSG = "Bienvenido";
 export const BRAND = "Task Manager";
 export const OWNED_BOARDS = "Mis tableros";
 export const SEARCH = "Buscar tareas";
+export const PROJECTS = "Proyectos";
 export const ASSIGNED_BOARDS = "Tableros asignados";
 export const BOARD = "Tablero";
 export const EMPTY_BOARDS_MSG = "No haz creado ningún tablero aún. Crea un nuevo tablero para empezar."

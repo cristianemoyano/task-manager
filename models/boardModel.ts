@@ -8,7 +8,7 @@ const subtasksSchema = new Schema<ISubtask>({
   isCompleted: Boolean,
 });
 
-const commentsSchema = new Schema<IComment>({
+export const commentsSchema = new Schema<IComment>({
   // _id: { type: Number, required: false },
   value: String,
   author: String,
