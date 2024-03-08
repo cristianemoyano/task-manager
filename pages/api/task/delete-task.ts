@@ -15,7 +15,7 @@ export default async function handler(
     try {
       const { board_id, column_id, task_id, user_id } = query;
 
-      const board = await Board.findOne({ _id: board_id, user_id });
+      const board = await Board.findOne({ _id: board_id });
 
       const columnToUpdate: IColumn = board.columns.find(
         (c: IColumn) => c._id.toString() == column_id
