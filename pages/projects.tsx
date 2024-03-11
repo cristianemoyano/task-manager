@@ -18,6 +18,8 @@ import { IBoard, IUser } from '@/typing';
 import { getAsignedBoardsByUser, getOwnedBoardsByUser } from '@/services/board';
 import ProjectForm from '@/components/shared/ProjectForm';
 import ProjectList from '@/components/shared/ProjectList';
+import useSWR from 'swr';
+import { fetcher } from '@/services/utils';
 
 const Projects: NextPage<{ boards: IBoard[], assignedBoards: IBoard[], user_id:string, user:IUser }> = ({ boards = [], assignedBoards =[], user_id, user }) => {
 
@@ -30,6 +32,17 @@ const Projects: NextPage<{ boards: IBoard[], assignedBoards: IBoard[], user_id:s
       }
   }, [router]);
 
+  const userIds = "";
+
+  const { data: users, error: userError } = useSWR<IUser[], any>(
+    `/api/users?user_ids=${userIds}`,
+    fetcher,
+    {
+        fallbackData: [],
+        revalidateOnFocus: false,
+    }
+);
+
  
   return (
     <HeadOfPage title={SEARCH_TITLE} content={SEARCH_CONTENT}>
@@ -39,7 +52,7 @@ const Projects: NextPage<{ boards: IBoard[], assignedBoards: IBoard[], user_id:s
           <div>
             <Navbar boards={boards} title='Proyectos'/>
             <ProjectForm />
-            <ProjectList />
+            <ProjectList users={users} />
           </div>
         </main>
       </>

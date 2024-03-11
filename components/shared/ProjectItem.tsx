@@ -1,16 +1,17 @@
-import { IProject } from '@/typing';
+import { IProject, IUser } from '@/typing';
 import React from 'react';
 
 interface Props {
   project: IProject;
+  assigneeName: string;
 }
 
-export default function ProjectItem({ project }: Props) {
+export default function ProjectItem({ project, assigneeName }: Props) {
 
   return (
-    <div>
-      <div className="max-w-sm w-full lg:max-w-full lg:flex">
-        <div className="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+    <div className='p-3'>
+      <div className="max-w-sm w-full lg:max-w-full lg:flex bg-white shadow-xl rounded-sm">
+        <div className="lg:border-l-0 lg:border-t lg:border-gray-400 rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
           <div className="mb-8">
             <p className="text-sm text-gray-600 flex items-center">
               Prioridad: {project.priority}
@@ -20,7 +21,12 @@ export default function ProjectItem({ project }: Props) {
           </div>
           <div className="flex items-center">
             <div className="text-sm">
-              <p className="text-gray-900 leading-none">{project.assignee}</p>
+              <p className="text-gray-600 leading-none font-bold">
+                {assigneeName}
+              </p>
+              <p className="text-gray-900 leading-none pt-3">
+                Track ID:{project.track_id}
+              </p>
             </div>
           </div>
         </div>
