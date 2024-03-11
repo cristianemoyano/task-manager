@@ -32,9 +32,9 @@ export default async function handler(
       projectRecord.status = project.status;
       projectRecord.is_closed = project.is_closed;
   
-      await project.save();
+      await projectRecord.save();
 
-      res.status(200).json(project);
+      res.status(200).json(projectRecord);
     } catch (error) {
       console.error(error)
       res.status(500).json(error);

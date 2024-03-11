@@ -1,18 +1,31 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IProject, IUser } from '@/typing';
 import { fetcher } from '@/services/utils';
 import useSWR from 'swr';
 import ProjectItem from './ProjectItem';
 import { isEmpty } from 'lodash';
+import ProjectModal from '../modals/ProjectModal';
 
 interface Props {
     users: IUser[] | undefined
 }
 
+const defaultProject:IProject = {
+    _id: "",
+    track_id: "",
+    priority: "",
+    assignee: "",
+    title: "",
+    description: "",
+    status: "",
+    comments: [],
+    is_closed: false,
+}
 
-export default function ProjectList({users }: Props) {
-    useEffect(() => {
-    }, []);
+export default function ProjectList({ users }: Props) {
+
+    const [project, setProject] = useState<IProject>(defaultProject);
+    const [isModalVisible, setModalVisibility] = useState(false);
 
     const { data: projects, error: projectError } = useSWR<IProject[], any>(
         `/api/project/`,
@@ -23,16 +36,17 @@ export default function ProjectList({users }: Props) {
         }
     );
 
-    // padding: 24px;
-    // border-radius: 6px;
-    // width: 100%;
-    // margin: 3vh 3vh 3vh 3vh;
-    // cursor: auto;
-    // max-width: 130vh;
+    const handleOnClickProject = (selectedProject: IProject) => {
+        setProject({...selectedProject})
+        setModalVisibility(true)
+    }
+
+    const closeModal = () => {
+        setModalVisibility(!isModalVisible)
+    }
+
     return (
-        <div
-            className={''}
-        >
+        <div>
             <div className='p-6 rounded-sm w-full m-3 max-w-screen-lg'>
                 <header className='modal__header'>
                     <h4 className='modal__header__title'>
@@ -40,15 +54,16 @@ export default function ProjectList({users }: Props) {
                         <hr />
                     </h4>
                 </header>
-                <div className='overflow-y-auto max-h-60'>
+                <div className='overflow-y-auto max-h-screen'>
+                    <ProjectModal isVisible={isModalVisible} close={closeModal} project={project} users={users}/>
                     {projects?.map((project: IProject) => {
                         const assignee = users?.find((c) => c._id === project.assignee)
                         const assigneeName = assignee ? assignee.name : "Sin asignar"
                         return (
-                            <div className=''>
-                                <ProjectItem key={project._id} project={project}  assigneeName={String(assigneeName)}/>
+                            <div className='cursor-pointer'
+                                key={project._id} onClick={() => handleOnClickProject(project)}>
+                                <ProjectItem project={project} assigneeName={String(assigneeName)} />
                             </div>
-                                
                         )
                     })}
                 </div>

@@ -5,7 +5,7 @@ import { GetServerSideProps } from 'next';
 
 import HeadOfPage from '@/components/shared/HeadOfPage';
 
-import {  SEARCH_CONTENT, SEARCH_TITLE } from '@/components/constants';
+import { SEARCH_CONTENT, SEARCH_TITLE } from '@/components/constants';
 import Sidebar from '@/components/sidebar/Sidebar';
 import Navbar from '@/components/navbar/Navbar';
 import { useRouter } from 'next/router';
@@ -21,15 +21,15 @@ import ProjectList from '@/components/shared/ProjectList';
 import useSWR from 'swr';
 import { fetcher } from '@/services/utils';
 
-const Projects: NextPage<{ boards: IBoard[], assignedBoards: IBoard[], user_id:string, user:IUser }> = ({ boards = [], assignedBoards =[], user_id, user }) => {
+const Projects: NextPage<{ boards: IBoard[], assignedBoards: IBoard[], user_id: string, user: IUser }> = ({ boards = [], assignedBoards = [], user_id, user }) => {
 
   const router = useRouter();
   const { data: session } = useSession()
 
   useEffect(() => {
-      if (!session) {
-        router.push('/register', router.asPath);
-      }
+    if (!session) {
+      router.push('/register', router.asPath);
+    }
   }, [router]);
 
   const userIds = "";
@@ -38,21 +38,29 @@ const Projects: NextPage<{ boards: IBoard[], assignedBoards: IBoard[], user_id:s
     `/api/users?user_ids=${userIds}`,
     fetcher,
     {
-        fallbackData: [],
-        revalidateOnFocus: false,
+      fallbackData: [],
+      revalidateOnFocus: false,
     }
-);
+  );
 
- 
+
   return (
     <HeadOfPage title={SEARCH_TITLE} content={SEARCH_CONTENT}>
       <>
         <main>
-          <Sidebar boards={boards} assignedBoards={assignedBoards} user={user}/>
+          <Sidebar boards={boards} assignedBoards={assignedBoards} user={user} />
           <div>
-            <Navbar boards={boards} title='Proyectos'/>
-            <ProjectForm />
-            <ProjectList users={users} />
+            <Navbar boards={boards} title='Proyectos' />
+
+            <div className="grid lg:grid-cols-2 gap-2">
+              <div>
+                <ProjectForm />
+              </div>
+
+              <div>
+                <ProjectList users={users} />
+              </div>
+            </div>
           </div>
         </main>
       </>
@@ -89,7 +97,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-  
+
   return {
     props: {
       boards: [],
@@ -100,7 +108,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 
- 
+
 };
 
 export default Projects;
