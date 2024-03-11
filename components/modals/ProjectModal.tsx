@@ -96,20 +96,6 @@ export default function ProjectModal({ isVisible, close, project, users }: Props
           <div className="bg-white">
             <div className="lg:border-l-0 lg:border-t lg:border-gray-400 rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
               <div className="mb-8">
-                <p className="text-sm text-gray-600 flex items-center">
-                  <Controller
-                    control={control}
-                    {...register('priority')}
-                    render={({ field: { onChange, value } }) => (
-                      <InputDropdownControl
-                        onChange={onChange}
-                        value={value}
-                        label={"Prioridad"}
-                        columns={PRIORITIES}
-                      />
-                    )}
-                  />
-                </p>
                 <div className="text-gray-900 font-bold text-xl mb-2">
                   <Controller
                     control={control}
@@ -139,22 +125,8 @@ export default function ProjectModal({ isVisible, close, project, users }: Props
                 </p>
               </div>
               <div className="flex items-center">
-                <div className="text-sm">
-                  <p className="text-gray-600 leading-none font-bold">
-                    <Controller
-                      control={control}
-                      {...register('assignee')}
-                      render={({ field: { onChange, value } }) => (
-                        <InputDropdownControl
-                          onChange={onChange}
-                          value={value}
-                          label={"Asignado"}
-                          columns={userOptions}
-                        />
-                      )}
-                    />
-                  </p>
-                  <p className="text-gray-900 leading-none pt-3">
+                <div className="text-sm  grid lg:grid-cols-3 gap-3 flex items-center">
+                <div className="text-gray-900 ">
                     <Controller
                       control={control}
                       name='track_id'
@@ -169,7 +141,36 @@ export default function ProjectModal({ isVisible, close, project, users }: Props
                         />
                       )}
                     />
-                  </p>
+                  </div>
+                  <div className="text-gray-600 leading-none font-bold">
+                    <Controller
+                      control={control}
+                      {...register('assignee')}
+                      render={({ field: { onChange, value } }) => (
+                        <InputDropdownControl
+                          onChange={onChange}
+                          value={value}
+                          label={"Asignado"}
+                          columns={userOptions}
+                        />
+                      )}
+                    />
+                  </div>
+                  
+                  <div className="text-sm text-gray-600 flex items-center">
+                  <Controller
+                    control={control}
+                    {...register('priority')}
+                    render={({ field: { onChange, value } }) => (
+                      <InputDropdownControl
+                        onChange={onChange}
+                        value={value}
+                        label={"Prioridad"}
+                        columns={PRIORITIES}
+                      />
+                    )}
+                  />
+                </div>
                 </div>
               </div>
 
