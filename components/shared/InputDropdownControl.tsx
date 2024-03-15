@@ -25,8 +25,13 @@ export default function InputDropdownControl({
 
   useEffect(function mount() {
 
-    function onMouse() {
-      setIsDropdownOpen(false)
+    function onMouse(evt:any) {
+      if (evt.target.attributes.typeof?.value == "dropdown") {
+        return
+      }
+      if (isDropdownOpen) {
+        setIsDropdownOpen(false)
+      }
     }
     window.addEventListener('mousedown', onMouse, false);
 
@@ -76,7 +81,7 @@ export default function InputDropdownControl({
               key={item._id}
               onClick={(evt) => handleClick(evt, item._id!.toString())}
             >
-              <p className='dropdown__content__value'>{item.name}</p>
+              <p className='dropdown__content__value' typeof="dropdown">{item.name}</p>
             </div>
           ))}
         </div>

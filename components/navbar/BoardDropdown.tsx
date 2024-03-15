@@ -50,13 +50,13 @@ export default function BoardDropdown({ isVisible, close, board, toggleClosedTas
           : 'edit__dropdown board__dropdown'
       }
     >
-      <button className='edit__button__edit' onClick={handleEditClick}>
+      <button className='edit__button__edit' onClick={handleEditClick} typeof='dropdown'>
         {EDIT_BOARD}
       </button>
-      <button className='edit__button__edit' onClick={handleClickShowClosedTasks}>
+      <button className='edit__button__edit' onClick={handleClickShowClosedTasks} typeof='dropdown'>
         {showClosedTasks ? "Ocultar tareas cerradas" : "Mostrar tareas cerradas"}
       </button>
-      <button className='edit__button__delete' onClick={handleDeleteClick}>
+      <button className='edit__button__delete' onClick={handleDeleteClick} typeof='dropdown'>
         {DELETE_BOARD}
       </button>
 

@@ -46,8 +46,15 @@ export default function Navbar({ boards, board, onUserClick, onClearFilters, tit
 
   useEffect(function mount() {
 
-    function onMouse() {
-      setIsBoardDropdownOpen(false)
+    function onMouse(evt:any) {
+      
+      if (evt.target.attributes.typeof?.value == "dropdown") {
+        return
+      }
+      
+      if (isBoardDropdownOpen) {
+        setIsBoardDropdownOpen(false)
+      }
     }
     window.addEventListener('mousedown', onMouse, false);
 
@@ -162,7 +169,7 @@ export default function Navbar({ boards, board, onUserClick, onClearFilters, tit
       {board && (
         <BoardDropdown
           isVisible={isBoardDropdownOpen}
-          close={(evt) => handleBoardDropdown(evt, false)}
+          close={(evt:any) => handleBoardDropdown(evt, false)}
           board={board}
           toggleClosedTasks={toggleClosedTasks}
         />
