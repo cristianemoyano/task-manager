@@ -231,7 +231,7 @@ export default function SearchForm({ user }: Props) {
         <div className="flex items-center justify-center">
             <Image
                 src='/assets/empty_state.jpg'
-                className="w-full h-auto"
+                className="w-full h-auto rounded-lg"
                 width={480}
                 height={330}
                 layout='fixed'
@@ -260,7 +260,7 @@ export default function SearchForm({ user }: Props) {
     )
 
     return (
-        <div className="mt-3 bg-white p-3 m-3 max-h-full" >
+        <div className="mt-3 modal__container p-3 m-3 max-h-full" >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid grid-cols-3 lg:grid-cols-6 gap-1 items-center">
                     <div className="lg:col-span-5">

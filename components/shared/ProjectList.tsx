@@ -59,7 +59,7 @@ export default function ProjectList({ users }: Props) {
                         const assignee = users?.find((c) => c._id === project.assignee)
                         const assigneeName = assignee ? assignee.name : "Sin asignar"
                         return (
-                            <div className='cursor-pointer'
+                            <div className='cursor-pointer modal__container'
                                 key={project._id} onClick={() => handleOnClickProject(project)}>
                                 <ProjectItem project={project} assigneeName={String(assigneeName)} />
                             </div>

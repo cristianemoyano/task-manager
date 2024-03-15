@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { IUser } from '@/typing';
 import { getInitials } from '@/services/utils';
 import Image from 'next/image';
 import { isEmpty } from 'lodash';
+import useTheme from '@/contexts/useTheme';
 
 interface Props {
     users?: IUser[];
@@ -18,6 +19,8 @@ const COLORS = ['bg-blue-400', 'bg-green-400', 'bg-yellow-400', 'bg-red-400', 'b
 function UserList({ users, onUserClick, onClearFilters }: Props) {
 
     const [isFiltered, setIsFiltered] = useState(false);
+    const { theme, toggleTheme } = useTheme();
+
 
     if (isEmpty(users)) {
         return (
@@ -30,7 +33,6 @@ function UserList({ users, onUserClick, onClearFilters }: Props) {
         setIsFiltered(true)
     }
     const handleClearFilter = () => {
-
         onClearFilters ? onClearFilters() : ""
         setIsFiltered(false)
     }
@@ -48,7 +50,7 @@ function UserList({ users, onUserClick, onClearFilters }: Props) {
 
     return (
         <div className="flex invisible lg:visible">
-            <div className="w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full text-black ">
+            <div className="w-9 h-9 border-solid border-2 border-white flex items-center justify-center rounded-full text-black">
                 {
                     isFiltered ? (
                         <button title='Remover filtros' onClick={() => handleClearFilter()} className="text-md font-bold">
@@ -58,8 +60,8 @@ function UserList({ users, onUserClick, onClearFilters }: Props) {
                                 height={20}
                                 layout='fixed'
                                 alt='vertical-ellipsis'
-                                className='navbar__dropdown__icon'
-                            />
+                                className={theme === 'dark' ? 'invert' : '' }
+                            /> 
                         </button>
                     ) : (<></>)
                 }
