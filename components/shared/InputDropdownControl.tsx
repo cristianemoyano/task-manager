@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { IColumn } from '@/typing';
 
@@ -18,10 +18,22 @@ export default function InputDropdownControl({
 }: Props) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const handleClick = (value: string) => {
+  const handleClick = (evt:any, value: string) => {
     setIsDropdownOpen(false);
     onChange(value);
   };
+
+  useEffect(function mount() {
+
+    function onMouse() {
+      setIsDropdownOpen(false)
+    }
+    window.addEventListener('mousedown', onMouse, false);
+
+    return function unMount() {
+      window.removeEventListener('mousedown', onMouse, false);
+    };
+  });
 
   return (
     <div className='input__dropdown__control z-50'>
@@ -62,7 +74,7 @@ export default function InputDropdownControl({
             <div
               className='dropdown__content__item'
               key={item._id}
-              onClick={() => handleClick(item._id!.toString())}
+              onClick={(evt) => handleClick(evt, item._id!.toString())}
             >
               <p className='dropdown__content__value'>{item.name}</p>
             </div>

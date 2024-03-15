@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
@@ -40,6 +40,22 @@ export default function Navbar({ boards, board, onUserClick, onClearFilters, tit
     }
   );
 
+  const handleBoardDropdown = (evt:any, value:boolean) => {
+    setIsBoardDropdownOpen(value)
+  }
+
+  useEffect(function mount() {
+
+    function onMouse() {
+      setIsBoardDropdownOpen(false)
+    }
+    window.addEventListener('mousedown', onMouse, false);
+
+    return function unMount() {
+      window.removeEventListener('mousedown', onMouse, false);
+    };
+  });
+
 
   return (
     <>
@@ -59,7 +75,7 @@ export default function Navbar({ boards, board, onUserClick, onClearFilters, tit
             </div>
             <div
               className='navbar__dropdown'
-              onClick={() => setIsBoardModalOpen(!isBoardModalOpen)}
+              onClick={(evt) => handleBoardDropdown(evt, !isBoardModalOpen)}
             >
               <h2 className='navbar__dropdown__title'>
               {pathname === '/' ? HOME : pathname.includes("board") ? board?.name : title}
@@ -122,7 +138,7 @@ export default function Navbar({ boards, board, onUserClick, onClearFilters, tit
                 </button>
                 <button
                   className='dropdown__buton'
-                  onClick={() => setIsBoardDropdownOpen(!isBoardDropdownOpen)}
+                  onClick={(evt) => handleBoardDropdown(evt, !isBoardDropdownOpen)}
                 >
                   <Image
                     src='/assets/icon-vertical-ellipsis.svg'
@@ -146,7 +162,7 @@ export default function Navbar({ boards, board, onUserClick, onClearFilters, tit
       {board && (
         <BoardDropdown
           isVisible={isBoardDropdownOpen}
-          close={() => setIsBoardDropdownOpen(false)}
+          close={(evt) => handleBoardDropdown(evt, false)}
           board={board}
           toggleClosedTasks={toggleClosedTasks}
         />
