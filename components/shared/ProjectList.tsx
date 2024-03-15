@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { IProject, IUser } from '@/typing';
 import { fetcher } from '@/services/utils';
 import useSWR from 'swr';
 import ProjectItem from './ProjectItem';
-import { isEmpty } from 'lodash';
 import ProjectModal from '../modals/ProjectModal';
 
 interface Props {

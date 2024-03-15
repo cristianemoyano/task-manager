@@ -1,12 +1,15 @@
-import { IColumn, IProject, IUser } from '@/typing';
+import { IColumn, IProject, ITask, IUser } from '@/typing';
 import Modal from '../shared/Modal';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { PRIORITIES } from '../constants';
-import { mutate } from 'swr';
+import useSWR, { mutate } from 'swr';
 import axios from 'axios';
 import InputTextControl from '../shared/InputTextControl';
 import { useEffect, useState } from 'react';
 import InputDropdownControl from '../shared/InputDropdownControl';
+import { fetcher } from '@/services/utils';
+import BoardTask from '../single_board/BoardTask';
+import { isEmpty } from 'lodash';
 
 interface Props {
   isVisible: boolean
@@ -55,6 +58,15 @@ export default function ProjectModal({ isVisible, close, project, users }: Props
     mutate(`/api/project/`);
     close()
   };
+
+  const { data: tasks, error: taskError } = useSWR<ITask[], any>(
+    `/api/tasks/search?text=${""}&assignee=${""}&priority=${""}&track_id=${""}&is_closed=${""}&project_id=${project._id}`,
+    fetcher,
+    {
+      fallbackData: [],
+      revalidateOnFocus: false,
+    }
+  );
 
   useEffect(() => {
     setValue('title', project.title!);
@@ -126,7 +138,7 @@ export default function ProjectModal({ isVisible, close, project, users }: Props
               </div>
               <div className="flex items-center">
                 <div className="text-sm  grid lg:grid-cols-3 gap-3 flex items-center">
-                <div className="text-gray-900 ">
+                  <div className="text-gray-900 ">
                     <Controller
                       control={control}
                       name='track_id'
@@ -156,25 +168,46 @@ export default function ProjectModal({ isVisible, close, project, users }: Props
                       )}
                     />
                   </div>
-                  
+
                   <div className="text-sm text-gray-600 flex items-center">
-                  <Controller
-                    control={control}
-                    {...register('priority')}
-                    render={({ field: { onChange, value } }) => (
-                      <InputDropdownControl
-                        onChange={onChange}
-                        value={value}
-                        label={"Prioridad"}
-                        columns={PRIORITIES}
-                      />
-                    )}
-                  />
-                </div>
+                    <Controller
+                      control={control}
+                      {...register('priority')}
+                      render={({ field: { onChange, value } }) => (
+                        <InputDropdownControl
+                          onChange={onChange}
+                          value={value}
+                          label={"Prioridad"}
+                          columns={PRIORITIES}
+                        />
+                      )}
+                    />
+                  </div>
                 </div>
               </div>
 
-              <button className='modal__button__primary__s' type='submit'>
+              {
+                !isEmpty(tasks) ? (
+                  <div className='pb-3'>
+                    <h3>
+                      Tareas asociadas al proyecto
+                      <hr />
+                    </h3>
+                    <div className='overflow-y-auto max-h-40 p-4'>
+                      {
+                        tasks?.map((t, index) => {
+                          return (
+                            <div className="p-3" key={index}>
+                              <BoardTask task={t} users={users} isToggleDisabled={true} projects={[project]} />
+                            </div>
+                          )
+                        })
+                      }
+                    </div>
+                  </div>
+                ) : ""
+              }
+              <button className='modal__button__primary__s mt-3' type='submit'>
                 Guardar
               </button>
             </div>
