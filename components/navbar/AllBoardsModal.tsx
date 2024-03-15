@@ -5,7 +5,7 @@ import AllBoards from '../shared/AllBoards';
 
 interface Props {
   boards: IBoard[];
-  close: () => void;
+  close: (evt:any) => void;
   isVisible: boolean;
 }
 

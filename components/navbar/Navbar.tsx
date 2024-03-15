@@ -44,16 +44,23 @@ export default function Navbar({ boards, board, onUserClick, onClearFilters, tit
     setIsBoardDropdownOpen(value)
   }
 
+  const handleBoardModal = (evt:any, value:boolean) => {
+    setIsBoardModalOpen(value)
+  }
+
   useEffect(function mount() {
 
     function onMouse(evt:any) {
-      
+  
       if (evt.target.attributes.typeof?.value == "dropdown") {
         return
       }
       
       if (isBoardDropdownOpen) {
         setIsBoardDropdownOpen(false)
+      }
+      if (isBoardModalOpen) {
+        setIsBoardModalOpen(false)
       }
     }
     window.addEventListener('mousedown', onMouse, false);
@@ -82,9 +89,9 @@ export default function Navbar({ boards, board, onUserClick, onClearFilters, tit
             </div>
             <div
               className='navbar__dropdown'
-              onClick={(evt) => handleBoardDropdown(evt, !isBoardModalOpen)}
+              onClick={(evt) => handleBoardModal(evt, !isBoardModalOpen)}
             >
-              <h2 className='navbar__dropdown__title'>
+              <h2 className='navbar__dropdown__title' typeof='dropdown'>
               {pathname === '/' ? HOME : pathname.includes("board") ? board?.name : title}
               </h2>
               {isBoardModalOpen ? (
@@ -163,13 +170,13 @@ export default function Navbar({ boards, board, onUserClick, onClearFilters, tit
       </nav>
       <AllBoardsModal
         isVisible={isBoardModalOpen}
-        close={() => setIsBoardModalOpen(false)}
+        close={(evt:any) =>handleBoardDropdown(evt, false)}
         boards={boards}
       />
       {board && (
         <BoardDropdown
           isVisible={isBoardDropdownOpen}
-          close={(evt:any) => handleBoardDropdown(evt, false)}
+          close={(evt:any) => handleBoardModal(evt, false)}
           board={board}
           toggleClosedTasks={toggleClosedTasks}
         />
