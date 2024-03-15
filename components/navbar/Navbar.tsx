@@ -18,11 +18,12 @@ interface Props {
   onUserClick?: (user:IUser) => void;
   onClearFilters?: () => void;
   title?: string;
+  toggleClosedTasks?: () => void;
 }
 
 
 
-export default function Navbar({ boards, board, onUserClick, onClearFilters, title }: Props) {
+export default function Navbar({ boards, board, onUserClick, onClearFilters, title, toggleClosedTasks }: Props) {
   const { toggleTaskModal, setTaskModalContent, isSidebarOpen } = useModal();
   const [isBoardModalOpen, setIsBoardModalOpen] = useState(false);
   const [isBoardDropdownOpen, setIsBoardDropdownOpen] = useState(false);
@@ -147,6 +148,7 @@ export default function Navbar({ boards, board, onUserClick, onClearFilters, tit
           isVisible={isBoardDropdownOpen}
           close={() => setIsBoardDropdownOpen(false)}
           board={board}
+          toggleClosedTasks={toggleClosedTasks}
         />
       )}
     </>

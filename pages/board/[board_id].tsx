@@ -22,7 +22,7 @@ import Sidebar from '@/components/sidebar/Sidebar';
 import { auth } from '@/services/auth';
 import User from '@/models/userModel';
 import { BACK_HOME, BOARD_ERROR_CONTENT, BOARD_ERROR_MSG, BOARD_ERROR_TITLE, NEW_COLUMN } from '@/components/constants';
-import { fetcher, filterTasksByAssignee } from '@/services/utils';
+import { fetcher, filterTasksByAssignee, filterTasksByClosed } from '@/services/utils';
 import { getAsignedBoardsByUser } from '@/services/board';
 import { useEffect, useState } from 'react';
 import { isEmpty } from 'lodash';
@@ -83,13 +83,15 @@ const SingleBoard: NextPage<Props> = ({
   const router = useRouter();
 
   const [filteredBoard, filterBoard] = useState<IBoard|undefined>(undefined);
+  const [showClosedTasks, setShowClosedTasks] = useState(false);
 
   useEffect(() => {
     const nextBoardState = produce(board, draftBoard => {
       draftBoard = draftBoard
     })
     filterBoard(nextBoardState)
-  }, [board]);
+    setClosedTasks(showClosedTasks)
+  }, [showClosedTasks, board]);
 
   const onUserClick = (user:IUser) => {
     if (isEmpty(board)) {
@@ -107,6 +109,17 @@ const SingleBoard: NextPage<Props> = ({
       draftBoard = draftBoard
     })
     filterBoard(nextBoardState)
+  }
+
+  const setClosedTasks = (showClosed:boolean=false) => {
+    const nextBoardState = produce(board, draftBoard => {
+      draftBoard = filterTasksByClosed(draftBoard, showClosed)
+    })
+    filterBoard(nextBoardState)
+  }
+
+  const toggleClosedTasks = () => {
+    setShowClosedTasks(prev => !prev)
   }
 
   if (boardsError || boardError || !boards || !board)
@@ -130,7 +143,7 @@ const SingleBoard: NextPage<Props> = ({
         <main>
           <Sidebar boards={boards} assignedBoards={assignedBoards} user={user}/>
           <div className='board__main'>
-            <Navbar boards={boards} board={board} onUserClick={onUserClick} onClearFilters={onClearFilters}/>
+            <Navbar boards={boards} board={board} onUserClick={onUserClick} onClearFilters={onClearFilters} toggleClosedTasks={toggleClosedTasks}/>
             {board?.columns.length ? (
               <ScrollContainer className='board__main__container'>
                 {filteredBoard?.columns.map((column) => (

@@ -63,7 +63,7 @@ export default function TaskInfosModal({ board, user_id, user, users, projects }
   const onSubmit: SubmitHandler<IControllerTask> = async (data) => {
     if (status === data.status) {
       await axios.patch(`/api/task/edit-task?user_id=${user_id}`, {
-        task: { title, description, track_id, priority, assignee, comments, subtasks: data.subtasks, is_closed: data.is_closed },
+        task: { title, description, track_id, priority, assignee, comments, subtasks: data.subtasks, is_closed: data.is_closed, project_id },
         comment: {
           value: data.comment,
           author: String(user_id),

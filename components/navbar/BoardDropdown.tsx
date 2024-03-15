@@ -1,20 +1,24 @@
 import useModal from '@/contexts/useModal';
 import { IBoard } from '@/typing';
 import { DELETE_BOARD, EDIT_BOARD } from '../constants';
+import { useState } from 'react';
 
 interface Props {
   isVisible: boolean;
   close: () => void;
   board?: IBoard;
+  toggleClosedTasks?: ()=> void;
 }
 
-export default function BoardDropdown({ isVisible, close, board }: Props) {
+export default function BoardDropdown({ isVisible, close, board, toggleClosedTasks }: Props) {
   const {
     toggleBoardModal,
     toggleDeleteModal,
     setDeleteModalContent,
     setIsNewBoard,
   } = useModal();
+
+  const [showClosedTasks, setShowClosedTasks] = useState(false)
 
   const handleEditClick = () => {
     close();
@@ -32,6 +36,12 @@ export default function BoardDropdown({ isVisible, close, board }: Props) {
       column_id: '',
     });
   };
+
+  const handleClickShowClosedTasks = () => {
+    setShowClosedTasks(!showClosedTasks)
+    toggleClosedTasks ? toggleClosedTasks() : ""
+  };
+
   return (
     <div
       className={
@@ -43,9 +53,13 @@ export default function BoardDropdown({ isVisible, close, board }: Props) {
       <button className='edit__button__edit' onClick={handleEditClick}>
         {EDIT_BOARD}
       </button>
+      <button className='edit__button__edit' onClick={handleClickShowClosedTasks}>
+        {showClosedTasks ? "Ocultar tareas cerradas" : "Mostrar tareas cerradas"}
+      </button>
       <button className='edit__button__delete' onClick={handleDeleteClick}>
         {DELETE_BOARD}
       </button>
+
     </div>
   );
 }
