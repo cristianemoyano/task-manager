@@ -10,6 +10,7 @@ import InputDropdownControl from '../shared/InputDropdownControl';
 import { fetcher } from '@/services/utils';
 import BoardTask from '../single_board/BoardTask';
 import { isEmpty } from 'lodash';
+import useTheme from '@/contexts/useTheme';
 
 interface Props {
   isVisible: boolean
@@ -40,6 +41,7 @@ export default function ProjectModal({ isVisible, close, project, users }: Props
   };
 
   const [isClient, setIsClient] = useState(false)
+  const { theme, toggleTheme } = useTheme();
 
 
   const assignee = users?.find((c) => c._id === project.assignee)
@@ -93,6 +95,8 @@ export default function ProjectModal({ isVisible, close, project, users }: Props
     }
   })
   userOptions = transformUsers ? userOptions.concat(transformUsers) : userOptions
+
+  const taskBGClass = theme === "dark" ? "dark:bg-[#20212c]" : ""
 
   if (!isClient) {
     return (<></>)
@@ -193,7 +197,7 @@ export default function ProjectModal({ isVisible, close, project, users }: Props
                       Tareas asociadas al proyecto
                       <hr />
                     </h3>
-                    <div className='overflow-y-auto max-h-40 p-4 dark:bg-[#20212c]'>
+                    <div className={`overflow-y-auto max-h-40 p-4 ${taskBGClass}`}>
                       {
                         tasks?.map((t, index) => {
                           return (
