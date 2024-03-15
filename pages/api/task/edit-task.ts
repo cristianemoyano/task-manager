@@ -31,6 +31,7 @@ export default async function handler(
       taskToUpdate.title = task.title;
       taskToUpdate.track_id = task.track_id;
       taskToUpdate.priority = task.priority;
+      taskToUpdate.project_id = task.project_id;
       taskToUpdate.assignee = task.assignee;
       taskToUpdate.description = task.description;
       taskToUpdate.subtasks = task.subtasks;

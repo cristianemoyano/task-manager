@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import ScrollContainer from 'react-indiana-drag-scroll';
 
-import { IBoard, IUser } from '@/typing';
+import { IBoard, IProject, IUser } from '@/typing';
 import connectMongo from '@/services/connectMongo';
 import Board from '@/models/boardModel';
 import useModal from '@/contexts/useModal';
@@ -70,6 +70,15 @@ const SingleBoard: NextPage<Props> = ({
     }
   );
 
+  const { data: projects, error: projectError } = useSWR<IProject[], any>(
+    `/api/project/`,
+    fetcher,
+    {
+        fallbackData: [],
+        revalidateOnFocus: false,
+    }
+);
+
   const { setIsNewBoard, toggleBoardModal } = useModal();
   const router = useRouter();
 
@@ -115,9 +124,9 @@ const SingleBoard: NextPage<Props> = ({
     <HeadOfPage title={board.name} content={board.name}>
       <>
         <BoardModal board={board} user_id={user_id}/>
-        <TaskModal board={board} user_id={user_id} users={users}/>
+        <TaskModal board={board} user_id={user_id} users={users} projects={projects}/>
         <DeleteModal board={board} user_id={user_id}/>
-        <TaskInfosModal board={board} user_id={user_id} user={user} users={users}/>
+        <TaskInfosModal board={board} user_id={user_id} user={user} users={users} projects={projects}/>
         <main>
           <Sidebar boards={boards} assignedBoards={assignedBoards} user={user}/>
           <div className='board__main'>
@@ -125,7 +134,7 @@ const SingleBoard: NextPage<Props> = ({
             {board?.columns.length ? (
               <ScrollContainer className='board__main__container'>
                 {filteredBoard?.columns.map((column) => (
-                  <BoardColumn key={column._id} column={column} users={users}/>
+                  <BoardColumn key={column._id} column={column} users={users} projects={projects}/>
                 ))}
                 <NewItem
                   isColumn={true}

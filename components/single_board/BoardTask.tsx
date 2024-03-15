@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
-import { ITask, IUser } from '@/typing';
+import { IProject, ITask, IUser } from '@/typing';
 import Image from 'next/image';
 import useModal from '@/contexts/useModal';
 import { OF, SUB_TASKS } from '../constants';
 import { getInitials } from '@/services/utils';
 
-export default function BoardTask({ task, users, isToggleDisabled=false }: { task: ITask, users?: IUser[], isToggleDisabled?: boolean }) {
+export default function BoardTask({ task, users, isToggleDisabled = false, projects }: { task: ITask, users?: IUser[], isToggleDisabled?: boolean, projects?: IProject[], }) {
   const { setTaskInfosModalContent, toggleTaskInfosModal } = useModal();
   const [subtasksCompleted, setSubtasksCompleted] = useState(0);
 
@@ -38,10 +38,16 @@ export default function BoardTask({ task, users, isToggleDisabled=false }: { tas
           setTaskInfosModalContent(task);
         }}
       >
-
+        {task.project_id ? (
+          <span className="inline-flex mb-3 items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
+          { ` ${projects?.find((p) => p._id === task.project_id)?.title}`}
+          </span>
+        ) : ""
+        }
         <h3 className='board__task__title'>
+
           <span className={task.is_closed ? `line-through text-gray-400` : ""}>
-          {task.title}
+            {task.title}
           </span>
         </h3>
         <p className='board__task__text'>
@@ -51,8 +57,6 @@ export default function BoardTask({ task, users, isToggleDisabled=false }: { tas
         <div className="grid grid-cols-3 gap-4 mt-3 items-center">
           <div className="...">
 
-
-
             <div className="grid grid-cols-4 gap-4 items-center">
               <div>
                 {/* Priority */}
@@ -61,18 +65,18 @@ export default function BoardTask({ task, users, isToggleDisabled=false }: { tas
               </div>
               {task.comments?.length > 0 ? (
                 <>
-              <div>
-                <Image
-                  src='/assets/comment.svg'
-                  width={15}
-                  height={24}
-                  layout='fixed'
-                  alt='comments'
-                  className='register__logo'
-                /> 
-              </div>
-              <div className='text-xs'>({task.comments.length})</div>
-              </>) : ""}
+                  <div>
+                    <Image
+                      src='/assets/comment.svg'
+                      width={15}
+                      height={24}
+                      layout='fixed'
+                      alt='comments'
+                      className='register__logo'
+                    />
+                  </div>
+                  <div className='text-xs'>({task.comments.length})</div>
+                </>) : ""}
             </div>
 
           </div>

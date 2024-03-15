@@ -28,6 +28,7 @@ export interface ITask {
   comments: IComment[];
   board_id?: string;
   is_closed: boolean;
+  project_id: string;
 }
 
 export interface IProject {

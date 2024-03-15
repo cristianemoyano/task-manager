@@ -45,7 +45,7 @@ const Projects: NextPage<{ boards: IBoard[], assignedBoards: IBoard[], user_id: 
 
 
   return (
-    <HeadOfPage title={SEARCH_TITLE} content={SEARCH_CONTENT}>
+    <HeadOfPage title={"Proyectos"} content={"Buscar proyectos"}>
       <>
         <main>
           <Sidebar boards={boards} assignedBoards={assignedBoards} user={user} />

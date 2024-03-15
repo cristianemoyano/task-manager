@@ -28,6 +28,7 @@ const tasksSchema = new Schema<ITask>({
   subtasks: [subtasksSchema],
   comments: [commentsSchema],
   is_closed: Boolean,
+  project_id: String,
 });
 
 const columnsSchema = new Schema<IColumn>({

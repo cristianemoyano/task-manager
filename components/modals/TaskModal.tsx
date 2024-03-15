@@ -8,7 +8,7 @@ import {
 import axios from 'axios';
 import { mutate } from 'swr';
 
-import { IBoard, IColumn, IUser } from '@/typing';
+import { IBoard, IColumn, IProject, IUser } from '@/typing';
 import useModal from '@/contexts/useModal';
 import Modal from '../shared/Modal';
 import InputTextControl from '../shared/InputTextControl';
@@ -31,9 +31,10 @@ interface IControllerTask {
   priority: string;
   assignee: string;
   subtasks: IControllerSubtasks[];
+  project_id: string;
 }
 
-export default function TaskModal({ board, user_id, users }: { board?: IBoard, user_id: string, users: IUser[] | undefined }) {
+export default function TaskModal({ board, user_id, users, projects }: { board?: IBoard, user_id: string, users: IUser[] | undefined, projects: IProject[]| undefined }) {
 
   const defaultValues = {
     title: '',
@@ -46,6 +47,7 @@ export default function TaskModal({ board, user_id, users }: { board?: IBoard, u
       { title: '', isCompleted: false },
     ],
     is_closed: false,
+    project_id: projects?.length ? projects[0]._id!.toString() : '',
   };
 
   const { control, handleSubmit, reset, register, setValue } =
@@ -72,12 +74,17 @@ export default function TaskModal({ board, user_id, users }: { board?: IBoard, u
       setValue('assignee', task.assignee!);
       setValue('subtasks', task.subtasks!);
       setValue('is_closed', task.is_closed!);
+      setValue('project_id', task.project_id!);
 
     } else {
       setValue('title', '');
       setValue('track_id', '');
       setValue('description', '');
       setValue('is_closed', false);
+      setValue(
+        'project_id',
+        projects?.length ? projects[0]._id!.toString() : ''
+      );
       setValue(
         'status',
         board?.columns?.length ? board.columns[0]._id!.toString() : ''
@@ -126,12 +133,11 @@ export default function TaskModal({ board, user_id, users }: { board?: IBoard, u
     toggleTaskModal();
   };
 
-  let defaulOption = {
+  let userOptions:IColumn[] = [{
     _id: "0",
     name: "Sin Asignar",
     tasks: [],
-  } 
-  let userOptions:IColumn[] = [defaulOption]
+  }]
   const transformUsers = users?.map((us)=>{
     return {
       _id: us._id,
@@ -140,6 +146,20 @@ export default function TaskModal({ board, user_id, users }: { board?: IBoard, u
     }
   })
   userOptions = transformUsers ? userOptions.concat(transformUsers) : userOptions
+
+  let projectOptions:IColumn[] = [{
+    _id: "",
+    name: "Sin Asignar",
+    tasks: [],
+  }]
+  const transformProjects = projects?.map((proj)=>{
+    return {
+      _id: proj._id,
+      name: proj.title,
+      tasks: [],
+    }
+  })
+  projectOptions = transformProjects ? projectOptions.concat(transformProjects) : projectOptions
 
   return (
     <Modal
@@ -248,6 +268,18 @@ export default function TaskModal({ board, user_id, users }: { board?: IBoard, u
                   value={value}
                   label={PRIORITY}
                   columns={PRIORITIES}
+                />
+              )}
+            />
+             <Controller
+              control={control}
+              {...register('project_id')}
+              render={({ field: { onChange, value } }) => (
+                <InputDropdownControl
+                  onChange={onChange}
+                  value={value}
+                  label={"Proyecto"}
+                  columns={projectOptions}
                 />
               )}
             />

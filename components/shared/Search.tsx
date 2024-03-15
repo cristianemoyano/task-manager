@@ -1,7 +1,7 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import InputDropdownControl from "./InputDropdownControl";
 import InputTextControl from "./InputTextControl";
-import { IBoard, IColumn, ITask, IUser } from "@/typing";
+import { IBoard, IColumn, IProject, ITask, IUser } from "@/typing";
 import Image from 'next/image';
 import BoardTask from "../single_board/BoardTask";
 import TaskInfosModal from "../modals/TaskInfosModal";
@@ -129,6 +129,15 @@ export default function SearchForm({ user }: Props) {
         }
     );
 
+    const { data: projects, error: projectError } = useSWR<IProject[], any>(
+        `/api/project/`,
+        fetcher,
+        {
+            fallbackData: [],
+            revalidateOnFocus: false,
+        }
+    );
+
     useEffect(() => {
         if (!isEmpty(title)) {
             const targetTask = tasks?.find((task) => task._id === _id)
@@ -223,7 +232,7 @@ export default function SearchForm({ user }: Props) {
                     {tasks?.map((task, index) => {
                         return (
                             <div className="p-3" key={index}>
-                                <BoardTask task={task} users={users} isToggleDisabled={true} />
+                                <BoardTask task={task} users={users} isToggleDisabled={true} projects={projects}/>
                             </div>
                         )
                     })}
@@ -328,9 +337,9 @@ export default function SearchForm({ user }: Props) {
                         <hr />
                     </h4>
                 </header>
-                <TaskModal board={board} user_id={user._id} users={users} />
+                <TaskModal board={board} user_id={user._id} users={users} projects={projects}/>
                 <DeleteModal board={board} user_id={user._id} />
-                <TaskInfosModal board={board} user_id={user._id} user={userAssignee} users={users} />
+                <TaskInfosModal board={board} user_id={user._id} user={userAssignee} users={users} projects={projects}/>
 
 
                 {!isEmpty(tasks) ? taskResults : emptyState}
