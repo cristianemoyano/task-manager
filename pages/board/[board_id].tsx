@@ -99,14 +99,14 @@ const SingleBoard: NextPage<Props> = ({
     }
 
     const nextBoardState = produce(board, draftBoard => {
-      draftBoard = filterTasksByAssignee(draftBoard, user._id)
+      draftBoard = filterTasksByAssignee(draftBoard, user._id, showClosedTasks)
     })
     filterBoard(nextBoardState)
   }
 
   const onClearFilters = () => {
     const nextBoardState = produce(board, draftBoard => {
-      draftBoard = draftBoard
+      draftBoard = showClosedTasks ? draftBoard : filterTasksByClosed(draftBoard, showClosedTasks)
     })
     filterBoard(nextBoardState)
   }

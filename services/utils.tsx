@@ -34,13 +34,13 @@ export const getBoardAssignees = (board?: IBoard): String[] => {
 export const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 
-export const filterTasksByAssignee = (board: IBoard, assigneeId: string) => {
-  if (isEmpty(board) || isEmpty(assigneeId)) {
+export const filterTasksByAssignee = (board: IBoard, assigneeId: string, showClosed: boolean = false) => {
+  if (isEmpty(board) || isEmpty(assigneeId) ) {
     return board
   }
 
   board.columns = board.columns.map(column => {
-    column.tasks = column.tasks.filter(task => task.assignee === assigneeId);
+    column.tasks = column.tasks.filter(task => task.assignee === assigneeId && task.is_closed === showClosed);
     return column;
   });
   return board;
