@@ -27,6 +27,7 @@ interface IControllerTask {
     text: string;
     trackIdSelected: string;
     isClosedSelected: string;
+    projectIDSelected: string;
 }
 
 const priorities = [
@@ -85,6 +86,7 @@ export default function SearchForm({ user }: Props) {
         text: "",
         trackIdSelected: "",
         isClosedSelected: "",
+        projectIDSelected: "",
     };
 
     const { control, handleSubmit, reset, register, setValue } =
@@ -103,7 +105,7 @@ export default function SearchForm({ user }: Props) {
     const [boardID, setBoardID] = useState<string>("");
 
     const { data: tasks, error: taskError } = useSWR<ITask[], any>(
-        `/api/tasks/search?text=${query?.text}&assignee=${query?.assigneeSelected}&priority=${query?.prioritySelected}&track_id=${query?.trackIdSelected}&is_closed=${query?.isClosedSelected}`,
+        `/api/tasks/search?text=${query?.text}&assignee=${query?.assigneeSelected}&priority=${query?.prioritySelected}&track_id=${query?.trackIdSelected}&is_closed=${query?.isClosedSelected}&project_id=${query?.projectIDSelected}`,
         fetcher,
         {
             fallbackData: [],
@@ -190,12 +192,11 @@ export default function SearchForm({ user }: Props) {
         </>
     )
 
-    let defaulOption = {
+    let userOptions: IColumn[] = [{
         _id: "",
         name: "Seleccionar",
         tasks: [],
-    }
-    let userOptions: IColumn[] = [defaulOption]
+    }]
     const transformUsers = users?.map((us) => {
         return {
             _id: us._id,
@@ -204,6 +205,20 @@ export default function SearchForm({ user }: Props) {
         }
     })
     userOptions = transformUsers ? userOptions.concat(transformUsers) : userOptions
+
+    let projectOptions: IColumn[] = [{
+        _id: "",
+        name: "Seleccionar",
+        tasks: [],
+    }]
+    const transformProjects = projects?.map((proj) => {
+        return {
+            _id: proj._id,
+            name: proj.title,
+            tasks: [],
+        }
+    })
+    projectOptions = transformProjects ? projectOptions.concat(transformProjects) : projectOptions
 
     const userAssignee: IUser = {
         _id: assignee,
@@ -281,6 +296,20 @@ export default function SearchForm({ user }: Props) {
                                     name='text'
                                     label={"ID Trazabilidad"}
                                     placeholder=''
+                                />
+                            )}
+                        />
+                    </div>
+                    <div>
+                        <Controller
+                            control={control}
+                            name='projectIDSelected'
+                            render={({ field: { onChange, value } }) => (
+                                <InputDropdownControl
+                                    onChange={onChange}
+                                    value={value}
+                                    label={"Proyecto"}
+                                    columns={projectOptions}
                                 />
                             )}
                         />

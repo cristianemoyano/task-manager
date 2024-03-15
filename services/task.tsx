@@ -3,7 +3,7 @@ import { IColumn, ITask } from "@/typing";
 import { isEmpty, isEqual } from "lodash";
 import { FilterQuery } from "mongoose";
 
-function buildQuery(text: string = '', assignee?: string, priority?: string, track_id?: string, is_closed?: string): any {
+function buildQuery(text: string = '', assignee?: string, priority?: string, track_id?: string, is_closed?: string, project_id?: string): any {
   let expr: FilterQuery<any> = {};
 
   if (!isEmpty(text)) {
@@ -21,6 +21,9 @@ function buildQuery(text: string = '', assignee?: string, priority?: string, tra
   if (!isEmpty(is_closed)) {
     expr['columns.tasks.is_closed'] = Boolean(Number(is_closed));
   }
+  if (!isEmpty(project_id)) {
+    expr['columns.tasks.project_id'] = project_id;
+  }
   const query = [
     {
       $match: {
@@ -33,8 +36,8 @@ function buildQuery(text: string = '', assignee?: string, priority?: string, tra
   return query;
 }
 
-export const searchTasks = async (text: string, assignee: string, priority: string, track_id: string, is_closed: string) => {
-  const query = buildQuery(text, assignee, priority, track_id, is_closed);
+export const searchTasks = async (text: string, assignee: string, priority: string, track_id: string, is_closed: string, project_id: string) => {
+  const query = buildQuery(text, assignee, priority, track_id, is_closed, project_id);
   let boards = await Board.aggregate(query);
   const allTasks: ITask[] = boards.flatMap(board => {
     const tasks = board.columns.flatMap((column: IColumn) => column.tasks)
@@ -45,7 +48,7 @@ export const searchTasks = async (text: string, assignee: string, priority: stri
   }
   );
   return allTasks.filter((task: ITask) => {
-    let query1, query2, query3, query4, query5 = false;
+    let query1, query2, query3, query4, query5, query6 = false;
     if (!isEmpty(text)) {
       query1 = task.title.toUpperCase().includes(text.toUpperCase()) || task.description.toUpperCase().includes(text.toUpperCase()) || task.track_id.toUpperCase() === text.toUpperCase()
     } else {
@@ -71,7 +74,12 @@ export const searchTasks = async (text: string, assignee: string, priority: stri
     } else {
       query5 = true
     }
-    return query1 && (query2 && query3) && query4 && query5
+    if (!isEqual(project_id, "")) {
+      query6 = task.project_id === project_id
+    } else {
+      query6 = true
+    }
+    return query1 && (query2 && query3) && query4 && query5 && query6
 
   })
 }
