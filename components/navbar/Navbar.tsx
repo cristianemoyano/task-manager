@@ -61,7 +61,7 @@ export default function Navbar({ boards, board, onUserClick, onClearFilters, tit
         setIsBoardDropdownOpen(false)
       }
       if (isBoardModalOpen) {
-        setIsBoardModalOpen(false)
+        return
       }
     }
     window.addEventListener('mousedown', onMouse, false);

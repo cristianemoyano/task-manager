@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -63,6 +64,7 @@ export default function AllBoards({ boards, assignedBoards, className, close }: 
             <Link href={`/board/${item._id}`} passHref key={item._id}>
               <a>
                 <div
+                  typeof='dropdown'
                   className={
                     board_id === item._id
                       ? 'board__item board__item--active'
@@ -78,7 +80,7 @@ export default function AllBoards({ boards, assignedBoards, className, close }: 
                     alt='board'
                     className='board__item__logo'
                   />
-                  <h3 className='board__item__name'>{item.name}</h3>
+                  <h3 className='board__item__name' typeof='dropdown'>{item.name}</h3>
                 </div>
               </a>
             </Link>
@@ -90,6 +92,7 @@ export default function AllBoards({ boards, assignedBoards, className, close }: 
               setIsNewBoard(true);
               toggleBoardModal();
             }}
+            typeof='dropdown'
           >
             <Image
               src='/assets/icon-board.svg'
@@ -98,7 +101,7 @@ export default function AllBoards({ boards, assignedBoards, className, close }: 
               alt='board'
               className='board__item__button__logo'
             />
-            <h3 className='board__item__button__text'>+ {NEW_BOARD}</h3>
+            <h3 className='board__item__button__text' typeof='dropdown'>+ {NEW_BOARD}</h3>
           </button>
         </div>
 
@@ -106,12 +109,13 @@ export default function AllBoards({ boards, assignedBoards, className, close }: 
       {/* END BOARDS */}
       {/* ASSIGNED BOARDS */}
       <div>
-        <p className='board__numbers'>{ASSIGNED_BOARDS} ({assignedBoards ? assignedBoards.length : 0})</p>
-        <div className='board__items'>
+        <p className='board__numbers' typeof='dropdown'>{ASSIGNED_BOARDS} ({assignedBoards ? assignedBoards.length : 0})</p>
+        <div className='board__items' typeof='dropdown'>
           {assignedBoards?.map((item) => (
-            <Link href={`/board/${item._id}`} passHref key={item._id}>
-              <a>
+            <Link href={`/board/${item._id}`} passHref key={item._id} typeof='dropdown'>
+              <a typeof='dropdown'>
                 <div
+                  typeof='dropdown'
                   className={
                     board_id === item._id
                       ? 'board__item board__item--active'
@@ -127,7 +131,7 @@ export default function AllBoards({ boards, assignedBoards, className, close }: 
                     alt='board'
                     className='board__item__logo'
                   />
-                  <h3 className='board__item__name'>{item.name}</h3>
+                  <h3 className='board__item__name' typeof='dropdown'>{item.name}</h3>
                 </div>
               </a>
             </Link>
@@ -144,7 +148,7 @@ export default function AllBoards({ boards, assignedBoards, className, close }: 
             height={19}
             alt='board'
           />
-          <button className='board__theme__switch' onClick={toggleTheme}>
+          <button className='board__theme__switch' onClick={toggleTheme} typeof='dropdown'>
             <div className='board__theme__switch__circle'></div>
           </button>
           <Image
@@ -157,6 +161,7 @@ export default function AllBoards({ boards, assignedBoards, className, close }: 
         <button
           className='board__logout'
           onClick={() => signOut({ callbackUrl: '/register' })}
+          typeof='dropdown'
         >
           {LOGOUT}
         </button>
