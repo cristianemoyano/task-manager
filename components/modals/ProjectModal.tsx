@@ -105,7 +105,7 @@ export default function ProjectModal({ isVisible, close, project, users }: Props
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className=''>
-          <div className="bg-white">
+          <div className="">
             <div className="lg:border-l-0 lg:border-t lg:border-gray-400 rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
               <div className="mb-8">
                 <div className="text-gray-900 font-bold text-xl mb-2">
@@ -188,12 +188,12 @@ export default function ProjectModal({ isVisible, close, project, users }: Props
 
               {
                 !isEmpty(tasks) ? (
-                  <div className='pb-3'>
+                  <div className='pb-3 modal__header__title'>
                     <h3>
                       Tareas asociadas al proyecto
                       <hr />
                     </h3>
-                    <div className='overflow-y-auto max-h-40 p-4'>
+                    <div className='overflow-y-auto max-h-40 p-4 dark:bg-[#20212c]'>
                       {
                         tasks?.map((t, index) => {
                           return (

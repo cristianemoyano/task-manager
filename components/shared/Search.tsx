@@ -148,14 +148,14 @@ export default function SearchForm({ user }: Props) {
     }, [title]);
 
     const taskContent = (
-        <>
+        <div className="modal__container">
             <header className='modal__header modal__header__flex'>
                 <h3 className='modal__header__title'>{title}</h3>
             </header>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
                 {/* COL 1 */}
                 <div className='col-span-2'>
-                    <p className='mb-4'>{description}</p>
+                    <p className='mb-4 modal__text'>{description}</p>
                 </div>
                 {/* END COL 1 */}
 
@@ -180,8 +180,12 @@ export default function SearchForm({ user }: Props) {
                             {track_id ? ` ${track_id}` : track_id}
                         </span>
                     </p>
-
-                    {board?.columns?.find((c) => c._id === status)?.name}
+                    <p className='input__label'>
+                        Estado:
+                        <span className='modal__text'>
+                        {board?.columns?.find((c) => c._id === status)?.name}
+                        </span>
+                    </p>
 
                 </div>
                 {/* END COL 2 */}
@@ -189,7 +193,7 @@ export default function SearchForm({ user }: Props) {
             <button className="mt-3 bg-indigo-600 hover:bg-indigo-400 text-white font-bold py-2 px-4 rounded" onClick={() => toggleTaskInfosModal()}>
                 Abrir
             </button>
-        </>
+        </div>
     )
 
     let userOptions: IColumn[] = [{
@@ -241,7 +245,7 @@ export default function SearchForm({ user }: Props) {
     )
 
     const taskResults = (
-        <div className="grid grid-cols-2 gap-1">
+        <div className="grid grid-cols-2 gap-1 ">
             <div className="overflow-y-auto max-h-96">
                 <div className="grid grid-cols-1 gap-1">
                     {tasks?.map((task, index) => {
@@ -260,8 +264,8 @@ export default function SearchForm({ user }: Props) {
     )
 
     return (
-        <div className="mt-3 modal__container p-3 m-3 max-h-full" >
-            <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mt-3  p-3 m-3 max-h-full " >
+            <form onSubmit={handleSubmit(onSubmit)} className="modal__container">
                 <div className="grid grid-cols-3 lg:grid-cols-6 gap-1 items-center">
                     <div className="lg:col-span-5">
                         <Controller
@@ -359,19 +363,22 @@ export default function SearchForm({ user }: Props) {
                 </div>
             </form>
 
-            <div>
+            <div className="">
                 <header className='modal__header'>
                     <h4 className='modal__header__title'>
                         <span className="">Tareas</span>
                         <hr />
                     </h4>
                 </header>
+                
                 <TaskModal board={board} user_id={user._id} users={users} projects={projects}/>
                 <DeleteModal board={board} user_id={user._id} />
                 <TaskInfosModal board={board} user_id={user._id} user={userAssignee} users={users} projects={projects}/>
 
 
                 {!isEmpty(tasks) ? taskResults : emptyState}
+
+                
 
             </div>
         </div>

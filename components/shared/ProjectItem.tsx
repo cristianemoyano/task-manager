@@ -13,7 +13,7 @@ export default function ProjectItem({ project, assigneeName }: Props) {
   const priorityName = priority ? priority.name : "Sin asignar"
 
   return (
-    <div className='p-3'>
+    <div className='p-3 modal__container cursor-pointer'>
       <div className="max-w-sm w-full lg:max-w-full lg:flex  rounded-sm">
         <div className="lg:border-l-0 lg:border-t lg:border-gray-400 rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal">
           <div className="mb-8">
