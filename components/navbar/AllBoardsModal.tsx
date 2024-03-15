@@ -20,7 +20,7 @@ export default function AllBoardsModal({ boards, close, isVisible }: Props) {
 
   const handleCloseModal = (e: any) => {
     if (!e.target.classList.contains('board__modal')) return;
-    close();
+    close(e);
   };
 
   return (
@@ -28,7 +28,7 @@ export default function AllBoardsModal({ boards, close, isVisible }: Props) {
       className={isVisible ? 'board__modal board__modal--open' : 'board__modal'}
       onClick={handleCloseModal}
     >
-      <AllBoards boards={boards} className='board__container' close={close} />
+      <AllBoards boards={boards} className='board__container' close={(e:any) => close(e)} />
     </div>
   );
 }

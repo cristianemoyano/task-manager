@@ -12,7 +12,7 @@ interface Props {
   boards?: IBoard[];
   assignedBoards?: IBoard[];
   className: string;
-  close?: () => void;
+  close?: (e:any) => void;
 }
 export default function AllBoards({ boards, assignedBoards, className, close }: Props) {
   const { toggleBoardModal, setIsNewBoard } = useModal();
@@ -85,8 +85,8 @@ export default function AllBoards({ boards, assignedBoards, className, close }: 
           ))}
           <button
             className='board__item__button'
-            onClick={() => {
-              close && close();
+            onClick={(e:any) => {
+              close && close(e);
               setIsNewBoard(true);
               toggleBoardModal();
             }}
