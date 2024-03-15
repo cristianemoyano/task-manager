@@ -5,7 +5,7 @@ import BoardTask from './BoardTask';
 import NewItem from '../shared/NewItem';
 import useModal from '@/contexts/useModal';
 
-export default function BoardColumn({ column, users, projects }: { column: IColumn, users: IUser[], projects: IProject[] }) {
+export default function BoardColumn({ column, users, projects }: { column: IColumn, users: IUser[], projects?: IProject[] }) {
   const { toggleTaskModal, setTaskModalContent } = useModal();
 
   return (
