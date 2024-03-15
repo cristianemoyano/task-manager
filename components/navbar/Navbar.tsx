@@ -171,7 +171,7 @@ export default function Navbar({ boards, board, onUserClick, onClearFilters, tit
       </nav>
       <AllBoardsModal
         isVisible={isBoardModalOpen}
-        close={(evt:any) =>handleBoardDropdown(evt, false)}
+        close={(evt:any) =>handleBoardModal(evt, false)}
         boards={boards}
       />
       {board && (
