@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { IColumn } from '@/typing';

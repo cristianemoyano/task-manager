@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import useModal from '@/contexts/useModal';
 import { IBoard } from '@/typing';
 import { DELETE_BOARD, EDIT_BOARD } from '../constants';
@@ -5,7 +6,7 @@ import { useState } from 'react';
 
 interface Props {
   isVisible: boolean;
-  close: () => void;
+  close: (evt:any) => void;
   board?: IBoard;
   toggleClosedTasks?: ()=> void;
 }
@@ -20,14 +21,14 @@ export default function BoardDropdown({ isVisible, close, board, toggleClosedTas
 
   const [showClosedTasks, setShowClosedTasks] = useState(false)
 
-  const handleEditClick = () => {
-    close();
+  const handleEditClick = (evt:any) => {
+    close(evt);
     setIsNewBoard(false);
     toggleBoardModal();
   };
 
-  const handleDeleteClick = () => {
-    close();
+  const handleDeleteClick = (evt:any) => {
+    close(evt);
     toggleDeleteModal();
     setDeleteModalContent({
       isBoard: true,
